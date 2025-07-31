@@ -19,7 +19,7 @@ const HeroSection = () => (
       m: { xs: 1, md: 2 },
       px: { xs: 2, sm: 4, md: 8 },
       py: { xs: 6, md: 10 },
-      background: `linear-gradient(360deg, var(--primary-300) 0%, var(--primary-50) 100%)`,
+      background: `linear-gradient(360deg, var(--primary-50) 0%, var(--primary-50) 100%)`,
       borderRadius: { xs: 0, md: "2rem" },
       boxShadow: "0 4px 32px 0 var(--shadow-md, var(--primary-800))",
       overflow: "hidden",
