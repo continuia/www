@@ -168,8 +168,9 @@ const HeroSection = () => (
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            maxWidth: 500, // Bigger
+            maxWidth: 600, // Bigger
             width: "100%",
+            height: "100%",
           }}
         >
           <Box
@@ -178,7 +179,7 @@ const HeroSection = () => (
             alt="Medical consultation"
             sx={{
               width: "100%",
-              maxWidth: 440, // Bigger
+              maxWidth: "80%", // Bigger
               borderRadius: "1.5rem",
               objectFit: "cover",
             }}
