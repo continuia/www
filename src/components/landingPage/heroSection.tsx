@@ -1,7 +1,7 @@
 import { Box, Typography, Button, Stack, Paper } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import LocalHospitalIcon from "@mui/icons-material/LocalHospital";
-import heroIllustration from "../../assets/ai_assisted_patient_intake.png"; // <-- Import your image
+import heroIllustration from "../../assets/ai_assisted_patient_intake.webp"; // <-- Import your image
 
 const features = [
     "Board-certified specialists",
