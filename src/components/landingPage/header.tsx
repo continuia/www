@@ -84,7 +84,7 @@ const Header = () => {
                     textTransform: "none",
                     color: isActive
                       ? "#fff"
-                      : "var(--primary-700, #7c3aed)",
+                      : "var(--neutral-500)",
                     background: isActive
                       ? "linear-gradient(90deg, var(--primary-600, #a78bfa), var(--primary-400, #7c3aed))"
                       : "transparent",
