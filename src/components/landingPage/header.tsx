@@ -43,7 +43,7 @@ const Header = () => {
           <Box display="flex" alignItems="center" gap={1.5}>
             <Box
               component="img"
-              src="/continuia.png"
+              src="/continuia.webp"
               alt="Continuia Logo"
               sx={{ height: 36, width: 36, mr: 1 }}
             />

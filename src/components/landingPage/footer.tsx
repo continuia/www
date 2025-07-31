@@ -44,7 +44,7 @@ const Footer = () => {
           <Stack direction="row" alignItems="center" spacing={1.5} mb={{ xs: 1, sm: 0 }}>
             <Box
               component="img"
-              src="/continuia.png"
+              src="/continuia.webp"
               alt="Continuia Logo"
               sx={{ height: { xs: 28, sm: 32 }, width: { xs: 28, sm: 32 } }}
             />

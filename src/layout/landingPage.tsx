@@ -5,9 +5,14 @@ import Footer from "../components/landingPage/footer";
 
 const HomeLayout = () => {
   return (
-    <Box display={"flex"} flexDirection={"column"} height={"100vh"}>
+    <Box
+      display={"flex"}
+      flexDirection={"column"}
+      width={"100%"}
+      height={"100vh"}
+    >
       <Header />
-      <Box flexGrow={1}>
+      <Box position={"relative"}>
         <Outlet />
       </Box>
       <Footer />
