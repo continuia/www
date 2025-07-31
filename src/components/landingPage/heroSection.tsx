@@ -18,9 +18,12 @@ const HeroSection = () => (
       justifyContent: "center",
       m: { xs: 1, md: 2 },
       px: { xs: 2, sm: 4, md: 8 },
-      py: { xs: 6, md: 10 },
-      background: `linear-gradient(360deg, var(--primary-50) 0%, var(--primary-50) 100%)`,
-      borderRadius: { xs: 0, md: "2rem" },
+      py: { xs: 3, md: 10 },
+      background: {
+        xs: "none",
+        md: `linear-gradient(150deg, var(--primary-50) 40%, var(--primary-300) 100%)`,
+      },
+      borderRadius: { xs: "1rem", md: "2rem" },
       boxShadow: "0 4px 32px 0 var(--shadow-md, var(--primary-800))",
       overflow: "hidden",
       position: "relative",
@@ -67,17 +70,15 @@ const HeroSection = () => (
             display: "inline-block",
           }}
         >
-          When Medical Decisions
-          <br />
-          Matter Most
+          When Medical Decisions Matter Most
         </Typography>
         <Typography
           variant="h6"
           sx={{
-            color: "var(--primary-800, #4c1d95)",
-            fontWeight: 400,
+            color: "var(--neutral-600)",
+            fontWeight: 500,
             mb: 4,
-            fontSize: { xs: "1rem", sm: "1.1rem", md: "1.2rem" }, // Bigger
+            fontSize: { xs: "1rem", sm: "1.1rem" }, // Bigger
             maxWidth: 600,
           }}
         >
@@ -130,7 +131,12 @@ const HeroSection = () => (
             Learn How It Works
           </Button>
         </Stack>
-        <Stack direction="row" spacing={3} mt={2} flexWrap="wrap">
+        <Stack
+          direction={{ sx: "column", lg: "row" }}
+          spacing={3}
+          mt={2}
+          flexWrap="wrap"
+        >
           {features.map((feature) => (
             <Stack
               direction="row"
@@ -138,13 +144,11 @@ const HeroSection = () => (
               spacing={1}
               key={feature}
             >
-              <CheckCircleIcon
-                sx={{ color: "var(--neutral-800, #64748b)", fontSize: 20 }}
-              />
+              <CheckCircleIcon sx={{ color: "var(--success)", fontSize: 20 }} />
               <Typography
                 variant="body2"
                 sx={{
-                  color: "var(--primary-800, #4c1d95)",
+                  color: "var(--neutral-700)",
                   fontWeight: 500,
                   fontSize: { xs: "0.98rem", sm: "1.05rem" },
                   whiteSpace: "nowrap",
@@ -168,7 +172,7 @@ const HeroSection = () => (
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            maxWidth: 600, // Bigger
+            maxWidth: { sx: "100%", md: 600 },
             width: "100%",
             height: "100%",
           }}
@@ -179,7 +183,7 @@ const HeroSection = () => (
             alt="Medical consultation"
             sx={{
               width: "100%",
-              maxWidth: "80%", // Bigger
+              maxWidth: { sx: "100%", md: "90%" }, // Bigger
               borderRadius: "1.5rem",
               objectFit: "cover",
             }}
