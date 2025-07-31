@@ -1,22 +1,27 @@
-import { Box, Container, Stack, Typography, Link as MuiLink, Divider, IconButton, Tooltip } from "@mui/material";
-import LinkedInIcon from '@mui/icons-material/LinkedIn';
-import TwitterIcon from '@mui/icons-material/Twitter';
-import FacebookIcon from '@mui/icons-material/Facebook';
-import InstagramIcon from '@mui/icons-material/Instagram';
-
-const navLinks = [
-  { label: "Home", href: "/" },
-  { label: "For Patients", href: "/#patients" },
-  { label: "For Hospitals", href: "/#hospitals" },
-  { label: "Specialists", href: "/#specialists" },
-  { label: "About", href: "/#about" },
-];
+import {
+  Box,
+  Container,
+  Stack,
+  Typography,
+  Link as MuiLink,
+  Divider,
+  IconButton,
+  Tooltip,
+} from "@mui/material";
+import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import TwitterIcon from "@mui/icons-material/Twitter";
+import FacebookIcon from "@mui/icons-material/Facebook";
+import InstagramIcon from "@mui/icons-material/Instagram";
 
 const socialLinks = [
   { icon: <LinkedInIcon />, label: "LinkedIn", href: "https://linkedin.com" },
   { icon: <TwitterIcon />, label: "Twitter", href: "https://twitter.com" },
   { icon: <FacebookIcon />, label: "Facebook", href: "https://facebook.com" },
-  { icon: <InstagramIcon />, label: "Instagram", href: "https://instagram.com" },
+  {
+    icon: <InstagramIcon />,
+    label: "Instagram",
+    href: "https://instagram.com",
+  },
 ];
 
 const Footer = () => {
@@ -33,7 +38,7 @@ const Footer = () => {
         boxSizing: "border-box",
       }}
     >
-      <Container maxWidth="lg">
+      <Container maxWidth="xl">
         <Stack
           direction={{ xs: "column", sm: "row" }}
           justifyContent="space-between"
@@ -41,7 +46,12 @@ const Footer = () => {
           spacing={{ xs: 2, sm: 3 }}
         >
           {/* Logo and Brand */}
-          <Stack direction="row" alignItems="center" spacing={1.5} mb={{ xs: 1, sm: 0 }}>
+          <Stack
+            direction="row"
+            alignItems="center"
+            spacing={1.5}
+            mb={{ xs: 1, sm: 0 }}
+          >
             <Box
               component="img"
               src="/continuia.webp"
@@ -61,29 +71,6 @@ const Footer = () => {
             </Typography>
           </Stack>
 
-          {/* Navigation Links */}
-          <Stack direction="row" spacing={{ xs: 1, sm: 2 }} flexWrap="wrap">
-            {navLinks.map((link) => (
-              <MuiLink
-                key={link.label}
-                href={link.href}
-                underline="none"
-                sx={{
-                  color: "var(--text-secondary)",
-                  fontWeight: 500,
-                  fontSize: { xs: "0.95rem", sm: "1rem" },
-                  transition: "color var(--transition-normal)",
-                  "&:hover": {
-                    color: "var(--primary-600)",
-                  },
-                  mx: 0.5,
-                }}
-              >
-                {link.label}
-              </MuiLink>
-            ))}
-          </Stack>
-
           {/* Contact/Support Info & Socials */}
           <Stack spacing={1} alignItems={{ xs: "flex-start", sm: "flex-end" }}>
             <Stack direction="row" spacing={1} mb={0.5}>
@@ -96,7 +83,8 @@ const Footer = () => {
                     rel="noopener noreferrer"
                     sx={{
                       color: "var(--text-tertiary)",
-                      transition: "color var(--transition-normal), background var(--transition-normal)",
+                      transition:
+                        "color var(--transition-normal), background var(--transition-normal)",
                       "&:hover": {
                         color: "var(--primary-600)",
                         background: "var(--primary-50)",
@@ -109,17 +97,36 @@ const Footer = () => {
                 </Tooltip>
               ))}
             </Stack>
-            <Typography variant="body2" sx={{ color: "var(--text-tertiary)", fontSize: { xs: "0.85rem", sm: "1rem" } }}>
-              Need help? <MuiLink href="mailto:support@continuia.ai" sx={{ color: "var(--primary-600)", fontWeight: 500 }}>Contact Support</MuiLink>
-            </Typography>
-            <Typography variant="body2" sx={{ color: "var(--text-tertiary)", fontSize: { xs: "0.85rem", sm: "1rem" } }}>
-              © {new Date().getFullYear()} Continuia. All rights reserved.
+            <Typography
+              variant="body2"
+              sx={{
+                color: "var(--text-tertiary)",
+                fontSize: { xs: "0.85rem", sm: "1rem" },
+              }}
+            >
+              Need help?{" "}
+              <MuiLink
+                href="mailto:support@continuia.ai"
+                sx={{ color: "var(--primary-600)", fontWeight: 500 }}
+              >
+                Contact Support
+              </MuiLink>
             </Typography>
           </Stack>
         </Stack>
-        <Divider sx={{ my: { xs: 2, sm: 3 }, borderColor: "var(--border-light)" }} />
-        <Typography variant="caption" sx={{ color: "var(--text-muted)", textAlign: "center", display: "block", fontSize: { xs: "0.75rem", sm: "0.9rem" } }}>
-          Built with ❤️ using Material UI & your design system.
+        <Divider
+          sx={{ my: { xs: 2, sm: 3 }, borderColor: "var(--border-light)" }}
+        />
+        <Typography
+          variant="caption"
+          sx={{
+            color: "var(--text-muted)",
+            textAlign: "center",
+            display: "block",
+            fontSize: { xs: "0.75rem", sm: "0.9rem" },
+          }}
+        >
+          © {new Date().getFullYear()} Continuia. All rights reserved.
         </Typography>
       </Container>
     </Box>
