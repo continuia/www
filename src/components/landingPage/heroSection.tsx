@@ -13,7 +13,7 @@ const HeroSection = () => (
     <Box
         sx={{
             width: "100%",
-            minHeight: { xs: "80vh", md: "60vh" },
+            minHeight: { xs: "80vh", md: "70vh" },
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
