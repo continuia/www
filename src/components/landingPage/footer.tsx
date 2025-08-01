@@ -3,7 +3,6 @@ import {
   Container,
   Stack,
   Typography,
-  Divider,
   IconButton,
   Tooltip,
 } from "@mui/material";
@@ -39,7 +38,6 @@ const Footer = () => {
         background: "var(--bg-secondary)",
         color: "var(--text-secondary)",
         borderTop: "1px solid var(--border-light)",
-        mt: 4,
         py: 4,
         width: "100%", // Use 100% instead of 100vw
         boxSizing: "border-box",
@@ -121,9 +119,7 @@ const Footer = () => {
             </Typography> */}
           </Stack>
         </Stack>
-        <Divider
-          sx={{ my: { xs: 2, sm: 3 }, borderColor: "var(--border-light)" }}
-        />
+
         <Typography
           variant="caption"
           sx={{

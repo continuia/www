@@ -28,8 +28,6 @@ const statVariant: Variants = {
   }),
 };
 
-
-
 const StatsHighlight = () => (
   <Box
     sx={{
@@ -102,9 +100,8 @@ const StatsHighlight = () => (
             py: { xs: 2, sm: 2, md: 3.4 },
             borderRadius: "1.25rem",
             boxShadow: "var(--shadow-lg)",
-            minWidth: 200,
-            maxWidth: 250,
-            width: 200,
+            minWidth: 250,
+            maxwidth: 250,
             minHeight: 150,
             height: 150,
             display: "flex",
