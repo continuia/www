@@ -15,7 +15,7 @@ import QueryBuilderIcon from "@mui/icons-material/QueryBuilder";
 import { motion } from "framer-motion";
 import type { Variants } from "framer-motion";
 import heroIllustration from "../../assets/ai_assisted_patient_intake.webp";
-
+import ShareYOurStory from "../../assets/share_your_story.webp"
 const MotionBox = motion(Box);
 
 const fadeInVariants: Variants = {
@@ -244,7 +244,7 @@ const JourneySteps: React.FC = () => {
             }}
           >
             <img
-              src={heroIllustration}
+              src={ShareYOurStory}
               alt="Step illustration"
               style={{ width: "100%", height: "100%", objectFit: "cover" }}
             />
@@ -487,7 +487,7 @@ const JourneySteps: React.FC = () => {
                     fontSize: { xs: "1.15rem", md: "1.28rem" },
                   }}
                 >
-                  Clear Insights
+                  Continuia Insights
                 </Typography>
                 <Typography
                   variant="body2"

@@ -23,7 +23,7 @@ const HeroSection = () => (
         xs: "none",
         md: `linear-gradient(150deg, var(--primary-50) 40%, var(--primary-300) 100%)`,
       },
-      borderRadius: { xs: "1rem", md: "2rem" },
+      borderRadius: { xs:"1rem", md: "2rem" },
       boxShadow: "0 4px 32px 0 var(--neutral-300)",
       overflow: "hidden",
       position: "relative",
