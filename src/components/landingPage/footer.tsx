@@ -3,24 +3,31 @@ import {
   Container,
   Stack,
   Typography,
-  Link as MuiLink,
   Divider,
   IconButton,
   Tooltip,
 } from "@mui/material";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
-import TwitterIcon from "@mui/icons-material/Twitter";
+import XIcon from "@mui/icons-material/X";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import InstagramIcon from "@mui/icons-material/Instagram";
 
 const socialLinks = [
-  { icon: <LinkedInIcon />, label: "LinkedIn", href: "https://linkedin.com" },
-  { icon: <TwitterIcon />, label: "Twitter", href: "https://twitter.com" },
-  { icon: <FacebookIcon />, label: "Facebook", href: "https://facebook.com" },
+  {
+    icon: <LinkedInIcon />,
+    label: "LinkedIn",
+    href: "https://www.linkedin.com/company/continuia",
+  },
+  { icon: <XIcon />, label: "X", href: "https://x.com" },
+  {
+    icon: <FacebookIcon />,
+    label: "Facebook",
+    href: "https://www.facebook.com/continuia",
+  },
   {
     icon: <InstagramIcon />,
     label: "Instagram",
-    href: "https://instagram.com",
+    href: "https://www.instagram.com/continuia/",
   },
 ];
 
@@ -97,7 +104,7 @@ const Footer = () => {
                 </Tooltip>
               ))}
             </Stack>
-            <Typography
+            {/* <Typography
               variant="body2"
               sx={{
                 color: "var(--text-tertiary)",
@@ -111,7 +118,7 @@ const Footer = () => {
               >
                 Contact Support
               </MuiLink>
-            </Typography>
+            </Typography> */}
           </Stack>
         </Stack>
         <Divider
