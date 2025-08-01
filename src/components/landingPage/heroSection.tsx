@@ -186,6 +186,7 @@ const HeroSection = () => (
               maxWidth: { sx: "100%", md: "90%" }, // Bigger
               borderRadius: "1.5rem",
               objectFit: "cover",
+              fetchpriority: "high",
             }}
           />
         </Paper>
