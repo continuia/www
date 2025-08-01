@@ -24,7 +24,7 @@ const HeroSection = () => (
         md: `linear-gradient(150deg, var(--primary-50) 40%, var(--primary-300) 100%)`,
       },
       borderRadius: { xs: "1rem", md: "2rem" },
-      boxShadow: "0 4px 32px 0 var(--shadow-md, var(--primary-800))",
+      boxShadow: "0 4px 32px 0 var(--neutral-300)",
       overflow: "hidden",
       position: "relative",
     }}
@@ -172,7 +172,7 @@ const HeroSection = () => (
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            maxWidth: { sx: "100%", md: 600 },
+            maxWidth: { sx: "100%", md: 650 },
             width: "100%",
             height: "100%",
           }}
@@ -183,10 +183,9 @@ const HeroSection = () => (
             alt="Medical consultation"
             sx={{
               width: "100%",
-              maxWidth: { sx: "100%", md: "90%" }, // Bigger
+              maxWidth: { sx: "100%" }, // Bigger
               borderRadius: "1.5rem",
               objectFit: "cover",
-              fetchpriority: "high",
             }}
           />
         </Paper>
