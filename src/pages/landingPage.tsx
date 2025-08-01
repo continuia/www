@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import HeroSection from "../components/landingPage/heroSection";
 import JourneySteps from "../components/landingPage/journeySteps";
-import StatsHighlight from "./StatsHighlight";
+import StatsHighlight from "../components/landingPage/statsHighlight";
 const LandingPage = () => {
   return (
     <Box position={"relative"}  width={"100%"}>
