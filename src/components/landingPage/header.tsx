@@ -1,34 +1,67 @@
-import { AppBar, Box, Toolbar, Button, Typography, Fade, Paper } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
+import {
+  AppBar,
+  Box,
+  Toolbar,
+  Button,
+  Typography,
+  Fade,
+  Paper,
+  IconButton,
+  Drawer,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+  useTheme,
+  useMediaQuery,
+  Divider,
+} from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
+import CloseIcon from "@mui/icons-material/Close";
 
+// Navigation links config
 const navLinks = [
   { label: "Home", href: "/" },
   { label: "For Patients", href: "/#patients" },
-  { label: "For Hospitals", href: "/#hospitals" },
+  { label: "For Doctors", href: "/#hospitals" },
   { label: "Specialists", href: "/#specialists" },
   { label: "About", href: "/#about" },
 ];
 
 const Header = () => {
   const [show, setShow] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+
+  const theme = useTheme();
+  // lg === 1200px by default; "md & down" should show mobile menu
+  const isBelowLg = useMediaQuery(theme.breakpoints.down("lg"));
+
   useEffect(() => {
     setShow(true);
   }, []);
 
-  // For demo, "Home" is active. In a real app, use router location.
+  // For demo logic: mark "Home" as the current
   const activeLink = "Home";
+
+  // Closing menu on navigation link
+  const handleDrawerNav = () => {
+    setDrawerOpen(false);
+    // if you use react-router, you may want to do navigation here programmatically instead.
+  };
 
   return (
     <Fade in={show} timeout={700}>
       <AppBar
-        position="static"
+        position="sticky"
         elevation={0}
         sx={{
-          background: "var(--bg-primary, #f8fafc)",
-          color: "var(--text-primary, #22223b)",
-          boxShadow: "none",
-          borderBottom: "none",
+          background: "var(--bg-primary)",
+          color: "var(--text-primary)",
+          borderBottom: "1px solid var(--border-light)",
           py: 1,
+          zIndex: 1301,
+          boxShadow: "0 2px 12px 0 var(--primary-50)",
         }}
       >
         <Toolbar
@@ -51,7 +84,7 @@ const Header = () => {
               variant="h6"
               sx={{
                 fontWeight: 700,
-                color: "var(--primary-700, #7c3aed)",
+                color: "var(--primary-700)",
                 letterSpacing: 1,
                 fontSize: { xs: "1.2rem", sm: "1.5rem" },
               }}
@@ -60,17 +93,18 @@ const Header = () => {
             </Typography>
           </Box>
 
-          {/* Navigation Links in pill-shaped Paper */}
+          {/* Desktop Navigation Links (lg and up only) */}
           <Paper
             elevation={2}
             sx={{
-              display: { xs: "none", sm: "flex" },
+              display: { xs: "none", lg: "flex" }, // show only on lg+
               borderRadius: "999px",
-              background: "#fff",
+              background: "var(--bg-primary)",
               px: 1,
               py: 0.5,
-              boxShadow: "0 2px 12px 0 rgba(124,58,237,0.06)",
+              boxShadow: "0 2px 12px 0 var(--primary-100)",
               gap: 1,
+              alignItems: "center",
             }}
           >
             {navLinks.map((link) => {
@@ -83,10 +117,10 @@ const Header = () => {
                   sx={{
                     textTransform: "none",
                     color: isActive
-                      ? "#fff"
-                      : "var(--neutral-500)",
+                      ? "var(--text-inverse)"
+                      : "var(--neutral-600)",
                     background: isActive
-                      ? "linear-gradient(90deg, var(--primary-600, #a78bfa), var(--primary-400, #7c3aed))"
+                      ? "linear-gradient(90deg, var(--primary-500), var(--primary-700))"
                       : "transparent",
                     fontWeight: 600,
                     fontSize: "1rem",
@@ -95,13 +129,16 @@ const Header = () => {
                     py: 1,
                     minWidth: 0,
                     boxShadow: isActive
-                      ? "0 5px 15px 0 rgba(124,58,237,0.10)"
+                      ? "0 5px 15px 0 var(--primary-200)"
                       : "none",
                     transition: "background 0.2s, color 0.2s",
                     "&:hover": {
                       background: isActive
-                        ? "linear-gradient(90deg, var(--primary-400, #c7d2fe), var(--primary-500, #a78bfa))"
-                        : "rgba(124,58,237,0.08)",
+                        ? "linear-gradient(90deg, var(--primary-400), var(--primary-600))"
+                        : "var(--primary-50)",
+                      color: isActive
+                        ? "var(--text-inverse)"
+                        : "var(--primary-800)",
                     },
                   }}
                 >
@@ -111,38 +148,142 @@ const Header = () => {
             })}
           </Paper>
 
-          {/* Contact Us Button */}
+          {/* Hamburger menu (only on md and below; i.e., if isBelowLg) */}
+          {isBelowLg && (
+            <>
+              <IconButton
+                onClick={() => setDrawerOpen(true)}
+                edge="end"
+                sx={{
+                  ml: 1,
+                  color: "var(--primary-700)",
+                  display: { xs: "inline-flex", lg: "none" },
+                }}
+                aria-label="Open navigation menu"
+              >
+                <MenuIcon fontSize="large" />
+              </IconButton>
+              <Drawer
+                anchor="right"
+                open={drawerOpen}
+                onClose={() => setDrawerOpen(false)}
+                
+                slotProps={{
+                  paper: {
+                    sx: {
+                      bgcolor: "var(--bg-primary)",
+                      boxShadow: "0 12px 40px 0 var(--primary-100)",
+                      minWidth: 240,
+                      pt:2
+                    },
+                  },
+                }}
+              >
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="space-between"
+                  px={2}
+                  py={2}
+                >
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      color: "var(--primary-700)",
+                      fontWeight: 700,
+                      fontSize: "1.15rem",
+                      letterSpacing: 1,
+                    }}
+                  >
+                    Menu
+                  </Typography>
+                  <IconButton
+                    onClick={() => setDrawerOpen(false)}
+                    sx={{ color: "var(--primary-700)" }}
+                    aria-label="Close navigation menu"
+                  >
+                    <CloseIcon fontSize="medium" />
+                  </IconButton>
+                </Box>
+                <Divider sx={{ mb: 1, bgcolor: "var(--border-light)" }} />
+                <List>
+                  {navLinks.map((link) => (
+                    <ListItem key={link.label} disablePadding>
+                      <ListItemButton
+                        component="a"
+                        href={link.href}
+                        onClick={() => handleDrawerNav()}
+                        sx={{
+                          mx: 1,
+                          px: 3,
+                          py: 1.3,
+                          color: "var(--primary-700)",
+                          borderRadius: 2.2,
+                          fontWeight: 700,
+                          fontSize: "1.09rem",
+                          letterSpacing: 0.6,
+                          mb: 0.7,
+                          "&.Mui-selected, &:hover": {
+                            bgcolor: "var(--primary-50)",
+                            color: "var(--primary-800)",
+                          },
+                        }}
+                        selected={link.label === activeLink}
+                      >
+                        <ListItemText primary={link.label} />
+                      </ListItemButton>
+                    </ListItem>
+                  ))}
+                  <Divider sx={{ my: 2, bgcolor: "var(--primary-100)" }} />
+                  {/* Mobile version of CTA button */}
+                  <ListItem>
+                    <Button
+                      fullWidth
+                      variant="contained"
+                      href="#get-started"
+                      onClick={() => setDrawerOpen(false)}
+                      sx={{
+                        background: "var(--primary-700)",
+                        color: "var(--text-inverse)",
+                        fontWeight: 700,
+                        borderRadius: 2,
+                        px: 2,
+                        py: 1.2,
+                        fontSize: "1.09rem",
+                        boxShadow: "0 2px 8px 0 var(--primary-200)",
+                        textTransform: "none",
+                        "&:hover": {
+                          background: "var(--primary-800)",
+                        },
+                      }}
+                    >
+                      Get Started
+                    </Button>
+                  </ListItem>
+                </List>
+              </Drawer>
+            </>
+          )}
+
+          {/* Desktop CTA (lg and up only) */}
           <Button
             variant="contained"
             href="#get-started"
             sx={{
-              background: "#18181b",
-              color: "#fff",
-              fontWeight: 600,
+              background: "var(--primary-900)",
+              color: "var(--text-inverse)",
+              fontWeight: 700,
               borderRadius: "999px",
               px: 3,
               py: 1.2,
               fontSize: "1rem",
-              boxShadow: "0 2px 8px 0 rgba(24,24,27,0.10)",
+              boxShadow: "0 2px 8px 0 var(--primary-300)",
               textTransform: "none",
+              display: { xs: "none", lg: "inline-flex" },
               "&:hover": {
-                background: "#27272a",
+                background: "var(--primary-800)",
               },
-              display: { xs: "none", sm: "inline-flex" },
             }}
-            endIcon={
-              <Box
-                component="span"
-                sx={{
-                  display: "inline-block",
-                  ml: 0.5,
-                  fontSize: "1.2em",
-                  lineHeight: 1,
-                }}
-              >
-                &rarr;
-              </Box>
-            }
           >
             Get Started
           </Button>

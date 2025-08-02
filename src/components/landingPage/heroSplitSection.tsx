@@ -44,7 +44,8 @@ const HeroSplitSection: React.FC = () => {
   return (
     <Box
       sx={{
-        background: "linear-gradient(110deg, var(--primary-50) 0%, var(--bg-secondary) 100%)",
+        background:
+          "linear-gradient(110deg, var(--primary-50) 0%, var(--bg-secondary) 100%)",
         p: { xs: 2, sm: 4, md: 7 },
         maxWidth: "100%",
         mx: "auto",
@@ -52,7 +53,7 @@ const HeroSplitSection: React.FC = () => {
     >
       <Stack
         direction={{ xs: "column", md: "row" }}
-        gap={{ xs: 4, }}
+        gap={{ xs: 4 }}
         alignItems="stretch"
         justifyContent="center"
         sx={{ width: "100%" }}
@@ -61,7 +62,7 @@ const HeroSplitSection: React.FC = () => {
         <MotionBox
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, amount: 0.7 }}
+          viewport={{ once: true, amount: 0.4 }}
           variants={fadeIn}
           custom={1}
           sx={{
@@ -98,21 +99,35 @@ const HeroSplitSection: React.FC = () => {
               textAlign: { xs: "center", md: "left" },
             }}
           >
-            Facing a complex diagnosis or treatment decision can feel overwhelming. Our platform connects you with world-renowned specialists who provide comprehensive second opinions, giving you the confidence to move forward with your care.
+            Facing a complex diagnosis or treatment decision can feel
+            overwhelming. Our platform connects you with world-renowned
+            specialists who provide comprehensive second opinions, giving you
+            the confidence to move forward with your care.
           </Typography>
 
           {/* Feature List */}
-          <List disablePadding dense sx={{ mb: 2, width: "100%", maxWidth: 480 }}>
+          <List
+            disablePadding
+            dense
+            sx={{ mb: 2, width: "100%", maxWidth: 480 }}
+          >
             <ListItem sx={{ mb: 0.8, px: 0 }}>
               <ListItemIcon>
-                <VerifiedUserIcon sx={{ color: "var(--primary-600)", fontSize: 29 }} />
+                <VerifiedUserIcon
+                  sx={{ color: "var(--primary-600)", fontSize: 29 }}
+                />
               </ListItemIcon>
               <ListItemText
                 primary={
                   <>
                     <b>Expert Specialist Review</b>
-                    <Box component="span" sx={{ color: "var(--text-secondary)", fontWeight: 400 }}>
-                      {" — Board-certified physicians provide detailed insights and care alternatives."}
+                    <Box
+                      component="span"
+                      sx={{ color: "var(--text-secondary)", fontWeight: 400 }}
+                    >
+                      {
+                        " — Board-certified physicians provide detailed insights and care alternatives."
+                      }
                     </Box>
                   </>
                 }
@@ -120,13 +135,18 @@ const HeroSplitSection: React.FC = () => {
             </ListItem>
             <ListItem sx={{ mb: 0.8, px: 0 }}>
               <ListItemIcon>
-                <InsightsIcon sx={{ color: "var(--primary-600)", fontSize: 27 }} />
+                <InsightsIcon
+                  sx={{ color: "var(--primary-600)", fontSize: 27 }}
+                />
               </ListItemIcon>
               <ListItemText
                 primary={
                   <>
                     <b>AI-Enhanced Analysis</b>
-                    <Box component="span" sx={{ color: "var(--text-secondary)", fontWeight: 400 }}>
+                    <Box
+                      component="span"
+                      sx={{ color: "var(--text-secondary)", fontWeight: 400 }}
+                    >
                       {" — Advanced AI analyzes your records for key details."}
                     </Box>
                   </>
@@ -135,14 +155,21 @@ const HeroSplitSection: React.FC = () => {
             </ListItem>
             <ListItem sx={{ mb: 1.2, px: 0 }}>
               <ListItemIcon>
-                <MedicalServicesIcon sx={{ color: "var(--primary-600)", fontSize: 27 }} />
+                <MedicalServicesIcon
+                  sx={{ color: "var(--primary-600)", fontSize: 27 }}
+                />
               </ListItemIcon>
               <ListItemText
                 primary={
                   <>
                     <b>Personalized Care Plan</b>
-                    <Box component="span" sx={{ color: "var(--text-secondary)", fontWeight: 400 }}>
-                      {" — Clear explanations, options, and next steps tailored to you."}
+                    <Box
+                      component="span"
+                      sx={{ color: "var(--text-secondary)", fontWeight: 400 }}
+                    >
+                      {
+                        " — Clear explanations, options, and next steps tailored to you."
+                      }
                     </Box>
                   </>
                 }
@@ -151,7 +178,13 @@ const HeroSplitSection: React.FC = () => {
           </List>
 
           {/* CTA buttons */}
-          <Stack direction={{ xs: "column", md: "row" }} spacing={2} mt={1} mb={2} sx={{ width: "100%", maxWidth: 460 }}>
+          <Stack
+            direction={{ xs: "column", md: "row" }}
+            spacing={2}
+            mt={1}
+            mb={2}
+            sx={{ width: "100%", maxWidth: 460 }}
+          >
             <Button
               variant="contained"
               sx={{
@@ -188,19 +221,28 @@ const HeroSplitSection: React.FC = () => {
           {/* Doctor + patient image */}
           <Box
             sx={{
-              width: { xs: "100%", },
+              width: { xs: "100%" },
               height: { md: "auto" },
               borderRadius: 2.8,
               overflow: "hidden",
               boxShadow: "0 9px 28px 0 var(--primary-200)",
               mt: 2.5,
               mx: { xs: "auto", md: 0 },
+              /* Add this line: */
+              alignSelf: { xs: "center", md: "stretch" },
+              // MOST IMPORTANT for sticking at bottom:
+              marginTop: "auto", // or mt: "auto" in sx shorthand
             }}
           >
             <img
               src={heroDoctorImage}
               alt="Doctor with patient"
-              style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                display: "block",
+              }}
             />
           </Box>
         </MotionBox>
@@ -209,7 +251,7 @@ const HeroSplitSection: React.FC = () => {
         <MotionBox
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, amount: 0.7 }}
+          viewport={{ once: true, amount: 0.4 }}
           variants={fadeIn}
           custom={2}
           sx={{
@@ -255,19 +297,33 @@ const HeroSplitSection: React.FC = () => {
               textAlign: { xs: "center", md: "left" },
             }}
           >
-            Transform your healthcare delivery with our AI-powered clinical governance platform. Reduce medical errors, improve patient outcomes, and ensure the highest standards of care across your institution.
+            Transform your healthcare delivery with our AI-powered clinical
+            governance platform. Reduce medical errors, improve patient
+            outcomes, and ensure the highest standards of care across your
+            institution.
           </Typography>
 
-          <List disablePadding dense sx={{ width: "100%", maxWidth: 480, mb: 1.5 }}>
+          <List
+            disablePadding
+            dense
+            sx={{ width: "100%", maxWidth: 480, mb: 1.5 }}
+          >
             <ListItem sx={{ px: 0, mb: 0.7 }}>
               <ListItemIcon>
-                <QueryBuilderIcon sx={{ color: "var(--primary-600)", fontSize: 23 }} />
+                <QueryBuilderIcon
+                  sx={{ color: "var(--primary-600)", fontSize: 23 }}
+                />
               </ListItemIcon>
               <ListItemText
                 primary={
                   <span>
                     <b>Real-Time Quality Monitoring</b>
-                    <span style={{ color: "var(--text-secondary)", fontWeight: 400 }}>
+                    <span
+                      style={{
+                        color: "var(--text-secondary)",
+                        fontWeight: 400,
+                      }}
+                    >
                       {" — Alerts for risk, quality improvement, and oversight"}
                     </span>
                   </span>
@@ -276,13 +332,20 @@ const HeroSplitSection: React.FC = () => {
             </ListItem>
             <ListItem sx={{ px: 0, mb: 0.7 }}>
               <ListItemIcon>
-                <SupervisorAccountIcon sx={{ color: "var(--primary-600)", fontSize: 24 }} />
+                <SupervisorAccountIcon
+                  sx={{ color: "var(--primary-600)", fontSize: 24 }}
+                />
               </ListItemIcon>
               <ListItemText
                 primary={
                   <span>
                     <b>Expert Network Access</b>
-                    <span style={{ color: "var(--text-secondary)", fontWeight: 400 }}>
+                    <span
+                      style={{
+                        color: "var(--text-secondary)",
+                        fontWeight: 400,
+                      }}
+                    >
                       {" — Consult with leading specialists on complex cases"}
                     </span>
                   </span>
@@ -291,13 +354,20 @@ const HeroSplitSection: React.FC = () => {
             </ListItem>
             <ListItem sx={{ px: 0, mb: 0.8 }}>
               <ListItemIcon>
-                <SettingsInputComponentIcon sx={{ color: "var(--primary-600)", fontSize: 23 }} />
+                <SettingsInputComponentIcon
+                  sx={{ color: "var(--primary-600)", fontSize: 23 }}
+                />
               </ListItemIcon>
               <ListItemText
                 primary={
                   <span>
                     <b>Seamless Integration</b>
-                    <span style={{ color: "var(--text-secondary)", fontWeight: 400 }}>
+                    <span
+                      style={{
+                        color: "var(--text-secondary)",
+                        fontWeight: 400,
+                      }}
+                    >
                       {" — Syncs with EHRs and clinical workflows"}
                     </span>
                   </span>
@@ -306,7 +376,12 @@ const HeroSplitSection: React.FC = () => {
             </ListItem>
           </List>
           {/* Call-to-action buttons */}
-          <Stack direction={{ xs: "column", md: "row" }} spacing={2} mt={3} sx={{ width: "100%", maxWidth: 460 }}>
+          <Stack
+            direction={{ xs: "column", md: "row" }}
+            spacing={2}
+            mt={3}
+            sx={{ width: "100%", maxWidth: 460 }}
+          >
             <Button
               variant="contained"
               sx={{
@@ -345,20 +420,28 @@ const HeroSplitSection: React.FC = () => {
           {/* Dashboard image */}
           <Box
             sx={{
-              width: { xs: "100%"},
-              height: { xs: "auto"},
+              width: { xs: "100%" },
+              height: { xs: "auto" },
               borderRadius: 2.2,
               overflow: "hidden",
               boxShadow: "0 7px 24px 0 var(--primary-200)",
               mx: { xs: "auto", md: 0 },
               mt: 3,
-              alignSelf: { xs: "center", md: "end" },
+              /* Add this line: */
+              alignSelf: { xs: "center", md: "stretch" },
+              // MOST IMPORTANT for sticking at bottom:
+              marginTop: "auto", // or mt: "auto" in sx shorthand
             }}
           >
             <img
               src={heroDoctorImage}
               alt="Clinical Dashboard"
-              style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                display: "block",
+              }}
             />
           </Box>
         </MotionBox>
