@@ -25,7 +25,7 @@ import { NavLink } from "react-router-dom";
 const navLinks = [
   { label: "Home", href: "/" },
   { label: "For Patients", href: "/patients" },
-  { label: "For Doctors", href: "/hospitals" },
+  { label: "For Doctors", href: "/doctors" },
   { label: "Specialists", href: "/specialists" },
   { label: "About", href: "/about" },
 ];

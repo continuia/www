@@ -7,8 +7,8 @@ import {
 import HomeLayout from "./layout/landingPage";
 import NotFound from "./pages/notFound";
 import LandingPage from "./pages/landingPage";
-import ForPatients from "./layout/forPatients";
-import ForDoctors from "./layout/forDoctors";
+import ForPatients from "./pages/forPatients";
+import ForDoctors from "./pages/forDoctors";
 
 function App() {
   return (
