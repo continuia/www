@@ -60,7 +60,7 @@ const Header = () => {
           color: "var(--text-primary)",
           borderBottom: "1px solid var(--border-light)",
           py: 1,
-          zIndex: 1301,
+          zIndex: 100,
           boxShadow: "0 2px 12px 0 var(--primary-50)",
         }}
       >
@@ -174,7 +174,6 @@ const Header = () => {
                       bgcolor: "var(--bg-primary)",
                       boxShadow: "0 12px 40px 0 var(--primary-100)",
                       minWidth: 240,
-                      pt:2
                     },
                   },
                 }}
@@ -184,7 +183,7 @@ const Header = () => {
                   alignItems="center"
                   justifyContent="space-between"
                   px={2}
-                  py={2}
+                  py={1}
                 >
                   <Typography
                     variant="h6"
