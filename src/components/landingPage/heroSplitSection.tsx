@@ -17,11 +17,8 @@ import QueryBuilderIcon from "@mui/icons-material/QueryBuilder";
 import SettingsInputComponentIcon from "@mui/icons-material/SettingsInputComponent";
 import SupervisorAccountIcon from "@mui/icons-material/SupervisorAccount";
 import { motion } from "framer-motion";
-import heroIllustration from "../../assets/ai_assisted_patient_intake.webp"; // <-- Import your image
-// Replace with your real images
-const heroDoctorImage = heroIllustration;
-
-const dashboardImage = heroIllustration;
+import heroDoctorImage from "../../assets/ai_assisted_patient_intake.webp";
+// import { useTheme, useMediaQuery } from "@mui/material";
 
 // Animation variant for fade-in
 const fadeIn = {
@@ -41,22 +38,24 @@ const fadeIn = {
 const MotionBox = motion(Box);
 
 const HeroSplitSection: React.FC = () => {
-  //   const theme = useTheme();
-  //   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  // const theme = useTheme();
+  // const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   return (
     <Box
       sx={{
-        background:
-          "linear-gradient(110deg, var(--primary-50) 0%, var(--bg-secondary) 100%)",
+        background: "linear-gradient(110deg, var(--primary-50) 0%, var(--bg-secondary) 100%)",
         p: { xs: 2, sm: 4, md: 7 },
+        maxWidth: "100%",
+        mx: "auto",
       }}
     >
       <Stack
         direction={{ xs: "column", md: "row" }}
-        spacing={{ xs: 4 }}
-        alignItems="strech"
+        gap={{ xs: 4, }}
+        alignItems="stretch"
         justifyContent="center"
+        sx={{ width: "100%" }}
       >
         {/* LEFT: Clarity in Care */}
         <MotionBox
@@ -66,12 +65,12 @@ const HeroSplitSection: React.FC = () => {
           variants={fadeIn}
           custom={1}
           sx={{
-            flex: 1.18,
+            flex: 1,
             bgcolor: "var(--bg-primary)",
             borderRadius: "1.7rem",
             boxShadow: "var(--shadow-xl)",
             p: { xs: 3, md: 6 },
-            minWidth: { xs: "100%", md: "50%" },
+            width: { xs: "100%", md: "auto" },
             display: "flex",
             flexDirection: "column",
             alignItems: { xs: "center", md: "flex-start" },
@@ -96,33 +95,24 @@ const HeroSplitSection: React.FC = () => {
               mb: 2.4,
               fontSize: { xs: "1.04rem", md: "1.13rem" },
               maxWidth: 570,
+              textAlign: { xs: "center", md: "left" },
             }}
           >
-            Facing a complex diagnosis or treatment decision can feel
-            overwhelming. Our platform connects you with world-renowned
-            specialists who provide comprehensive second opinions, giving you
-            the confidence to move forward with your care.
+            Facing a complex diagnosis or treatment decision can feel overwhelming. Our platform connects you with world-renowned specialists who provide comprehensive second opinions, giving you the confidence to move forward with your care.
           </Typography>
 
           {/* Feature List */}
-          <List disablePadding dense sx={{ mb: 2, width: "100%" }}>
+          <List disablePadding dense sx={{ mb: 2, width: "100%", maxWidth: 480 }}>
             <ListItem sx={{ mb: 0.8, px: 0 }}>
               <ListItemIcon>
-                <VerifiedUserIcon
-                  sx={{ color: "var(--primary-600)", fontSize: 29 }}
-                />
+                <VerifiedUserIcon sx={{ color: "var(--primary-600)", fontSize: 29 }} />
               </ListItemIcon>
               <ListItemText
                 primary={
                   <>
                     <b>Expert Specialist Review</b>
-                    <Box
-                      component="span"
-                      sx={{ color: "var(--text-secondary)", fontWeight: 400 }}
-                    >
-                      {
-                        " — Board-certified physicians provide detailed insights and care alternatives."
-                      }
+                    <Box component="span" sx={{ color: "var(--text-secondary)", fontWeight: 400 }}>
+                      {" — Board-certified physicians provide detailed insights and care alternatives."}
                     </Box>
                   </>
                 }
@@ -130,18 +120,13 @@ const HeroSplitSection: React.FC = () => {
             </ListItem>
             <ListItem sx={{ mb: 0.8, px: 0 }}>
               <ListItemIcon>
-                <InsightsIcon
-                  sx={{ color: "var(--primary-600)", fontSize: 27 }}
-                />
+                <InsightsIcon sx={{ color: "var(--primary-600)", fontSize: 27 }} />
               </ListItemIcon>
               <ListItemText
                 primary={
                   <>
                     <b>AI-Enhanced Analysis</b>
-                    <Box
-                      component="span"
-                      sx={{ color: "var(--text-secondary)", fontWeight: 400 }}
-                    >
+                    <Box component="span" sx={{ color: "var(--text-secondary)", fontWeight: 400 }}>
                       {" — Advanced AI analyzes your records for key details."}
                     </Box>
                   </>
@@ -150,21 +135,14 @@ const HeroSplitSection: React.FC = () => {
             </ListItem>
             <ListItem sx={{ mb: 1.2, px: 0 }}>
               <ListItemIcon>
-                <MedicalServicesIcon
-                  sx={{ color: "var(--primary-600)", fontSize: 27 }}
-                />
+                <MedicalServicesIcon sx={{ color: "var(--primary-600)", fontSize: 27 }} />
               </ListItemIcon>
               <ListItemText
                 primary={
                   <>
                     <b>Personalized Care Plan</b>
-                    <Box
-                      component="span"
-                      sx={{ color: "var(--text-secondary)", fontWeight: 400 }}
-                    >
-                      {
-                        " — Clear explanations, options, and next steps tailored to you."
-                      }
+                    <Box component="span" sx={{ color: "var(--text-secondary)", fontWeight: 400 }}>
+                      {" — Clear explanations, options, and next steps tailored to you."}
                     </Box>
                   </>
                 }
@@ -173,22 +151,22 @@ const HeroSplitSection: React.FC = () => {
           </List>
 
           {/* CTA buttons */}
-          <Stack direction={{ sx: "column", md: "row" }} gap={2} mt={1} mb={2}>
+          <Stack direction={{ xs: "column", md: "row" }} spacing={2} mt={1} mb={2} sx={{ width: "100%", maxWidth: 460 }}>
             <Button
               variant="contained"
               sx={{
                 bgcolor: "var(--primary-600)",
                 color: "var(--text-inverse)",
                 fontWeight: 800,
-                px: 3,
+                px: 2,
                 py: 1.2,
                 borderRadius: 2.3,
                 textTransform: "none",
                 fontSize: { xs: "1rem", md: "1.13rem" },
                 boxShadow: "0 4px 30px 0 var(--primary-200)",
-                "&:hover": {
-                  bgcolor: "var(--primary-700)",
-                },
+                width: { xs: "100%", md: "auto" },
+                mb: { xs: 1.5, md: 0 },
+                "&:hover": { bgcolor: "var(--primary-700)" },
               }}
             >
               Start Your Consultation
@@ -200,6 +178,7 @@ const HeroSplitSection: React.FC = () => {
                 fontWeight: 700,
                 fontSize: { xs: "1rem", md: "1.11rem" },
                 textTransform: "none",
+                width: { xs: "100%", md: "auto" },
               }}
             >
               View Success Stories
@@ -209,7 +188,8 @@ const HeroSplitSection: React.FC = () => {
           {/* Doctor + patient image */}
           <Box
             sx={{
-              width: { xs: "100%", sm: "100%", md: "100%" },
+              width: { xs: "100%", },
+              height: { md: "auto" },
               borderRadius: 2.8,
               overflow: "hidden",
               boxShadow: "0 9px 28px 0 var(--primary-200)",
@@ -220,7 +200,7 @@ const HeroSplitSection: React.FC = () => {
             <img
               src={heroDoctorImage}
               alt="Doctor with patient"
-              style={{ width: "100%", height: "100%", objectFit: "cover" }}
+              style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
             />
           </Box>
         </MotionBox>
@@ -241,7 +221,7 @@ const HeroSplitSection: React.FC = () => {
             display: "flex",
             flexDirection: "column",
             alignItems: { xs: "center", md: "flex-start" },
-            minWidth: { xs: "100%", lg: "50%" },
+            width: { xs: "100%", md: "auto" },
             mt: { xs: 4, md: 0 },
           }}
         >
@@ -262,6 +242,7 @@ const HeroSplitSection: React.FC = () => {
               color: "var(--primary-700)",
               mb: 1.2,
               fontSize: { xs: "1.24rem", md: "1.41rem" },
+              textAlign: { xs: "center", md: "left" },
             }}
           >
             Elevate Your Clinical Excellence
@@ -271,31 +252,22 @@ const HeroSplitSection: React.FC = () => {
               color: "var(--text-secondary)",
               mb: 2.5,
               fontSize: { xs: "1rem", sm: "1.09rem", md: "1.12rem" },
+              textAlign: { xs: "center", md: "left" },
             }}
           >
-            Transform your healthcare delivery with our AI-powered clinical
-            governance platform. Reduce medical errors, improve patient
-            outcomes, and ensure the highest standards of care across your
-            institution.
+            Transform your healthcare delivery with our AI-powered clinical governance platform. Reduce medical errors, improve patient outcomes, and ensure the highest standards of care across your institution.
           </Typography>
 
-          <List disablePadding dense sx={{ width: "100%", mb: 1.5 }}>
+          <List disablePadding dense sx={{ width: "100%", maxWidth: 480, mb: 1.5 }}>
             <ListItem sx={{ px: 0, mb: 0.7 }}>
               <ListItemIcon>
-                <QueryBuilderIcon
-                  sx={{ color: "var(--primary-600)", fontSize: 23 }}
-                />
+                <QueryBuilderIcon sx={{ color: "var(--primary-600)", fontSize: 23 }} />
               </ListItemIcon>
               <ListItemText
                 primary={
                   <span>
                     <b>Real-Time Quality Monitoring</b>
-                    <span
-                      style={{
-                        color: "var(--text-secondary)",
-                        fontWeight: 400,
-                      }}
-                    >
+                    <span style={{ color: "var(--text-secondary)", fontWeight: 400 }}>
                       {" — Alerts for risk, quality improvement, and oversight"}
                     </span>
                   </span>
@@ -304,20 +276,13 @@ const HeroSplitSection: React.FC = () => {
             </ListItem>
             <ListItem sx={{ px: 0, mb: 0.7 }}>
               <ListItemIcon>
-                <SupervisorAccountIcon
-                  sx={{ color: "var(--primary-600)", fontSize: 24 }}
-                />
+                <SupervisorAccountIcon sx={{ color: "var(--primary-600)", fontSize: 24 }} />
               </ListItemIcon>
               <ListItemText
                 primary={
                   <span>
                     <b>Expert Network Access</b>
-                    <span
-                      style={{
-                        color: "var(--text-secondary)",
-                        fontWeight: 400,
-                      }}
-                    >
+                    <span style={{ color: "var(--text-secondary)", fontWeight: 400 }}>
                       {" — Consult with leading specialists on complex cases"}
                     </span>
                   </span>
@@ -326,20 +291,13 @@ const HeroSplitSection: React.FC = () => {
             </ListItem>
             <ListItem sx={{ px: 0, mb: 0.8 }}>
               <ListItemIcon>
-                <SettingsInputComponentIcon
-                  sx={{ color: "var(--primary-600)", fontSize: 23 }}
-                />
+                <SettingsInputComponentIcon sx={{ color: "var(--primary-600)", fontSize: 23 }} />
               </ListItemIcon>
               <ListItemText
                 primary={
                   <span>
                     <b>Seamless Integration</b>
-                    <span
-                      style={{
-                        color: "var(--text-secondary)",
-                        fontWeight: 400,
-                      }}
-                    >
+                    <span style={{ color: "var(--text-secondary)", fontWeight: 400 }}>
                       {" — Syncs with EHRs and clinical workflows"}
                     </span>
                   </span>
@@ -348,22 +306,22 @@ const HeroSplitSection: React.FC = () => {
             </ListItem>
           </List>
           {/* Call-to-action buttons */}
-          <Stack direction={{ sx: "column", md: "row" }} gap={1} mt={3}>
+          <Stack direction={{ xs: "column", md: "row" }} spacing={2} mt={3} sx={{ width: "100%", maxWidth: 460 }}>
             <Button
               variant="contained"
               sx={{
                 bgcolor: "var(--primary-700)",
                 color: "var(--text-inverse)",
                 fontWeight: 800,
-                px: 2.7,
+                px: 2,
                 py: 1.12,
                 borderRadius: 2,
                 textTransform: "none",
                 fontSize: { xs: "0.98rem", md: "1.09rem" },
                 boxShadow: "0 4px 30px 0 var(--primary-200)",
-                "&:hover": {
-                  bgcolor: "var(--primary-800)",
-                },
+                width: { xs: "100%", md: "auto" },
+                mb: { xs: 1.5, md: 0 },
+                "&:hover": { bgcolor: "var(--primary-800)" },
               }}
             >
               Explore Solutions
@@ -374,9 +332,10 @@ const HeroSplitSection: React.FC = () => {
                 color: "var(--primary-700)",
                 borderColor: "var(--primary-300)",
                 fontWeight: 700,
-                px: 2.4,
+                px: 2,
                 textTransform: "none",
                 fontSize: { xs: "0.98rem", md: "1.09rem" },
+                width: { xs: "100%", md: "auto" },
               }}
             >
               Schedule Demo
@@ -386,19 +345,20 @@ const HeroSplitSection: React.FC = () => {
           {/* Dashboard image */}
           <Box
             sx={{
-              width: { xs: "100%" },
+              width: { xs: "100%"},
+              height: { xs: "auto"},
               borderRadius: 2.2,
               overflow: "hidden",
               boxShadow: "0 7px 24px 0 var(--primary-200)",
               mx: { xs: "auto", md: 0 },
               mt: 3,
-              alignSelf: "end",
+              alignSelf: { xs: "center", md: "end" },
             }}
           >
             <img
-              src={dashboardImage}
+              src={heroDoctorImage}
               alt="Clinical Dashboard"
-              style={{ width: "100%", height: "100%", objectFit: "cover" }}
+              style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
             />
           </Box>
         </MotionBox>

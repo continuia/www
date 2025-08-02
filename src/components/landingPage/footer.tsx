@@ -52,6 +52,7 @@ const Footer = () => {
         >
           {/* Logo and Brand */}
           <Stack
+            order={0}
             direction="row"
             alignItems="center"
             spacing={1.5}
@@ -76,8 +77,25 @@ const Footer = () => {
             </Typography>
           </Stack>
 
+          <Typography
+            order={{ xs: 2, sm: 1 }}
+            variant="caption"
+            sx={{
+              color: "var(--text-muted)",
+              textAlign: "center",
+              display: "block",
+              fontSize: { xs: "0.75rem", sm: "0.9rem" },
+            }}
+          >
+            © {new Date().getFullYear()} Continuia. All rights reserved.
+          </Typography>
+
           {/* Contact/Support Info & Socials */}
-          <Stack spacing={1} alignItems={{ xs: "flex-start", sm: "flex-end" }}>
+          <Stack
+            order={{ xs: 1, sm: 2 }}
+            spacing={1}
+            alignItems={{ xs: "flex-start", sm: "flex-end" }}
+          >
             <Stack direction="row" spacing={1} mb={0.5}>
               {socialLinks.map((social) => (
                 <Tooltip title={social.label} key={social.label}>
@@ -119,18 +137,6 @@ const Footer = () => {
             </Typography> */}
           </Stack>
         </Stack>
-
-        <Typography
-          variant="caption"
-          sx={{
-            color: "var(--text-muted)",
-            textAlign: "center",
-            display: "block",
-            fontSize: { xs: "0.75rem", sm: "0.9rem" },
-          }}
-        >
-          © {new Date().getFullYear()} Continuia. All rights reserved.
-        </Typography>
       </Container>
     </Box>
   );
