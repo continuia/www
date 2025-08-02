@@ -167,7 +167,7 @@ const HeroSection = () => (
         </Stack>
         <Stack
           direction={{ xs: "column", sm: "row" }}
-          gap={3}
+          gap={1}
           mt={2}
           flexWrap="wrap"
         >

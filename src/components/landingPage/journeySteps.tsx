@@ -14,7 +14,9 @@ import VerifiedUserIcon from "@mui/icons-material/VerifiedUser";
 import QueryBuilderIcon from "@mui/icons-material/QueryBuilder";
 import { motion } from "framer-motion";
 import type { Variants } from "framer-motion";
-import heroIllustration from "../../assets/ai_assisted_patient_intake.webp";
+import expertAnalysisImg from "../../assets/expert_analysis.webp";
+import continuiaInsightsLaptop from "../../assets/continuia_insights_laptop.webp";
+
 import ShareYOurStory from "../../assets/share_your_story.webp"
 const MotionBox = motion(Box);
 
@@ -399,8 +401,8 @@ const JourneySteps: React.FC = () => {
             }}
           >
             <img
-              src={heroIllustration}
-              alt="Step illustration"
+              src={expertAnalysisImg}
+              alt="expert Analysis Img"
               style={{ width: "100%", height: "100%", objectFit: "cover" }}
             />
           </MotionBox>
@@ -594,7 +596,8 @@ const JourneySteps: React.FC = () => {
             }}
           >
             <img
-              src={heroIllustration}
+              src={continuiaInsightsLaptop}
+
               alt="Step illustration"
               style={{ width: "100%", height: "100%", objectFit: "cover" }}
             />
