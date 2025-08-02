@@ -7,7 +7,7 @@ import {
   Tooltip,
 } from "@mui/material";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
-import XIcon from "@mui/icons-material/X";
+// import XIcon from "@mui/icons-material/X";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import InstagramIcon from "@mui/icons-material/Instagram";
 
@@ -17,7 +17,7 @@ const socialLinks = [
     label: "LinkedIn",
     href: "https://www.linkedin.com/company/continuia",
   },
-  { icon: <XIcon />, label: "X", href: "https://x.com" },
+  // { icon: <XIcon />, label: "X", href: "https://x.com" },
   {
     icon: <FacebookIcon />,
     label: "Facebook",
