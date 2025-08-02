@@ -9,6 +9,8 @@ import NotFound from "./pages/notFound";
 import LandingPage from "./pages/landingPage";
 import ForPatients from "./pages/forPatients";
 import ForDoctors from "./pages/forDoctors";
+import Specialists from "./pages/specialists";
+import AboutPage from "./pages/about";
 
 function App() {
   return (
@@ -19,6 +21,8 @@ function App() {
           <Route index element={<LandingPage />} />
           <Route path="patients" element={<ForPatients />} />
           <Route path="doctors" element={<ForDoctors />} />
+          <Route path="specialists" element={<Specialists />} />
+          <Route path="about" element={<AboutPage />} />
           <Route path="notFound" element={<NotFound />} />
         </Route>
 
