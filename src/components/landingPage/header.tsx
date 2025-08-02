@@ -19,14 +19,15 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
+import { NavLink } from "react-router-dom";
 
 // Navigation links config
 const navLinks = [
   { label: "Home", href: "/" },
-  { label: "For Patients", href: "/#patients" },
-  { label: "For Doctors", href: "/#hospitals" },
-  { label: "Specialists", href: "/#specialists" },
-  { label: "About", href: "/#about" },
+  { label: "For Patients", href: "/patients" },
+  { label: "For Doctors", href: "/hospitals" },
+  { label: "Specialists", href: "/specialists" },
+  { label: "About", href: "/about" },
 ];
 
 const Header = () => {
@@ -34,21 +35,15 @@ const Header = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   const theme = useTheme();
-  // lg === 1200px by default; "md & down" should show mobile menu
+  // lg === 1200px by default
   const isBelowLg = useMediaQuery(theme.breakpoints.down("lg"));
 
   useEffect(() => {
     setShow(true);
   }, []);
 
-  // For demo logic: mark "Home" as the current
-  const activeLink = "Home";
-
   // Closing menu on navigation link
-  const handleDrawerNav = () => {
-    setDrawerOpen(false);
-    // if you use react-router, you may want to do navigation here programmatically instead.
-  };
+  const handleDrawerNav = () => setDrawerOpen(false);
 
   return (
     <Fade in={show} timeout={700}>
@@ -107,45 +102,49 @@ const Header = () => {
               alignItems: "center",
             }}
           >
-            {navLinks.map((link) => {
-              const isActive = link.label === activeLink;
-              return (
-                <Button
-                  key={link.label}
-                  href={link.href}
-                  disableRipple
-                  sx={{
-                    textTransform: "none",
-                    color: isActive
-                      ? "var(--text-inverse)"
-                      : "var(--neutral-600)",
-                    background: isActive
-                      ? "linear-gradient(90deg, var(--primary-500), var(--primary-700))"
-                      : "transparent",
-                    fontWeight: 600,
-                    fontSize: "1rem",
-                    borderRadius: "999px",
-                    px: 2.5,
-                    py: 1,
-                    minWidth: 0,
-                    boxShadow: isActive
-                      ? "0 5px 15px 0 var(--primary-200)"
-                      : "none",
-                    transition: "background 0.2s, color 0.2s",
-                    "&:hover": {
-                      background: isActive
-                        ? "linear-gradient(90deg, var(--primary-400), var(--primary-600))"
-                        : "var(--primary-50)",
+            {navLinks.map((link) => (
+              <NavLink
+                key={link.label}
+                to={link.href}
+                end
+                style={{ textDecoration: "none" }}
+              >
+                {({ isActive }) => (
+                  <Button
+                    disableRipple
+                    sx={{
+                      textTransform: "none",
                       color: isActive
                         ? "var(--text-inverse)"
-                        : "var(--primary-800)",
-                    },
-                  }}
-                >
-                  {link.label}
-                </Button>
-              );
-            })}
+                        : "var(--neutral-600)",
+                      background: isActive
+                        ? "linear-gradient(90deg, var(--primary-500), var(--primary-700))"
+                        : "transparent",
+                      fontWeight: 600,
+                      fontSize: "1rem",
+                      borderRadius: "999px",
+                      px: 2.5,
+                      py: 1,
+                      minWidth: 0,
+                      boxShadow: isActive
+                        ? "0 5px 15px 0 var(--primary-200)"
+                        : "none",
+                      transition: "background 0.2s, color 0.2s",
+                      "&:hover": {
+                        background: isActive
+                          ? "linear-gradient(90deg, var(--primary-400), var(--primary-600))"
+                          : "var(--primary-50)",
+                        color: isActive
+                          ? "var(--text-inverse)"
+                          : "var(--primary-800)",
+                      },
+                    }}
+                  >
+                    {link.label}
+                  </Button>
+                )}
+              </NavLink>
+            ))}
           </Paper>
 
           {/* Hamburger menu (only on md and below; i.e., if isBelowLg) */}
@@ -167,7 +166,6 @@ const Header = () => {
                 anchor="right"
                 open={drawerOpen}
                 onClose={() => setDrawerOpen(false)}
-                
                 slotProps={{
                   paper: {
                     sx: {
@@ -209,9 +207,9 @@ const Header = () => {
                   {navLinks.map((link) => (
                     <ListItem key={link.label} disablePadding>
                       <ListItemButton
-                        component="a"
-                        href={link.href}
-                        onClick={() => handleDrawerNav()}
+                        component={NavLink}
+                        to={link.href}
+                        onClick={handleDrawerNav}
                         sx={{
                           mx: 1,
                           px: 3,
@@ -222,12 +220,12 @@ const Header = () => {
                           fontSize: "1.09rem",
                           letterSpacing: 0.6,
                           mb: 0.7,
-                          "&.Mui-selected, &:hover": {
+                          "&.active, &:hover": {
                             bgcolor: "var(--primary-50)",
                             color: "var(--primary-800)",
                           },
                         }}
-                        selected={link.label === activeLink}
+                        end
                       >
                         <ListItemText primary={link.label} />
                       </ListItemButton>
