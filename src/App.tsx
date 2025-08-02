@@ -11,6 +11,7 @@ import ForPatients from "./pages/forPatients";
 import ForDoctors from "./pages/forDoctors";
 import Specialists from "./pages/specialists";
 import AboutPage from "./pages/about";
+import Campaign from "./pages/campaign";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           <Route path="doctors" element={<ForDoctors />} />
           <Route path="specialists" element={<Specialists />} />
           <Route path="about" element={<AboutPage />} />
+          <Route path="campaign" element={<Campaign />} />
           <Route path="notFound" element={<NotFound />} />
         </Route>
 
