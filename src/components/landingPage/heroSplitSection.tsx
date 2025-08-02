@@ -17,7 +17,9 @@ import QueryBuilderIcon from "@mui/icons-material/QueryBuilder";
 import SettingsInputComponentIcon from "@mui/icons-material/SettingsInputComponent";
 import SupervisorAccountIcon from "@mui/icons-material/SupervisorAccount";
 import { motion } from "framer-motion";
-import heroDoctorImage from "../../assets/ai_assisted_patient_intake.webp";
+import heroDoctorImage from "../../assets/continuia_clinical_governance.webp";
+import continuia_doctor_team from "../../assets/continuia_doctor_team.webp";
+
 // import { useTheme, useMediaQuery } from "@mui/material";
 
 // Animation variant for fade-in
@@ -235,7 +237,7 @@ const HeroSplitSection: React.FC = () => {
             }}
           >
             <img
-              src={heroDoctorImage}
+              src={continuia_doctor_team}
               alt="Doctor with patient"
               style={{
                 width: "100%",

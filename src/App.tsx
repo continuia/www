@@ -24,7 +24,7 @@ function App() {
           <Route path="doctors" element={<ForDoctors />} />
           <Route path="specialists" element={<Specialists />} />
           <Route path="about" element={<AboutPage />} />
-          <Route path="campaign" element={<Campaign />} />
+          <Route path="cxa-globallaunch-c1a7e3d" element={<Campaign />} />
           <Route path="notFound" element={<NotFound />} />
         </Route>
 
