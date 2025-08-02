@@ -1,11 +1,11 @@
-import { Box, Typography, Paper } from "@mui/material";
+import { Box, Typography } from "@mui/material";
+import ContactForm from "./form";
 
 export default function ContinuaLaunch() {
   return (
     <Box
       sx={{
         width: "100%",
-        minHeight: "100vh",
         bgcolor: "var(--primary-600)",
         background:
           "linear-gradient(120deg, var(--primary-800), var(--primary-400) 80%)",
@@ -14,7 +14,7 @@ export default function ContinuaLaunch() {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        px: { xs: "var(--space-2)", md: "var(--space-16)" },
+        p: { xs: "var(--space-2)", md: "var(--space-16)" },
       }}
     >
       <Box
@@ -22,7 +22,6 @@ export default function ContinuaLaunch() {
           maxWidth: 600,
           w: "100%",
           py: "var(--space-16)",
-          mb: "var(--space-10)",
           textAlign: "center",
         }}
       >
@@ -35,7 +34,7 @@ export default function ContinuaLaunch() {
             color: "var(--text-inverse)",
           }}
         >
-          This is Continia's global launch
+          This is Continuia's global launch
         </Typography>
         <Typography
           sx={{
@@ -65,38 +64,7 @@ export default function ContinuaLaunch() {
           It helps define what the role should be.
         </Typography>
       </Box>
-
-      <Paper
-        elevation={3}
-        sx={{
-          minWidth: 320,
-          maxWidth: 420,
-          width: "100%",
-          px: { xs: "var(--space-4)", md: "var(--space-10)" },
-          py: { xs: "var(--space-8)", md: "var(--space-12)" },
-          borderRadius: "var(--radius-lg)",
-          background: "var(--bg-primary)",
-          color: "var(--text-primary)",
-          boxShadow: "var(--shadow-lg)",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        <Typography
-          variant="h6"
-          sx={{
-            fontWeight: 700,
-            color: "var(--text-primary)",
-            mb: "var(--space-4)",
-            textAlign: "center",
-          }}
-        >
-          Join the Initiative
-        </Typography>
-        {/* TODO: Add your form here */}
-        <Box sx={{ minHeight: 220, width: "100%" }} />
-      </Paper>
+      <ContactForm />
     </Box>
   );
 }

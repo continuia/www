@@ -3,7 +3,7 @@ import HeroSection from "../components/campaign/heroSection";
 import PlatformPromo from "../components/campaign/platformPromo";
 import AdaptiveTech2025 from "../components/campaign/adaptiveTech";
 import GuidingPrinciples from "../components/campaign/guidingPrinciples";
-// import ContinuaLaunch from "../components/campaign/continuaLaunch";
+import ContinuaLaunch from "../components/campaign/continuaLaunch";
 const Campaign = () => {
   return (
     <Box
@@ -16,7 +16,7 @@ const Campaign = () => {
       <PlatformPromo />
       <AdaptiveTech2025 />
       <GuidingPrinciples />
-      {/* <ContinuaLaunch /> */}
+      <ContinuaLaunch />
     </Box>
   );
 };
