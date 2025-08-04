@@ -6,7 +6,8 @@ import Paper from "@mui/material/Paper";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-
+// import { joinTheInitiative } from "../../api/campaign";
+import { useToast } from "../toastContext";
 const schema = z.object({
   email: z.string().email({ message: "Enter a valid email address" }).min(1, "Email is required"),
   phone: z
@@ -28,14 +29,31 @@ export default function ContactForm() {
     resolver: zodResolver(schema),
   });
 
+  const { addToast } = useToast();
+
   const onSubmit = async (data: FormValues) => {
-    // Replace with your own submission logic (API, etc)
-    alert(JSON.stringify(data, null, 2));
-    reset();
+    try {
+      console.log(data);
+      // await joinTheInitiative(data);
+      addToast("Thank you for joining the initiative!", "success");
+      reset(); // Clear form fields on success
+    } catch (error: any) {
+      // Adjust this to match your API error structure
+      // Typical axios error: error.response?.data?.message || error.message
+      if (error.response) {
+        // Server returned 4xx/5xx
+        const message = error.response.data?.message || "Could not submit your request. Please try again later.";
+        addToast(message, "error");
+      } else {
+        // Network or other errors (no response)
+        addToast("Network error. Please check your connection and try again.", "error");
+      }
+    }
   };
 
   return (
     <Box
+      id="joinTheInitiativeForm"
       sx={{
         minWidth: "280px",
         maxWidth: "600px",

@@ -1,7 +1,7 @@
 import { Box, Typography, Button, Stack } from "@mui/material";
 import { motion } from "framer-motion";
 import type { Variants } from "framer-motion";
-
+import { useNavigate } from "react-router-dom";
 // Animation variants
 const heroVariants: Variants = {
   hidden: { opacity: 0, y: 60 },
@@ -23,6 +23,8 @@ const buttonVariants: Variants = {
 };
 
 export default function HeroBanner() {
+  const navigate = useNavigate();
+
   return (
     <motion.div initial="hidden" animate="visible" variants={heroVariants} style={{ width: "100%" }}>
       <Box
@@ -96,6 +98,12 @@ export default function HeroBanner() {
         <motion.div variants={heroVariants}>
           <Stack direction={{ md: "row" }} gap={2} sx={{ mt: "var(--space-6)", flexWrap: "wrap" }}>
             <Button
+              onClick={() => {
+                const form = document.getElementById("joinTheInitiativeForm");
+                if (form) {
+                  form.scrollIntoView({ behavior: "smooth" });
+                }
+              }}
               component={motion.button}
               variants={buttonVariants}
               initial="rest"
@@ -118,6 +126,7 @@ export default function HeroBanner() {
               Join the Initiative
             </Button>
             <Button
+              onClick={() => navigate("/")}
               component={motion.button}
               variants={buttonVariants}
               initial="rest"
