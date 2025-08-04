@@ -10,7 +10,7 @@ import expertAnalysisImg from "../../assets/expert_analysis.webp";
 import continuiaInsightsLaptop from "../../assets/continuia_insights_laptop.webp";
 
 import ShareYOurStory from "../../assets/share_your_story.webp";
-const MotionBox = motion(Box);
+const MotionBox = motion.create(Box);
 
 const fadeInVariants: Variants = {
   hidden: { opacity: 0, y: 40 },

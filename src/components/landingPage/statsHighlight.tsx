@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import type { Variants } from "framer-motion";
 
 // Framer-motion animated Paper
-const MotionPaper = motion(Paper);
+const MotionPaper = motion.create(Paper);
 
 const stats = [
   { label: "Expert Specialists", value: "500+", color: "var(--primary-600)" },

@@ -25,8 +25,8 @@ const fadeLeft: Variants = {
 //     },
 //   },
 // };
-const MotionBox = motion(Box);
-// const MotionPaper = motion(Paper);
+const MotionBox = motion.create(Box);
+// const MotionPaper =  motion.create(Paper);
 
 const HeroSection = () => (
   <Box

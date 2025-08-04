@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import type { Variants } from "framer-motion";
 
 // Framer-motion animated Box
-const MotionBox = motion(Box);
+const MotionBox = motion.create(Box);
 
 const ctaFade: Variants = {
   hidden: { opacity: 0, y: 35, scale: 0.97 },

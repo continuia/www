@@ -27,7 +27,7 @@ const fadeIn = {
   }),
 };
 
-const MotionBox = motion(Box);
+const MotionBox = motion.create(Box);
 
 const HeroSplitSection: React.FC = () => {
   // const theme = useTheme();

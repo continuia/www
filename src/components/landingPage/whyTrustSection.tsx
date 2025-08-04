@@ -23,7 +23,7 @@ const cardVariants: Variants = {
   }),
 };
 
-const MotionPaper = motion(Paper);
+const MotionPaper = motion.create(Paper);
 
 const featureCards = [
   {

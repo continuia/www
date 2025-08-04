@@ -31,8 +31,8 @@ const fadeImage: Variants = {
 
 const features = ["Board-certified specialists", "50+ Specialties", "72-hour response"];
 
-const MotionBox = motion(Box);
-const MotionPaper = motion(Paper);
+const MotionBox = motion.create(Box);
+const MotionPaper = motion.create(Paper);
 
 const HeroSection = () => (
   <Box
