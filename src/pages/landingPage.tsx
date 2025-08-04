@@ -1,10 +1,10 @@
 import { Box } from "@mui/material";
-import HeroSection from "../components/landingPage/heroSection";
-import JourneySteps from "../components/landingPage/journeySteps";
-import StatsHighlight from "../components/landingPage/statsHighlight";
-import HeroSplitSection from "../components/landingPage/heroSplitSection";
-import WhyTrustSection from "../components/landingPage/whyTrustSection";
-import CTASection from "../components/landingPage/ctaSection";
+import HeroSection from "../components/home/heroSection";
+import JourneySteps from "../components/home/journeySteps";
+import StatsHighlight from "../components/home/statsHighlight";
+import HeroSplitSection from "../components/home/heroSplitSection";
+import WhyTrustSection from "../components/home/whyTrustSection";
+import CTASection from "../components/home/ctaSection";
 const LandingPage = () => {
   return (
     <Box display={"flex"} flexDirection={"column"} position={"relative"} width={"100%"}>

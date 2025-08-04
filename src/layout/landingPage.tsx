@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
 import { Box } from "@mui/material";
-import Header from "../components/landingPage/header";
-import Footer from "../components/landingPage/footer";
+import Header from "../components/home/header";
+import Footer from "../components/home/footer";
 
 // If your header is fixed or sticky and:
 // - xs: 56px

@@ -1,12 +1,12 @@
 import { Box } from "@mui/material";
-import HeroSection from "../components/doctors/heroSection";
-import TrustedByHealthcare from "../components/doctors/trustedByHealthcare";
-import ClinicalGovernancePlatform from "../components/doctors/clinicalGovernancePlatform";
-import OnDemandExpertConsultations from "../components/doctors/onDemandExpertConsultations";
-import ComplianceQualityAnalytics from "../components/doctors/complianceQualityAnalytics";
-import SeamlessImplementation from "../components/doctors/seamlessImplementation";
-import CTASection from "../components/doctors/ctaSection";
-import MeasurableImpact from "../components/doctors/measurableImpact";
+import HeroSection from "../components/governance/heroSection";
+import TrustedByHealthcare from "../components/governance/trustedByHealthcare";
+import ClinicalGovernancePlatform from "../components/governance/clinicalGovernancePlatform";
+import OnDemandExpertConsultations from "../components/governance/onDemandExpertConsultations";
+import ComplianceQualityAnalytics from "../components/governance/complianceQualityAnalytics";
+import SeamlessImplementation from "../components/governance/seamlessImplementation";
+import CTASection from "../components/governance/ctaSection";
+import MeasurableImpact from "../components/governance/measurableImpact";
 const ForDoctorsPage = () => {
   return (
     <Box display={"flex"} flexDirection={"column"} position={"relative"} width={"100%"}>

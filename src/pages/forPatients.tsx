@@ -1,10 +1,10 @@
 import { Box } from "@mui/material";
-import HeroSection from "../components/patients/heroSection";
-import HowItWorks from "../components/patients/howItWorks";
-import WhenYouNeedSecondOpinion from "../components/patients/whenYouNeedSecondOpinion";
-import OurSecondOpinionsDifferent from "../components/patients/ourSecondOpinionsDifferent";
-import WhyPatientsTrustContinua from "../components/patients/whyPatientsTrustContinua";
-import CTASection from "../components/landingPage/ctaSection";
+import HeroSection from "../components/insights/heroSection";
+import HowItWorks from "../components/insights/howItWorks";
+import WhenYouNeedSecondOpinion from "../components/insights/whenYouNeedSecondOpinion";
+import OurSecondOpinionsDifferent from "../components/insights/ourSecondOpinionsDifferent";
+import WhyPatientsTrustContinua from "../components/insights/whyPatientsTrustContinua";
+import CTASection from "../components/home/ctaSection";
 const ForPatientsPage = () => {
   return (
     <Box display={"flex"} flexDirection={"column"} position={"relative"} width={"100%"}>
