@@ -50,25 +50,9 @@ const HeroSection = () => (
       m: "auto",
     }}
   >
-    <Stack
-      direction={{ xs: "column", md: "row" }}
-      alignItems="center"
-      justifyContent="center"
-      spacing={{ xs: 5.5, md: 8 }}
-      width="100%"
-      maxWidth={1240}
-      mx="auto"
-      position="relative"
-      zIndex={2}
-    >
+    <Stack direction={{ xs: "column", md: "row" }} alignItems="center" justifyContent="center" spacing={{ xs: 5.5, md: 8 }} width="100%" maxWidth={1240} mx="auto" position="relative" zIndex={2}>
       {/* Left: Main Content */}
-      <MotionBox
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.16 }}
-        variants={fadeLeft}
-        sx={{ flex: 1.12, maxWidth: 570, zIndex: 2 }}
-      >
+      <MotionBox initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.16 }} variants={fadeLeft} sx={{ flex: 1.12, maxWidth: 570, zIndex: 2 }}>
         <Typography
           variant="h3"
           sx={{
@@ -93,18 +77,10 @@ const HeroSection = () => (
             lineHeight: 1.55,
           }}
         >
-          Healthcare leaders choose Continuia to transform their clinical
-          governance, reduce medical errors, and ensure the highest standards of
-          patient care. Our AI-powered platform integrates seamlessly with your
-          existing workflows while providing real-time oversight and expert
-          guidance.{" "}
+          Healthcare leaders choose Continuia to transform their clinical governance, reduce medical errors, and ensure the highest standards of patient care. Our AI-powered platform integrates seamlessly with your existing workflows while providing real-time oversight and expert guidance.{" "}
         </Typography>
 
-        <Stack
-          direction={{ xs: "column", sm: "row" }}
-          spacing={2}
-          sx={{ mt: 1.6, mb: 2.1 }}
-        >
+        <Stack direction={{ xs: "column", sm: "row" }} spacing={2} sx={{ mt: 1.6, mb: 2.1 }}>
           <Button
             variant="contained"
             sx={{

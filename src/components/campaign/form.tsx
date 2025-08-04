@@ -8,10 +8,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 
 const schema = z.object({
-  email: z
-    .string()
-    .email({ message: "Enter a valid email address" })
-    .min(1, "Email is required"),
+  email: z.string().email({ message: "Enter a valid email address" }).min(1, "Email is required"),
   phone: z
     .string()
     .min(8, { message: "Phone is required" })
@@ -127,16 +124,14 @@ export default function ContactForm() {
             sx={{
               mt: 2,
               py: { xs: 2 },
-              background:
-                "linear-gradient(90deg, var(--primary-500), var(--primary-700))",
+              background: "linear-gradient(90deg, var(--primary-500), var(--primary-700))",
               color: "var(--text-inverse)",
               borderRadius: "var(--radius-lg)",
               fontWeight: 600,
               textTransform: "none",
               boxShadow: "var(--shadow-sm)",
               "&:hover": {
-                background:
-                  "linear-gradient(90deg, var(--primary-600), var(--primary-800))",
+                background: "linear-gradient(90deg, var(--primary-600), var(--primary-800))",
               },
             }}
           >

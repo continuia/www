@@ -24,12 +24,7 @@ const buttonVariants: Variants = {
 
 export default function HeroBanner() {
   return (
-    <motion.div
-      initial="hidden"
-      animate="visible"
-      variants={heroVariants}
-      style={{ width: "100%" }}
-    >
+    <motion.div initial="hidden" animate="visible" variants={heroVariants} style={{ width: "100%" }}>
       <Box
         sx={{
           width: "100%",
@@ -57,12 +52,7 @@ export default function HeroBanner() {
       >
         {/* Stack is now wrapped by motion.div */}
         <motion.div variants={heroVariants}>
-          <Stack
-            direction="row"
-            alignItems="center"
-            spacing={2}
-            sx={{ flexWrap: "wrap" }}
-          >
+          <Stack direction="row" alignItems="center" spacing={2} sx={{ flexWrap: "wrap" }}>
             <Box>
               <span
                 style={{
@@ -104,11 +94,7 @@ export default function HeroBanner() {
         </motion.div>
 
         <motion.div variants={heroVariants}>
-          <Stack
-            direction={{ md: "row" }}
-            gap={2}
-            sx={{ mt: "var(--space-6)", flexWrap: "wrap" }}
-          >
+          <Stack direction={{ md: "row" }} gap={2} sx={{ mt: "var(--space-6)", flexWrap: "wrap" }}>
             <Button
               component={motion.button}
               variants={buttonVariants}

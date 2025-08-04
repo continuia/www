@@ -6,20 +6,17 @@ const principles = [
   {
     icon: "🤝",
     title: "Consent is non-negotiable",
-    description:
-      "Patient consent and data privacy form the foundation of our platform’s ethics.",
+    description: "Patient consent and data privacy form the foundation of our platform’s ethics.",
   },
   {
     icon: "🔗",
     title: "Traceability is built in",
-    description:
-      "Every decision is documented and traceable, ensuring accountability and transparency.",
+    description: "Every decision is documented and traceable, ensuring accountability and transparency.",
   },
   {
     icon: "🏥",
     title: "Clinical integrity",
-    description:
-      "You’re building a system grounded in clinical integrity, not just reviewing cases.",
+    description: "You’re building a system grounded in clinical integrity, not just reviewing cases.",
   },
 ];
 
@@ -81,15 +78,7 @@ export default function GuidingPrinciples() {
         }}
       >
         {principles.map((p, i) => (
-          <motion.div
-            key={p.title}
-            custom={i}
-            variants={cardVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.7 }}
-            style={{ width: 320, height: 320, display: "flex" }}
-          >
+          <motion.div key={p.title} custom={i} variants={cardVariants} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.7 }} style={{ width: 320, height: 320, display: "flex" }}>
             <Paper
               elevation={2}
               sx={{

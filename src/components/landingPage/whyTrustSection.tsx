@@ -37,9 +37,7 @@ const featureCards = [
     body: "Advanced artificial intelligence that augments clinical decision-making, identifying patterns and insights that enhance diagnostic accuracy.",
   },
   {
-    icon: (
-      <VerifiedUserIcon sx={{ fontSize: 38, color: "var(--primary-600)" }} />
-    ),
+    icon: <VerifiedUserIcon sx={{ fontSize: 38, color: "var(--primary-600)" }} />,
     title: "Clinical Governance",
     body: "Built-in governance frameworks that ensure quality, safety, and compliance across all medical consultations and institutional deployments.",
   },
@@ -50,8 +48,7 @@ const WhyTrustSection: React.FC = () => {
     <Box
       sx={{
         width: "100%",
-        background:
-          "linear-gradient(110deg, var(--primary-50) 0%, var(--bg-secondary) 100%)",
+        background: "linear-gradient(110deg, var(--primary-50) 0%, var(--bg-secondary) 100%)",
         py: { xs: 8, md: 12 },
         px: { xs: 2, sm: 4, md: 8 },
       }}
@@ -65,8 +62,7 @@ const WhyTrustSection: React.FC = () => {
             color: "var(--primary-800)",
             mb: 1.5,
             fontSize: { xs: "1.55rem", sm: "2.04rem", md: "2.33rem" },
-            background:
-              "linear-gradient(90deg, var(--primary-400), var(--primary-700))",
+            background: "linear-gradient(90deg, var(--primary-400), var(--primary-700))",
             WebkitBackgroundClip: "text",
             WebkitTextFillColor: "transparent",
             userSelect: "none",
@@ -86,8 +82,7 @@ const WhyTrustSection: React.FC = () => {
             mb: 0.5,
           }}
         >
-          Our platform combines cutting-edge AI technology with human expertise
-          to deliver unparalleled medical insights and clinical governance.
+          Our platform combines cutting-edge AI technology with human expertise to deliver unparalleled medical insights and clinical governance.
         </Typography>
       </Box>
       {/* Card Row */}

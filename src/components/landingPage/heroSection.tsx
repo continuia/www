@@ -29,11 +29,7 @@ const fadeImage: Variants = {
   },
 };
 
-const features = [
-  "Board-certified specialists",
-  "AI-enhanced analysis",
-  "Global expertise",
-];
+const features = ["Board-certified specialists", "AI-enhanced analysis", "Global expertise"];
 
 const MotionBox = motion(Box);
 const MotionPaper = motion(Paper);
@@ -58,21 +54,9 @@ const HeroSection = () => (
       position: "relative",
     }}
   >
-    <Stack
-      direction={{ xs: "column", md: "row" }}
-      alignItems="center"
-      justifyContent="space-between"
-      spacing={6}
-      sx={{ width: "100%" }}
-    >
+    <Stack direction={{ xs: "column", md: "row" }} alignItems="center" justifyContent="space-between" spacing={6} sx={{ width: "100%" }}>
       {/* Left: Text Content */}
-      <MotionBox
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.22 }}
-        variants={fadeLeft}
-        sx={{ flex: 1, maxWidth: 650 }}
-      >
+      <MotionBox initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.22 }} variants={fadeLeft} sx={{ flex: 1, maxWidth: 650 }}>
         <Typography
           variant="subtitle1"
           sx={{
@@ -95,8 +79,7 @@ const HeroSection = () => (
             mb: 2,
             lineHeight: 1.08,
             letterSpacing: "-1px",
-            background:
-              "linear-gradient(90deg, var(--neutral-800), var(--primary-800))",
+            background: "linear-gradient(90deg, var(--neutral-800), var(--primary-800))",
             WebkitBackgroundClip: "text",
             WebkitTextFillColor: "transparent",
             backgroundClip: "text",
@@ -116,10 +99,7 @@ const HeroSection = () => (
             maxWidth: 600,
           }}
         >
-          Every patient deserves confidence in their care. Our AI-powered
-          platform connects you with world-class specialists who provide expert
-          second opinions, ensuring you make informed decisions about your
-          health journey.
+          Every patient deserves confidence in their care. Our AI-powered platform connects you with world-class specialists who provide expert second opinions, ensuring you make informed decisions about your health journey.
         </Typography>
         <Stack direction={{ xs: "column", sm: "row" }} spacing={2} mb={3}>
           <Button
@@ -165,12 +145,7 @@ const HeroSection = () => (
             Learn How It Works
           </Button>
         </Stack>
-        <Stack
-          direction={{ xs: "column", sm: "row" }}
-          gap={1}
-          mt={2}
-          flexWrap="wrap"
-        >
+        <Stack direction={{ xs: "column", sm: "row" }} gap={1} mt={2} flexWrap="wrap">
           {features.map((feature) => (
             <Stack
               direction="row"

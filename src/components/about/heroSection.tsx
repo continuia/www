@@ -48,16 +48,7 @@ const HeroSection = () => (
       position: "relative",
     }}
   >
-    <Stack
-      direction={{ xs: "column", md: "row" }}
-      alignItems="stretch"
-      justifyContent="center"
-      width="100vw"
-      maxWidth="100vw"
-      minHeight="inherit"
-      spacing={0}
-      p={2}
-    >
+    <Stack direction={{ xs: "column", md: "row" }} alignItems="stretch" justifyContent="center" width="100vw" maxWidth="100vw" minHeight="inherit" spacing={0} p={2}>
       {/* Left: Main Content */}
       <MotionBox
         initial="hidden"
@@ -122,14 +113,9 @@ const HeroSection = () => (
             lineHeight: 1.65,
           }}
         >
-          Our vision, mission, and unwavering commitment&nbsp;to ethical AI in
-          healthcare
+          Our vision, mission, and unwavering commitment&nbsp;to ethical AI in healthcare
         </Typography>
-        <Stack
-          direction={{ xs: "column", sm: "row" }}
-          spacing={2.3}
-          sx={{ mb: 1.2 }}
-        >
+        <Stack direction={{ xs: "column", sm: "row" }} spacing={2.3} sx={{ mb: 1.2 }}>
           <Button
             variant="contained"
             sx={{

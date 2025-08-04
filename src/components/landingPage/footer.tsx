@@ -1,11 +1,4 @@
-import {
-  Box,
-  Container,
-  Stack,
-  Typography,
-  IconButton,
-  Tooltip,
-} from "@mui/material";
+import { Box, Container, Stack, Typography, IconButton, Tooltip } from "@mui/material";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 // import XIcon from "@mui/icons-material/X";
 import FacebookIcon from "@mui/icons-material/Facebook";
@@ -44,26 +37,10 @@ const Footer = () => {
       }}
     >
       <Container maxWidth="xl">
-        <Stack
-          direction={{ xs: "column", sm: "row" }}
-          justifyContent="space-between"
-          alignItems={{ xs: "flex-start", sm: "center" }}
-          spacing={{ xs: 2, sm: 3 }}
-        >
+        <Stack direction={{ xs: "column", sm: "row" }} justifyContent="space-between" alignItems={{ xs: "flex-start", sm: "center" }} spacing={{ xs: 2, sm: 3 }}>
           {/* Logo and Brand */}
-          <Stack
-            order={0}
-            direction="row"
-            alignItems="center"
-            spacing={1.5}
-            mb={{ xs: 1, sm: 0 }}
-          >
-            <Box
-              component="img"
-              src="/continuia.webp"
-              alt="Continuia Logo"
-              sx={{ height: { xs: 28, sm: 32 }, width: { xs: 28, sm: 32 } }}
-            />
+          <Stack order={0} direction="row" alignItems="center" spacing={1.5} mb={{ xs: 1, sm: 0 }}>
+            <Box component="img" src="/continuia.webp" alt="Continuia Logo" sx={{ height: { xs: 28, sm: 32 }, width: { xs: 28, sm: 32 } }} />
             <Typography
               variant="h6"
               sx={{
@@ -91,11 +68,7 @@ const Footer = () => {
           </Typography>
 
           {/* Contact/Support Info & Socials */}
-          <Stack
-            order={{ xs: 1, sm: 2 }}
-            spacing={1}
-            alignItems={{ xs: "flex-start", sm: "flex-end" }}
-          >
+          <Stack order={{ xs: 1, sm: 2 }} spacing={1} alignItems={{ xs: "flex-start", sm: "flex-end" }}>
             <Stack direction="row" spacing={1} mb={0.5}>
               {socialLinks.map((social) => (
                 <Tooltip title={social.label} key={social.label}>
@@ -106,8 +79,7 @@ const Footer = () => {
                     rel="noopener noreferrer"
                     sx={{
                       color: "var(--text-tertiary)",
-                      transition:
-                        "color var(--transition-normal), background var(--transition-normal)",
+                      transition: "color var(--transition-normal), background var(--transition-normal)",
                       "&:hover": {
                         color: "var(--primary-600)",
                         background: "var(--primary-50)",

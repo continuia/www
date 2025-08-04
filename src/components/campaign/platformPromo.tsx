@@ -1,11 +1,4 @@
-import {
-  Box,
-  Typography,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-} from "@mui/material";
+import { Box, Typography, List, ListItem, ListItemIcon, ListItemText } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import heroIllustration from "../../assets/campaign/campaign-1-2.webp";
 import { motion } from "framer-motion";
@@ -18,12 +11,7 @@ const animationVariants: Variants = {
 
 export default function PlatformPromo() {
   return (
-    <motion.div
-      variants={animationVariants}
-      initial="hidden"
-      animate="visible"
-      style={{ width: "100%" }}
-    >
+    <motion.div variants={animationVariants} initial="hidden" animate="visible" style={{ width: "100%" }}>
       <Box
         sx={{
           width: "100%",
@@ -37,10 +25,7 @@ export default function PlatformPromo() {
           gap: { xs: "var(--space-4)", md: "var(--space-8)" }, // Reduced gap
         }}
       >
-        <Box
-          order={{ xs: 1, md: 0 }}
-          sx={{ flex: 1, minWidth: 320, maxWidth: 700 }}
-        >
+        <Box order={{ xs: 1, md: 0 }} sx={{ flex: 1, minWidth: 320, maxWidth: 700 }}>
           <Typography
             variant="h4"
             component="div"
@@ -54,9 +39,7 @@ export default function PlatformPromo() {
           >
             The future isn't coming.
             <br />
-            <span style={{ color: "var(--primary-600)" }}>
-              It's already live.
-            </span>
+            <span style={{ color: "var(--primary-600)" }}>It's already live.</span>
           </Typography>
           <Typography
             sx={{
@@ -65,36 +48,23 @@ export default function PlatformPromo() {
               fontSize: { xs: "1.07rem", md: "1.16rem" },
             }}
           >
-            We’re launching a next-generation platform where second opinions are
-            delivered the way modern medicine demands:
+            We’re launching a next-generation platform where second opinions are delivered the way modern medicine demands:
           </Typography>
           <List sx={{ py: 0, my: 0 }}>
-            {["Doctor-led", "Consent-verified", "AI-assisted"].map(
-              (feature) => (
-                <ListItem
-                  sx={{ py: 0.5, alignItems: "flex-start" }}
-                  key={feature}
-                  disableGutters
-                >
-                  <ListItemIcon sx={{ minWidth: 36 }}>
-                    <CheckCircleIcon
-                      sx={{ color: "var(--primary-500)", fontSize: 28 }}
-                    />
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={
-                      <span style={{ fontWeight: 700, fontSize: "1.08rem" }}>
-                        {feature}
-                      </span>
-                    }
-                    primaryTypographyProps={{
-                      fontSize: "1.08rem",
-                      color: "var(--text-primary)",
-                    }}
-                  />
-                </ListItem>
-              )
-            )}
+            {["Doctor-led", "Consent-verified", "AI-assisted"].map((feature) => (
+              <ListItem sx={{ py: 0.5, alignItems: "flex-start" }} key={feature} disableGutters>
+                <ListItemIcon sx={{ minWidth: 36 }}>
+                  <CheckCircleIcon sx={{ color: "var(--primary-500)", fontSize: 28 }} />
+                </ListItemIcon>
+                <ListItemText
+                  primary={<span style={{ fontWeight: 700, fontSize: "1.08rem" }}>{feature}</span>}
+                  primaryTypographyProps={{
+                    fontSize: "1.08rem",
+                    color: "var(--text-primary)",
+                  }}
+                />
+              </ListItem>
+            ))}
           </List>
           <Typography
             sx={{
@@ -103,8 +73,7 @@ export default function PlatformPromo() {
               fontSize: { xs: "1rem", md: "1.07rem" },
             }}
           >
-            This isn’t a gig. This is your invitation to practice medicine the
-            way it should work in 2025 — globally, ethically, and on your terms.
+            This isn’t a gig. This is your invitation to practice medicine the way it should work in 2025 — globally, ethically, and on your terms.
           </Typography>
         </Box>
         <motion.div

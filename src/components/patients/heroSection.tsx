@@ -29,7 +29,6 @@ const fadeImage: Variants = {
 const MotionBox = motion(Box);
 const MotionPaper = motion(Paper);
 
-
 const HeroSection = () => (
   <Box
     sx={{
@@ -51,25 +50,9 @@ const HeroSection = () => (
       m: "auto",
     }}
   >
-    <Stack
-      direction={{ xs: "column", md: "row" }}
-      alignItems="center"
-      justifyContent="center"
-      spacing={7}
-      width="100%"
-      maxWidth={1250}
-      mx="auto"
-      position="relative"
-      zIndex={1}
-    >
+    <Stack direction={{ xs: "column", md: "row" }} alignItems="center" justifyContent="center" spacing={7} width="100%" maxWidth={1250} mx="auto" position="relative" zIndex={1}>
       {/* Left: Text Content */}
-      <MotionBox
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.18 }}
-        variants={fadeLeft}
-        sx={{ flex: 1.2, maxWidth: 555 }}
-      >
+      <MotionBox initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.18 }} variants={fadeLeft} sx={{ flex: 1.2, maxWidth: 555 }}>
         <Typography
           variant="h3"
           sx={{
@@ -94,18 +77,10 @@ const HeroSection = () => (
             lineHeight: 1.54,
           }}
         >
-          Facing a serious diagnosis or complex medical decision? You deserve
-          clarity, confidence, and peace of mind. Our global network of
-          board-certified specialists provides expert second opinions that help
-          you understand your options and make informed decisions about your
-          health.
+          Facing a serious diagnosis or complex medical decision? You deserve clarity, confidence, and peace of mind. Our global network of board-certified specialists provides expert second opinions that help you understand your options and make informed decisions about your health.
         </Typography>
 
-        <Stack
-          direction={{ xs: "column", sm: "row" }}
-          spacing={2.2}
-          sx={{ mt: 2, mb: 2.7 }}
-        >
+        <Stack direction={{ xs: "column", sm: "row" }} spacing={2.2} sx={{ mt: 2, mb: 2.7 }}>
           <Button
             variant="contained"
             sx={{

@@ -6,7 +6,7 @@ import Footer from "../components/landingPage/footer";
 // If your header is fixed or sticky and:
 // - xs: 56px
 // - sm+: 72px
-const HEADER_HEIGHT = { xs: 30};
+const HEADER_HEIGHT = { xs: 30 };
 
 const HomeLayout = () => (
   <Box

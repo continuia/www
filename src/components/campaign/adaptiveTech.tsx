@@ -1,11 +1,4 @@
-import {
-  Box,
-  Typography,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-} from "@mui/material";
+import { Box, Typography, List, ListItem, ListItemIcon, ListItemText } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { motion } from "framer-motion";
 import heroIllustration from "../../assets/campaign/campaign-1-1.webp"; // Your image
@@ -23,12 +16,7 @@ const fadeSlide: Variants = {
 
 export default function AdaptiveTech2025() {
   return (
-    <motion.div
-      initial="hidden"
-      animate="visible"
-      variants={fadeSlide}
-      style={{ width: "100%" }}
-    >
+    <motion.div initial="hidden" animate="visible" variants={fadeSlide} style={{ width: "100%" }}>
       <Box
         sx={{
           bgcolor: "var(--bg-primary)",
@@ -78,9 +66,7 @@ export default function AdaptiveTech2025() {
             }}
           >
             For Minds. <br />
-            <span style={{ color: "var(--primary-600)" }}>
-              That Value Clarity.
-            </span>
+            <span style={{ color: "var(--primary-600)" }}>That Value Clarity.</span>
           </Typography>
           <Typography
             sx={{
@@ -90,16 +76,11 @@ export default function AdaptiveTech2025() {
               mb: "var(--space-1)", // tighter margin-bottom
             }}
           >
-            Continia was built for medical minds that still believe clarity
-            matters.
+            Continia was built for medical minds that still believe clarity matters.
           </Typography>
           <List sx={{ p: 0, mb: 0 }}>
             {["You review.", "You decide.", "You lead."].map((feature, idx) => {
-              const secondaryTexts = [
-                "Full access to comprehensive case data with intuitive navigation.",
-                "Your clinical judgment remains the highest authority.",
-                "Set the standard for ethical, technology-enhanced medicine.",
-              ];
+              const secondaryTexts = ["Full access to comprehensive case data with intuitive navigation.", "Your clinical judgment remains the highest authority.", "Set the standard for ethical, technology-enhanced medicine."];
               return (
                 <ListItem
                   disableGutters
@@ -112,11 +93,7 @@ export default function AdaptiveTech2025() {
                     />
                   </ListItemIcon>
                   <ListItemText
-                    primary={
-                      <span style={{ fontWeight: 700, fontSize: "1.125rem" }}>
-                        {feature}
-                      </span>
-                    }
+                    primary={<span style={{ fontWeight: 700, fontSize: "1.125rem" }}>{feature}</span>}
                     secondary={
                       <span
                         style={{

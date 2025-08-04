@@ -31,8 +31,7 @@ const statVariant: Variants = {
 const StatsHighlight = () => (
   <Box
     sx={{
-      background:
-        "linear-gradient(110deg, var(--primary-50) 0%, var(--bg-secondary) 100%)",
+      background: "linear-gradient(110deg, var(--primary-50) 0%, var(--bg-secondary) 100%)",
       py: { xs: 6, md: 10 },
       px: { xs: 1, md: 4 },
       textAlign: "center",
@@ -46,8 +45,7 @@ const StatsHighlight = () => (
         letterSpacing: 1.1,
         mb: 1.5,
         fontSize: { xs: "1.7rem", md: "2.3rem" },
-        background:
-          "linear-gradient(90deg, var(--primary-400), var(--primary-700))",
+        background: "linear-gradient(90deg, var(--primary-400), var(--primary-700))",
         WebkitBackgroundClip: "text",
         WebkitTextFillColor: "transparent",
         userSelect: "none",
@@ -66,8 +64,7 @@ const StatsHighlight = () => (
         fontWeight: 500,
       }}
     >
-      Join thousands of patients who have gained clarity and confidence in their
-      medical decisions.
+      Join thousands of patients who have gained clarity and confidence in their medical decisions.
     </Typography>
 
     <Stack

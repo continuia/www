@@ -74,12 +74,7 @@ const Campaign = () => {
   }, []);
 
   return (
-    <Box
-      display={"flex"}
-      flexDirection={"column"}
-      position={"relative"}
-      width={"100%"}
-    >
+    <Box display={"flex"} flexDirection={"column"} position={"relative"} width={"100%"}>
       <HeroSection />
       <PlatformPromo />
       <AdaptiveTech2025 />

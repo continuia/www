@@ -7,8 +7,7 @@ export default function ContinuaLaunch() {
       sx={{
         width: "100%",
         bgcolor: "var(--primary-600)",
-        background:
-          "linear-gradient(120deg, var(--primary-800), var(--primary-400) 80%)",
+        background: "linear-gradient(120deg, var(--primary-800), var(--primary-400) 80%)",
         color: "var(--text-inverse)",
         display: "flex",
         flexDirection: "column",

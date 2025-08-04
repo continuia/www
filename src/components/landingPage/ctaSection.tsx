@@ -55,17 +55,10 @@ const CTASection = () => (
         lineHeight: 1.44,
       }}
     >
-      Join thousands of patients and healthcare institutions who trust Continuia
-      for expert medical opinions and clinical excellence.
+      Join thousands of patients and healthcare institutions who trust Continuia for expert medical opinions and clinical excellence.
     </Typography>
 
-    <Stack
-      direction={{ xs: "column", sm: "row" }}
-      spacing={2.5}
-      alignItems="center"
-      justifyContent="center"
-      sx={{ mt: 2 }}
-    >
+    <Stack direction={{ xs: "column", sm: "row" }} spacing={2.5} alignItems="center" justifyContent="center" sx={{ mt: 2 }}>
       <Button
         variant="contained"
         sx={{

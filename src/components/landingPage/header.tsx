@@ -1,22 +1,5 @@
 import { useState, useEffect } from "react";
-import {
-  AppBar,
-  Box,
-  Toolbar,
-  Button,
-  Typography,
-  Fade,
-  Paper,
-  IconButton,
-  Drawer,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemText,
-  useTheme,
-  useMediaQuery,
-  Divider,
-} from "@mui/material";
+import { AppBar, Box, Toolbar, Button, Typography, Fade, Paper, IconButton, Drawer, List, ListItem, ListItemButton, ListItemText, useTheme, useMediaQuery, Divider } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import { NavLink } from "react-router-dom";
@@ -69,12 +52,7 @@ const Header = () => {
         >
           {/* Logo */}
           <Box display="flex" alignItems="center" gap={1.5}>
-            <Box
-              component="img"
-              src="/continuia.webp"
-              alt="Continuia Logo"
-              sx={{ height: 36, width: 36, mr: 1 }}
-            />
+            <Box component="img" src="/continuia.webp" alt="Continuia Logo" sx={{ height: 36, width: 36, mr: 1 }} />
             <Typography
               variant="h6"
               sx={{
@@ -103,40 +81,25 @@ const Header = () => {
             }}
           >
             {navLinks.map((link) => (
-              <NavLink
-                key={link.label}
-                to={link.href}
-                end
-                style={{ textDecoration: "none" }}
-              >
+              <NavLink key={link.label} to={link.href} end style={{ textDecoration: "none" }}>
                 {({ isActive }) => (
                   <Button
                     disableRipple
                     sx={{
                       textTransform: "none",
-                      color: isActive
-                        ? "var(--text-inverse)"
-                        : "var(--neutral-600)",
-                      background: isActive
-                        ? "linear-gradient(90deg, var(--primary-500), var(--primary-700))"
-                        : "transparent",
+                      color: isActive ? "var(--text-inverse)" : "var(--neutral-600)",
+                      background: isActive ? "linear-gradient(90deg, var(--primary-500), var(--primary-700))" : "transparent",
                       fontWeight: 600,
                       fontSize: "1rem",
                       borderRadius: "999px",
                       px: 2.5,
                       py: 1,
                       minWidth: 0,
-                      boxShadow: isActive
-                        ? "0 5px 15px 0 var(--primary-200)"
-                        : "none",
+                      boxShadow: isActive ? "0 5px 15px 0 var(--primary-200)" : "none",
                       transition: "background 0.2s, color 0.2s",
                       "&:hover": {
-                        background: isActive
-                          ? "linear-gradient(90deg, var(--primary-400), var(--primary-600))"
-                          : "var(--primary-50)",
-                        color: isActive
-                          ? "var(--text-inverse)"
-                          : "var(--primary-800)",
+                        background: isActive ? "linear-gradient(90deg, var(--primary-400), var(--primary-600))" : "var(--primary-50)",
+                        color: isActive ? "var(--text-inverse)" : "var(--primary-800)",
                       },
                     }}
                   >
@@ -176,13 +139,7 @@ const Header = () => {
                   },
                 }}
               >
-                <Box
-                  display="flex"
-                  alignItems="center"
-                  justifyContent="space-between"
-                  px={2}
-                  py={1}
-                >
+                <Box display="flex" alignItems="center" justifyContent="space-between" px={2} py={1}>
                   <Typography
                     variant="h6"
                     sx={{
@@ -194,11 +151,7 @@ const Header = () => {
                   >
                     Menu
                   </Typography>
-                  <IconButton
-                    onClick={() => setDrawerOpen(false)}
-                    sx={{ color: "var(--primary-700)" }}
-                    aria-label="Close navigation menu"
-                  >
+                  <IconButton onClick={() => setDrawerOpen(false)} sx={{ color: "var(--primary-700)" }} aria-label="Close navigation menu">
                     <CloseIcon fontSize="medium" />
                   </IconButton>
                 </Box>

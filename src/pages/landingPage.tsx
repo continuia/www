@@ -7,12 +7,7 @@ import WhyTrustSection from "../components/landingPage/whyTrustSection";
 import CTASection from "../components/landingPage/ctaSection";
 const LandingPage = () => {
   return (
-    <Box
-      display={"flex"}
-      flexDirection={"column"}
-      position={"relative"}
-      width={"100%"}
-    >
+    <Box display={"flex"} flexDirection={"column"} position={"relative"} width={"100%"}>
       {/* Add your header if needed */}
       <HeroSection />
       <JourneySteps />

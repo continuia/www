@@ -92,10 +92,7 @@ const VisionSection = () => (
             maxWidth: 560,
           }}
         >
-          Continuia envisions a world where every patient has access to
-          trustworthy, expert-reviewed medical guidance—independent of where
-          they live or which doctor they saw first. We believe healthcare should
-          be a bridge, not a barrier.
+          Continuia envisions a world where every patient has access to trustworthy, expert-reviewed medical guidance—independent of where they live or which doctor they saw first. We believe healthcare should be a bridge, not a barrier.
         </Typography>
 
         {/* Soft card: "We don't replace doctors..." */}
@@ -129,9 +126,7 @@ const VisionSection = () => (
               fontSize: "0.99rem",
             }}
           >
-            With AI-augmented tools that are designed to work with clinicians,
-            not around them, Continuia bridges patients, providers, and medical
-            institutions with layered insight, safety, and transparency.
+            With AI-augmented tools that are designed to work with clinicians, not around them, Continuia bridges patients, providers, and medical institutions with layered insight, safety, and transparency.
           </Typography>
         </Paper>
         <Typography
@@ -142,8 +137,7 @@ const VisionSection = () => (
             fontSize: "0.98rem",
           }}
         >
-          We aim to bring ethical, AI-enabled second clinical insight and
-          governance into the global standard of care.
+          We aim to bring ethical, AI-enabled second clinical insight and governance into the global standard of care.
         </Typography>
       </MotionBox>
 

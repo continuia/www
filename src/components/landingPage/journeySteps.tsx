@@ -1,13 +1,5 @@
 import React from "react";
-import {
-  Box,
-  Typography,
-  Stack,
-  Chip,
-  useMediaQuery,
-  useTheme,
-  Paper,
-} from "@mui/material";
+import { Box, Typography, Stack, Chip, useMediaQuery, useTheme, Paper } from "@mui/material";
 import MedicalServicesIcon from "@mui/icons-material/MedicalServices";
 import InsightsIcon from "@mui/icons-material/Insights";
 import VerifiedUserIcon from "@mui/icons-material/VerifiedUser";
@@ -17,7 +9,7 @@ import type { Variants } from "framer-motion";
 import expertAnalysisImg from "../../assets/expert_analysis.webp";
 import continuiaInsightsLaptop from "../../assets/continuia_insights_laptop.webp";
 
-import ShareYOurStory from "../../assets/share_your_story.webp"
+import ShareYOurStory from "../../assets/share_your_story.webp";
 const MotionBox = motion(Box);
 
 const fadeInVariants: Variants = {
@@ -41,8 +33,7 @@ const JourneySteps: React.FC = () => {
   return (
     <Box
       sx={{
-        background:
-          "linear-gradient(110deg, var(--primary-50) 0%, var(--bg-secondary) 100%)",
+        background: "linear-gradient(110deg, var(--primary-50) 0%, var(--bg-secondary) 100%)",
         py: { xs: 5, md: 10 },
         px: { xs: 2, md: 4 },
       }}
@@ -61,8 +52,7 @@ const JourneySteps: React.FC = () => {
             color: "var(--primary-700)",
             fontWeight: 900,
             mb: 2,
-            background:
-              "linear-gradient(90deg, var(--primary-400) 0%, var(--primary-700) 100%)",
+            background: "linear-gradient(90deg, var(--primary-400) 0%, var(--primary-700) 100%)",
             WebkitBackgroundClip: "text",
             WebkitTextFillColor: "transparent",
             letterSpacing: 1.2,
@@ -83,8 +73,7 @@ const JourneySteps: React.FC = () => {
             fontSize: { xs: "1rem", sm: "1.1rem", md: "1.15rem" },
           }}
         >
-          Each step is designed for <b>clarity, comfort, and confidence</b>—no
-          medical jargon or confusion.
+          Each step is designed for <b>clarity, comfort, and confidence</b>—no medical jargon or confusion.
         </Typography>
       </Box>
 
@@ -136,9 +125,7 @@ const JourneySteps: React.FC = () => {
                   position: "relative",
                 }}
               >
-                <VerifiedUserIcon
-                  sx={{ fontSize: 44, color: "var(--primary-600)" }}
-                />
+                <VerifiedUserIcon sx={{ fontSize: 44, color: "var(--primary-600)" }} />
                 <Box
                   sx={{
                     position: "absolute",
@@ -194,11 +181,7 @@ const JourneySteps: React.FC = () => {
                 lineHeight: 1.7,
               }}
             >
-              Begin by sharing your medical journey with us. Our secure,
-              HIPAA-compliant platform makes it easy to upload your medical
-              records, test results, and current diagnosis. Our AI system
-              intelligently organizes your information, ensuring nothing
-              important is overlooked.
+              Begin by sharing your medical journey with us. Our secure, HIPAA-compliant platform makes it easy to upload your medical records, test results, and current diagnosis. Our AI system intelligently organizes your information, ensuring nothing important is overlooked.
             </Box>
             <Stack direction="row" spacing={1} mt={1} flexWrap="wrap">
               <Chip
@@ -245,11 +228,7 @@ const JourneySteps: React.FC = () => {
               mt: isMobile ? 1 : 0,
             }}
           >
-            <img
-              src={ShareYOurStory}
-              alt="Step illustration"
-              style={{ width: "100%", height: "100%", objectFit: "cover" }}
-            />
+            <img src={ShareYOurStory} alt="Step illustration" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
           </MotionBox>
         </MotionBox>
 
@@ -300,9 +279,7 @@ const JourneySteps: React.FC = () => {
                   position: "relative",
                 }}
               >
-                <MedicalServicesIcon
-                  sx={{ fontSize: 44, color: "var(--primary-600)" }}
-                />
+                <MedicalServicesIcon sx={{ fontSize: 44, color: "var(--primary-600)" }} />
                 <Box
                   sx={{
                     position: "absolute",
@@ -358,11 +335,7 @@ const JourneySteps: React.FC = () => {
                 lineHeight: 1.7,
               }}
             >
-              Your case is carefully matched with board-certified specialists
-              who have deep expertise in your specific condition. They conduct a
-              thorough review, analyzing your medical history, current symptoms,
-              and treatment options with fresh perspective and cutting-edge
-              knowledge.
+              Your case is carefully matched with board-certified specialists who have deep expertise in your specific condition. They conduct a thorough review, analyzing your medical history, current symptoms, and treatment options with fresh perspective and cutting-edge knowledge.
               <ul
                 style={{
                   margin: "0.5rem 0 0 1.25rem",
@@ -400,11 +373,7 @@ const JourneySteps: React.FC = () => {
               mt: isMobile ? 1 : 0,
             }}
           >
-            <img
-              src={expertAnalysisImg}
-              alt="expert Analysis Img"
-              style={{ width: "100%", height: "100%", objectFit: "cover" }}
-            />
+            <img src={expertAnalysisImg} alt="expert Analysis Img" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
           </MotionBox>
         </MotionBox>
 
@@ -455,9 +424,7 @@ const JourneySteps: React.FC = () => {
                   position: "relative",
                 }}
               >
-                <InsightsIcon
-                  sx={{ fontSize: 44, color: "var(--primary-600)" }}
-                />
+                <InsightsIcon sx={{ fontSize: 44, color: "var(--primary-600)" }} />
                 <Box
                   sx={{
                     position: "absolute",
@@ -513,10 +480,7 @@ const JourneySteps: React.FC = () => {
                 lineHeight: 1.7,
               }}
             >
-              Receive a comprehensive report written in clear, understandable
-              language. We translate complex medical terminology into actionable
-              insights, giving you the confidence to discuss options with your
-              primary care team and make informed decisions about your health.
+              Receive a comprehensive report written in clear, understandable language. We translate complex medical terminology into actionable insights, giving you the confidence to discuss options with your primary care team and make informed decisions about your health.
               <Box
                 sx={{
                   bgcolor: "var(--bg-tertiary)",
@@ -542,9 +506,7 @@ const JourneySteps: React.FC = () => {
                 </ul>
               </Box>
               <Stack direction="row" spacing={1} alignItems="center" mt={2}>
-                <QueryBuilderIcon
-                  sx={{ color: "var(--primary-500)", fontSize: 23 }}
-                />
+                <QueryBuilderIcon sx={{ color: "var(--primary-500)", fontSize: 23 }} />
                 <Typography
                   variant="subtitle2"
                   sx={{
@@ -595,12 +557,7 @@ const JourneySteps: React.FC = () => {
               mt: isMobile ? 1 : 0,
             }}
           >
-            <img
-              src={continuiaInsightsLaptop}
-
-              alt="Step illustration"
-              style={{ width: "100%", height: "100%", objectFit: "cover" }}
-            />
+            <img src={continuiaInsightsLaptop} alt="Step illustration" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
           </MotionBox>
         </MotionBox>
       </Stack>
