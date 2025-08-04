@@ -2,7 +2,7 @@ import { Box } from "@mui/material";
 import HeroSection from "../components/doctors/heroSection";
 import TrustedByHealthcare from "../components/doctors/trustedByHealthcare";
 import ClinicalGovernancePlatform from "../components/doctors/clinicalGovernancePlatform";
-import OnDemandExpertConsultations from "../components/doctors/OnDemandExpertConsultations";
+import OnDemandExpertConsultations from "../components/doctors/onDemandExpertConsultations";
 import ComplianceQualityAnalytics from "../components/doctors/complianceQualityAnalytics";
 import SeamlessImplementation from "../components/doctors/seamlessImplementation";
 import CTASection from "../components/doctors/ctaSection";
