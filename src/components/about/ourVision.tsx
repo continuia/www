@@ -92,7 +92,7 @@ const VisionSection = () => (
             maxWidth: 560,
           }}
         >
-          Continuiua envisions a world where every patient has access to
+          Continuia envisions a world where every patient has access to
           trustworthy, expert-reviewed medical guidance—independent of where
           they live or which doctor they saw first. We believe healthcare should
           be a bridge, not a barrier.
@@ -130,7 +130,7 @@ const VisionSection = () => (
             }}
           >
             With AI-augmented tools that are designed to work with clinicians,
-            not around them, Continuiua bridges patients, providers, and medical
+            not around them, Continuia bridges patients, providers, and medical
             institutions with layered insight, safety, and transparency.
           </Typography>
         </Paper>

@@ -73,7 +73,7 @@ const WhyTrustSection: React.FC = () => {
             letterSpacing: 1,
           }}
         >
-          Why Healthcare Professionals Trust Continuiua
+          Why Healthcare Professionals Trust Continuia
         </Typography>
         <Typography
           variant="subtitle1"

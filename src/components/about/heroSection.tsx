@@ -1,4 +1,4 @@
-import { Box, Typography, Button, Stack} from "@mui/material";
+import { Box, Typography, Button, Stack } from "@mui/material";
 import { motion } from "framer-motion";
 // import heroIllustration from "../../assets/ai_assisted_patient_intake.webp";
 import type { Variants } from "framer-motion";
@@ -42,7 +42,7 @@ const HeroSection = () => (
         xs: "none",
         md: "linear-gradient(120deg, var(--primary-50) 20%, var(--primary-200) 100%)",
       },
-      borderRadius: {sx: "2rem" },
+      borderRadius: { sx: "2rem" },
       boxShadow: { md: "0 4px 32px 0 var(--neutral-300)" },
       overflow: "hidden",
       position: "relative",
@@ -92,7 +92,7 @@ const HeroSection = () => (
             textShadow: "0 2px 8px var(--primary-50)",
           }}
         >
-          About Continuiua
+          About Continuia
         </Typography>
         <Typography
           variant="h4"
@@ -196,7 +196,7 @@ const HeroSection = () => (
         <Box
           component="img"
           src={heroIllustration}
-          alt="About Continuiua"
+          alt="About Continuia"
           sx={{
             width: "100%",
             height: { xs: 220, sm: 295, md: "100%" },
