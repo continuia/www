@@ -2,6 +2,7 @@ import React from "react";
 import { Box, Typography, Card, CardContent, CardMedia, Avatar, useMediaQuery, Divider } from "@mui/material";
 import { LocalHospital, Elderly, Person, Biotech, HealthAndSafety, WorkspacePremium, Diversity3, FlightTakeoff } from "@mui/icons-material";
 import { motion, type Variants } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import heroIllustration from "../../assets/ai_assisted_patient_intake.webp";
 
 const partnerIcons = [
@@ -20,41 +21,49 @@ const partnersData = [
     title: "Hospitals",
     description: "Discharge with Confidence, Reduce Risk, and Build Trust",
     details: "Reduce 30-day readmissions with structured second opinions that complement your clinical workflow. Our licensed physicians provide concise summaries—no diagnosis, just thoughtful clarity",
+    path: "/partners/hospitals",
   },
   {
     title: "Skilled Nursing & Assisted Living",
     description: "Support Your Residents Without Overloading Your Staff",
     details: "On-demand case reviews delivered in plain language summaries. No apps, no logins, no disruption—just improved family confidence and reduced transfers.",
+    path: "/partners/skilled-nursing",
   },
   {
     title: "Individual Doctors & Specialists",
     description: "You Stay in Control—We Simply Support Your Patients",
     details: "Invite a second pair of eyes without giving up control. Our interpretive role helps patients understand what's been done, not what to do next.",
+    path: "/partners/doctors-specialists",
   },
   {
     title: "Outpatient Clinics & Diagnostic Centers",
     description: "Add Value to Every Report—Extend Patient Engagement",
     details: "Bridge interpretation gaps with one-click physician-led second opinions on imaging, pathology, or lab reports. Build long-term patient loyalty.",
+    path: "/partners/clinics-diagnostics",
   },
   {
     title: "Health Plans & TPAs",
     description: "Reduce Avoidable Costs and Improve Member Decision-Making",
     details: "Help members make informed choices before unnecessary procedures. Lower downstream costs while boosting satisfaction with neutral, non-disruptive support.",
+    path: "/partners/health-plans-tpas",
   },
   {
     title: "Benefit Consultants & Wellness Platforms",
     description: "Offer Your Clients a High-Trust, Low-Friction Medical Add-On",
     details: "Turnkey second-opinion layer that adds medical clarity without legal risk. Fast to deploy, highly valued, and customizable for any population.",
+    path: "/partners/benefit-consultants",
   },
   {
     title: "Patient Advocacy Groups & NGOs",
     description: "Empower Your Members with Expert Reviews—Delivered with Empathy",
     details: "Non-judgmental, structured second opinions in plain language. Perfect for rare disease groups and chronic illness organizations seeking clarity without cost burden.",
+    path: "/partners/advocacy-ngos",
   },
   {
     title: "Medical Tourism & Concierge Health",
     description: "Make Every Flight Count—Pre-Screen Medical Cases Before Travel",
     details: "Offer second opinions before patients commit to travel. Match patients to the right facility and reduce friction with multi-lingual support and global networks.",
+    path: "/partners/medical-tourism",
   },
 ];
 
@@ -74,10 +83,11 @@ const cardVariants: Variants = {
 };
 
 export const PartnersSection: React.FC = () => {
-  // const xs = useMediaQuery("(max-width:600px)");
   const sm = useMediaQuery("(min-width:601px) and (max-width:899px)");
   const md = useMediaQuery("(min-width:900px) and (max-width:1199px)");
   const lg = useMediaQuery("(min-width:1200px)");
+  const navigate = useNavigate();
+
   let cardBasis = "100%";
   if (lg) cardBasis = "27%";
   else if (md) cardBasis = "35%";
@@ -151,6 +161,15 @@ export const PartnersSection: React.FC = () => {
               maxWidth,
               display: "flex",
               borderRadius: "var(--radius-2xl)",
+              cursor: "pointer",
+            }}
+            tabIndex={0}
+            role="button"
+            onClick={() => navigate(partner.path)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                navigate(partner.path);
+              }
             }}
           >
             <Card
@@ -250,7 +269,12 @@ export const PartnersSection: React.FC = () => {
                 />
                 <Typography
                   component="a"
-                  href="#"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigate(partner.path);
+                  }}
+                  href={partner.path}
+                  tabIndex={0}
                   sx={{
                     fontSize: "var(--text-base)",
                     color: "var(--primary-600)",
@@ -264,7 +288,12 @@ export const PartnersSection: React.FC = () => {
                       textDecoration: "underline",
                     },
                   }}
-                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.stopPropagation();
+                      navigate(partner.path);
+                    }
+                  }}
                 >
                   Learn more →
                 </Typography>
