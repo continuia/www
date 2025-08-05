@@ -1,5 +1,4 @@
 import { Box, Typography, Button, Stack, Paper } from "@mui/material";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import LocalHospitalIcon from "@mui/icons-material/LocalHospital";
 import { motion } from "framer-motion";
 import heroIllustration from "../../assets/ai_assisted_patient_intake.webp";
@@ -29,7 +28,6 @@ const fadeImage: Variants = {
   },
 };
 
-const features = ["Board-certified specialists", "50+ Specialties", "72-hour response"];
 
 const MotionBox = motion.create(Box);
 const MotionPaper = motion.create(Paper);
@@ -73,7 +71,7 @@ const HeroSection = () => (
             display: "inline-block",
           }}
         >
-          World-Class Specialists at Your Fingertips
+          Trusted Medical Second Opinions
         </Typography>
         <Typography
           variant="h6"
@@ -85,7 +83,7 @@ const HeroSection = () => (
             maxWidth: 600,
           }}
         >
-          When facing complex medical decisions, access matters. Our global network of board-certified specialists brings decades of expertise directly to your case, ensuring you receive the highest caliber of medical guidance across every specialty.
+          Structured physician reviews that complement your clinical workflow. No diagnosis, no treatment recommendations --just thoughtful clarity for between patient outcomes.{" "}
         </Typography>
         <Stack direction={{ xs: "column", sm: "row" }} spacing={2} mb={3}>
           <Button
@@ -107,7 +105,7 @@ const HeroSection = () => (
               },
             }}
           >
-            Find Your Specialist
+            Explore Partnerships
           </Button>
           <Button
             variant="outlined"
@@ -128,39 +126,8 @@ const HeroSection = () => (
               },
             }}
           >
-            How Matching Works
+            Learn More
           </Button>
-        </Stack>
-        <Stack direction={{ xs: "column", sm: "row" }} gap={3} mt={2} flexWrap="wrap">
-          {features.map((feature) => (
-            <Stack
-              direction="row"
-              alignItems="center"
-              spacing={1}
-              key={feature}
-              sx={{
-                borderRadius: "10px",
-                px: 1.1,
-                py: 0.7,
-                bgcolor: "var(--primary-50)",
-                mb: { xs: 1, sm: 0 },
-                boxShadow: "0 1px 4px 0 var(--primary-100)",
-              }}
-            >
-              <CheckCircleIcon sx={{ color: "var(--success)", fontSize: 20 }} />
-              <Typography
-                variant="body2"
-                sx={{
-                  color: "var(--neutral-700)",
-                  fontWeight: 500,
-                  fontSize: { xs: "0.98rem", sm: "1.05rem" },
-                  whiteSpace: "nowrap",
-                }}
-              >
-                {feature}
-              </Typography>
-            </Stack>
-          ))}
         </Stack>
       </MotionBox>
       {/* Right: Illustration */}
