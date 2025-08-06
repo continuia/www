@@ -267,36 +267,7 @@ export const PartnersSection: React.FC = () => {
                     mb: "var(--space-3)",
                   }}
                 />
-                <Typography
-                  component="a"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    navigate(partner.path);
-                  }}
-                  href={partner.path}
-                  tabIndex={0}
-                  sx={{
-                    fontSize: "var(--text-base)",
-                    color: "var(--primary-600)",
-                    fontWeight: 600,
-                    cursor: "pointer",
-                    transition: "color var(--transition-normal)",
-                    textDecoration: "none",
-                    display: "inline-block",
-                    "&:hover": {
-                      color: "var(--primary-700)",
-                      textDecoration: "underline",
-                    },
-                  }}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" || e.key === " ") {
-                      e.stopPropagation();
-                      navigate(partner.path);
-                    }
-                  }}
-                >
-                  Learn more →
-                </Typography>
+    
               </Box>
             </Card>
           </motion.div>
