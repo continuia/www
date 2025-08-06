@@ -11,8 +11,8 @@ const Partner = () => {
       <HeroSection />
       <WhyThisPartnerMatters />
       <HowContinuiaSupports />
-      <ExampleUseCases />
       <HowWeEngage />
+      <ExampleUseCases />
       <CTASection />
     </Box>
   );
