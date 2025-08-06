@@ -33,7 +33,7 @@ const partnersData = [
     title: "Individual Doctors & Specialists",
     description: "You Stay in Control—We Simply Support Your Patients",
     details: "Invite a second pair of eyes without giving up control. Our interpretive role helps patients understand what's been done, not what to do next.",
-    path: "/partners/doctors-specialists",
+    path: "/partners/doctors-and-specialists",
   },
   {
     title: "Outpatient Clinics & Diagnostic Centers",
