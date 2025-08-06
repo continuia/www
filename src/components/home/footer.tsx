@@ -1,8 +1,9 @@
-import { Box, Container, Stack, Typography, IconButton, Tooltip, Link as MuiLink } from "@mui/material";
+import { Box, Container, Stack, Typography, IconButton, Tooltip } from "@mui/material";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 // import XIcon from "@mui/icons-material/X";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import InstagramIcon from "@mui/icons-material/Instagram";
+import { NavLink } from "react-router-dom";
 
 const socialLinks = [
   {
@@ -37,20 +38,10 @@ const Footer = () => {
       }}
     >
       <Container maxWidth="xl">
-        <Stack
-          direction={{ xs: "column", sm: "row" }}
-          justifyContent="space-between"
-          alignItems={{ xs: "flex-start", sm: "center" }}
-          spacing={{ xs: 2, sm: 3 }}
-        >
+        <Stack direction={{ xs: "column", sm: "row" }} justifyContent="space-between" alignItems={{ xs: "flex-start", sm: "center" }} spacing={{ xs: 2, sm: 3 }}>
           {/* Logo and Brand */}
           <Stack order={0} direction="row" alignItems="center" spacing={1.5} mb={{ xs: 1, sm: 0 }}>
-            <Box
-              component="img"
-              src="/continuia.webp"
-              alt="Continuia Logo"
-              sx={{ height: { xs: 28, sm: 32 }, width: { xs: 28, sm: 32 } }}
-            />
+            <Box component="img" src="/continuia.webp" alt="Continuia Logo" sx={{ height: { xs: 28, sm: 32 }, width: { xs: 28, sm: 32 } }} />
             <Typography
               variant="h6"
               sx={{
@@ -86,23 +77,24 @@ const Footer = () => {
             >
               © {new Date().getFullYear()} Continuia. All rights reserved.
             </Typography>
-            <MuiLink
-              href="/terms-of-serivce"
-              underline="hover"
-              sx={{
-                color: "var(--primary-600)",
-                fontWeight: 500,
-                fontSize: { xs: "0.75rem", sm: "0.9rem" },
-                ml: { xs: 0, sm: 2 },
-                mt: { xs: 0.5, sm: 0 },
-                transition: "color var(--transition-normal)",
-                "&:hover": {
-                  color: "var(--primary-700)"
-                },
-              }}
-            >
-              Terms Of Service
-            </MuiLink>
+            <NavLink key={"/terms-of-serivce"} to={"/terms-of-serivce"} end style={{ textDecoration: "none" }}>
+              <Typography
+                variant="caption"
+                sx={{
+                  color: "var(--primary-600)",
+                  fontWeight: 500,
+                  fontSize: { xs: "0.75rem", sm: "0.9rem" },
+                  ml: { xs: 0, sm: 2 },
+                  mt: { xs: 0.5, sm: 0 },
+                  transition: "color var(--transition-normal)",
+                  "&:hover": {
+                    color: "var(--primary-700)",
+                  },
+                }}
+              >
+                Terms Of Service
+              </Typography>
+            </NavLink>
           </Stack>
 
           {/* Social icons */}
