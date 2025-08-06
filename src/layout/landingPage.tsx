@@ -3,11 +3,6 @@ import { Box } from "@mui/material";
 import Header from "../components/home/header";
 import Footer from "../components/home/footer";
 
-// If your header is fixed or sticky and:
-// - xs: 56px
-// - sm+: 72px
-const HEADER_HEIGHT = { xs: 30 };
-
 const HomeLayout = () => (
   <Box
     display="flex"
@@ -17,10 +12,6 @@ const HomeLayout = () => (
     bgcolor="var(--bg-secondary)" // optional for base styling
   >
     <Header />
-
-    {/* Spacer to avoid content under the fixed/sticky header */}
-    <Box sx={{ height: HEADER_HEIGHT, width: "100%" }} />
-
     {/* Main routed page content */}
     <Box position="relative" flex={1}>
       <Outlet />
