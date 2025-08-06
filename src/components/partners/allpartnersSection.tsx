@@ -27,7 +27,7 @@ const partnersData = [
     title: "Skilled Nursing & Assisted Living",
     description: "Support Your Residents Without Overloading Your Staff",
     details: "On-demand case reviews delivered in plain language summaries. No apps, no logins, no disruption—just improved family confidence and reduced transfers.",
-    path: "/partners/skilled-nursing",
+    path: "/partners/nursing-and-living",
   },
   {
     title: "Individual Doctors & Specialists",
