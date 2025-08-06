@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import HomeLayout from "./layout/landingPage";
 import NotFound from "./pages/notFound";
 import ScrollToTop from "./components/scrollToTop";
@@ -25,12 +25,10 @@ function App() {
           </Route>
           <Route path="about" element={<AboutPage />} />
           <Route path="cxa-globallaunch-c1a7e3d" element={<Campaign />} />
-
-          <Route path="notFound" element={<NotFound />} />
+          <Route path="*" element={<NotFound />} />
         </Route>
 
         {/* Unknown routes nagivated to not-found */}
-        <Route path="*" element={<Navigate to="/notFound" />} />
       </Routes>
     </Router>
   );
