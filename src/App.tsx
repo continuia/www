@@ -13,8 +13,26 @@ import NursingAndLivingPartner from "./pages/eachPartners/nursingAndLiving";
 import DoctorsAndSpecialists from "./pages/eachPartners/doctorsAndSpecialists";
 import ClinicsAndDiagnostic from "./pages/eachPartners/clinicsAndDiagnostic";
 import HealthPlansAndTPA from "./pages/eachPartners/healthPlansAndTPA";
+import { useState, useEffect } from "react";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import { Fab, Zoom } from "@mui/material";
+
 import { TermsOfService } from "./pages/termsOfService";
 function App() {
+  const [showButton, setShowButton] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowButton(window.scrollY > 300);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   return (
     <Router>
       <ScrollToTop />
@@ -40,6 +58,29 @@ function App() {
 
         {/* Unknown routes nagivated to not-found */}
       </Routes>
+
+      {/* Floating Scroll-to-Top Button */}
+      <Zoom in={showButton}>
+        <Fab
+          color="primary"
+          size="medium"
+          onClick={scrollToTop}
+          aria-label="scroll back to top"
+          sx={{
+            position: "fixed",
+            bottom: { xs: 28, sm: 40 },
+            right: { xs: 20, sm: 36 },
+            zIndex: 1700,
+            boxShadow: "var(--shadow-lg)",
+            bgcolor: "var(--primary-600)",
+            color: "var(--text-inverse)",
+            "&:hover": { bgcolor: "var(--primary-700)" },
+            transition: "background 0.2s",
+          }}
+        >
+          <KeyboardArrowUpIcon fontSize="large" />
+        </Fab>
+      </Zoom>
     </Router>
   );
 }
