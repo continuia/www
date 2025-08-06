@@ -44,7 +44,6 @@ const NotFound: React.FC = () => {
         alignItems: "center",
         justifyContent: "center",
         px: { xs: "var(--space-2)", sm: "var(--space-12)" },
-        border: "1px solid red",
       }}
     >
       <Box
