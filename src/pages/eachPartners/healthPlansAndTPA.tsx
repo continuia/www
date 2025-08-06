@@ -1,12 +1,18 @@
 import { Box } from "@mui/material";
-import HeroSection from "../../components/partners/heroSection";
-import CTASection from "../../components/partners/ctaSection";
-import { PartnersSection } from "../../components/partners/allpartnersSection";
+import HeroSection from "../../components/partners/healthPlansAndTPA/heroSection";
+import { WhyThisPartnerMatters } from "../../components/partners/healthPlansAndTPA/whyThisPartnerMatters";
+import { HowContinuiaSupports } from "../../components/partners/healthPlansAndTPA/howContinuiaSupports";
+import { ExampleUseCases } from "../../components/partners/healthPlansAndTPA/exampleUseCases";
+import { HowWeEngage } from "../../components/partners/healthPlansAndTPA/howWeEngage";
+import CTASection from "../../components/partners/healthPlansAndTPA/ctaSection";
 const Partner = () => {
   return (
     <Box display={"flex"} flexDirection={"column"} position={"relative"} width={"100%"}>
       <HeroSection />
-      <PartnersSection />
+      <WhyThisPartnerMatters />
+      <HowContinuiaSupports />
+      <HowWeEngage />
+      <ExampleUseCases />
       <CTASection />
     </Box>
   );

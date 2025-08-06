@@ -12,6 +12,7 @@ import HospitalPartner from "./pages/eachPartners/hospitals";
 import NursingAndLivingPartner from "./pages/eachPartners/nursingAndLiving";
 import DoctorsAndSpecialists from "./pages/eachPartners/doctorsAndSpecialists";
 import ClinicsAndDiagnostic from "./pages/eachPartners/clinicsAndDiagnostic";
+import HealthPlansAndTPA from "./pages/eachPartners/healthPlansAndTPA";
 import { TermsOfService } from "./pages/termsOfService";
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
             <Route path="nursing-and-living" element={<NursingAndLivingPartner />} />
             <Route path="doctors-and-specialists" element={<DoctorsAndSpecialists />} />
             <Route path="clinics-diagnostics" element={<ClinicsAndDiagnostic />} />
+            <Route path="health-plans-tpas" element={<HealthPlansAndTPA />} />
           </Route>
           <Route path="about" element={<AboutPage />} />
           <Route path="terms-of-serivce" element={<TermsOfService />} />

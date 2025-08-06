@@ -1,4 +1,4 @@
-import { Box, Container, Stack, Typography, IconButton, Tooltip } from "@mui/material";
+import { Box, Container, Stack, Typography, IconButton, Tooltip, Link as MuiLink } from "@mui/material";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 // import XIcon from "@mui/icons-material/X";
 import FacebookIcon from "@mui/icons-material/Facebook";
@@ -32,15 +32,25 @@ const Footer = () => {
         color: "var(--text-secondary)",
         borderTop: "1px solid var(--border-light)",
         py: 4,
-        width: "100%", // Use 100% instead of 100vw
+        width: "100%", // Not 100vw
         boxSizing: "border-box",
       }}
     >
       <Container maxWidth="xl">
-        <Stack direction={{ xs: "column", sm: "row" }} justifyContent="space-between" alignItems={{ xs: "flex-start", sm: "center" }} spacing={{ xs: 2, sm: 3 }}>
+        <Stack
+          direction={{ xs: "column", sm: "row" }}
+          justifyContent="space-between"
+          alignItems={{ xs: "flex-start", sm: "center" }}
+          spacing={{ xs: 2, sm: 3 }}
+        >
           {/* Logo and Brand */}
           <Stack order={0} direction="row" alignItems="center" spacing={1.5} mb={{ xs: 1, sm: 0 }}>
-            <Box component="img" src="/continuia.webp" alt="Continuia Logo" sx={{ height: { xs: 28, sm: 32 }, width: { xs: 28, sm: 32 } }} />
+            <Box
+              component="img"
+              src="/continuia.webp"
+              alt="Continuia Logo"
+              sx={{ height: { xs: 28, sm: 32 }, width: { xs: 28, sm: 32 } }}
+            />
             <Typography
               variant="h6"
               sx={{
@@ -54,20 +64,48 @@ const Footer = () => {
             </Typography>
           </Stack>
 
-          <Typography
+          {/* Terms and Copyright (center) */}
+          <Stack
             order={{ xs: 2, sm: 1 }}
-            variant="caption"
+            direction="row"
+            spacing={2}
+            alignItems="center"
+            justifyContent="center"
             sx={{
-              color: "var(--text-muted)",
+              width: { xs: "100%", sm: "auto" },
               textAlign: "center",
-              display: "block",
-              fontSize: { xs: "0.75rem", sm: "0.9rem" },
+              flexWrap: "wrap",
             }}
           >
-            © {new Date().getFullYear()} Continuia. All rights reserved.
-          </Typography>
+            <Typography
+              variant="caption"
+              sx={{
+                color: "var(--text-muted)",
+                fontSize: { xs: "0.75rem", sm: "0.9rem" },
+              }}
+            >
+              © {new Date().getFullYear()} Continuia. All rights reserved.
+            </Typography>
+            <MuiLink
+              href="/terms-of-serivce"
+              underline="hover"
+              sx={{
+                color: "var(--primary-600)",
+                fontWeight: 500,
+                fontSize: { xs: "0.75rem", sm: "0.9rem" },
+                ml: { xs: 0, sm: 2 },
+                mt: { xs: 0.5, sm: 0 },
+                transition: "color var(--transition-normal)",
+                "&:hover": {
+                  color: "var(--primary-700)"
+                },
+              }}
+            >
+              Terms Of Service
+            </MuiLink>
+          </Stack>
 
-          {/* Contact/Support Info & Socials */}
+          {/* Social icons */}
           <Stack order={{ xs: 1, sm: 2 }} spacing={1} alignItems={{ xs: "flex-start", sm: "flex-end" }}>
             <Stack direction="row" spacing={1} mb={0.5}>
               {socialLinks.map((social) => (
@@ -92,21 +130,6 @@ const Footer = () => {
                 </Tooltip>
               ))}
             </Stack>
-            {/* <Typography
-              variant="body2"
-              sx={{
-                color: "var(--text-tertiary)",
-                fontSize: { xs: "0.85rem", sm: "1rem" },
-              }}
-            >
-              Need help?{" "}
-              <MuiLink
-                href="mailto:support@continuia.ai"
-                sx={{ color: "var(--primary-600)", fontWeight: 500 }}
-              >
-                Contact Support
-              </MuiLink>
-            </Typography> */}
           </Stack>
         </Stack>
       </Container>
