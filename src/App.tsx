@@ -11,6 +11,7 @@ import Campaign from "./pages/campaign";
 import HospitalPartner from "./pages/eachPartners/hospitals";
 import NursingAndLivingPartner from "./pages/eachPartners/nursingAndLiving";
 import DoctorsAndSpecialists from "./pages/eachPartners/doctorsAndSpecialists";
+import ClinicsAndDiagnostic from "./pages/eachPartners/clinicsAndDiagnostic";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
             <Route path="hospitals" element={<HospitalPartner />} />
             <Route path="nursing-and-living" element={<NursingAndLivingPartner />} />
             <Route path="doctors-and-specialists" element={<DoctorsAndSpecialists />} />
+            <Route path="clinics-diagnostics" element={<ClinicsAndDiagnostic />} />
           </Route>
           <Route path="about" element={<AboutPage />} />
           <Route path="cxa-globallaunch-c1a7e3d" element={<Campaign />} />
