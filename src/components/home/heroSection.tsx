@@ -51,7 +51,7 @@ const HeroSection = () => (
         height: "100%",
         objectFit: "cover",
         zIndex: 0,
-        scale: 1.2,
+        scale:1.2,
         borderRadius: "inherit",
       }}
       aria-label="Medical consultation background video"
@@ -65,7 +65,7 @@ const HeroSection = () => (
         left: 0,
         width: "100%",
         height: "100%",
-        bgcolor: "rgba(255,255,255,0.65)", // adjust for dark/light overlay as needed
+        bgcolor: "rgba(255,255,255,0.20)", // adjust for dark/light overlay as needed
         zIndex: 1,
         borderRadius: "inherit",
         pointerEvents: "none",
@@ -73,9 +73,21 @@ const HeroSection = () => (
     />
 
     {/* Main Content */}
-    <Stack direction={{ xs: "column", md: "row" }} alignItems="center" justifyContent="space-between" spacing={6} sx={{ width: "100%", position: "relative", zIndex: 2 }}>
+    <Stack
+      direction={{ xs: "column", md: "row" }}
+      alignItems="center"
+      justifyContent="space-between"
+      spacing={6}
+      sx={{ width: "100%", position: "relative", zIndex: 2 }}
+    >
       {/* Left: Text Content */}
-      <MotionBox initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.22 }} variants={fadeLeft} sx={{ flex: 1, maxWidth: 650 }}>
+      <MotionBox
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.22 }}
+        variants={fadeLeft}
+        sx={{ flex: 1, maxWidth: 650 }}
+      >
         <Typography
           variant="subtitle1"
           sx={{
@@ -83,7 +95,7 @@ const HeroSection = () => (
             mb: 1,
             fontWeight: 600,
             fontSize: { xs: "1rem", sm: "1.1rem" },
-            color: "var(--neutral-700)",
+            color: "var(--neutral-800)",
             display: "flex",
             alignItems: "center",
           }}
@@ -98,7 +110,7 @@ const HeroSection = () => (
             mb: 2,
             lineHeight: 1.08,
             letterSpacing: "-1px",
-            background: "linear-gradient(90deg, var(--neutral-800), var(--primary-800))",
+            background: "linear-gradient(90deg, var(--neutral-50), var(--neutral-50))",
             WebkitBackgroundClip: "text",
             WebkitTextFillColor: "transparent",
             backgroundClip: "text",
@@ -111,14 +123,16 @@ const HeroSection = () => (
         <Typography
           variant="h6"
           sx={{
-            color: "var(--neutral-600)",
+            color: "var(--neutral-100)",
             fontWeight: 500,
             mb: 4,
             fontSize: { xs: "1rem", sm: "1.1rem" },
             maxWidth: 600,
           }}
         >
-          Every patient deserves confidence in their care. Our AI-powered platform connects you with world-class specialists who provide expert second opinions, ensuring you make informed decisions about your health journey.
+          Every patient deserves confidence in their care. Our AI-powered platform connects you
+          with world-class specialists who provide expert second opinions, ensuring you make
+          informed decisions about your health journey.
         </Typography>
         <Stack direction={{ xs: "column", sm: "row" }} spacing={2} mb={3}>
           <Button
