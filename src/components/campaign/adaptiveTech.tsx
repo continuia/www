@@ -66,7 +66,7 @@ export default function AdaptiveTech2025() {
             }}
           >
             For Minds. <br />
-            <span style={{ color: "var(--primary-600)" }}>That Value Clarity.</span>
+            <span style={{ color: "var(--primary-600)" }}>That Value Clarity.</span>
           </Typography>
           <Typography
             sx={{

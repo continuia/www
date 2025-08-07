@@ -68,7 +68,7 @@ export default function WhatMakesContinuaUnique() {
           fontSize: "var(--text-xl)",
         }}
       >
-        What Makes Continui​a Unique
+        What Makes Continuia Unique
       </Typography>
       <Typography
         variant="body1"
