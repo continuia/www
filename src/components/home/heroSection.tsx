@@ -100,7 +100,7 @@ const HeroSection = () => (
             alignItems: "center",
           }}
         >
-          🎉 15,000+ Happy Customers
+          🎉 Globally Happy Customers
         </Typography>
         <Typography
           variant="h2"
