@@ -61,7 +61,7 @@ function App() {
           <Route path="cxa-globallaunch-c1a7e3d" element={<Campaign />} />
           <Route path="*" element={<NotFound />} />
         </Route>
-        <Route path="/terms-of-serivce" element={<TermsOfServiceLayout />}>
+        <Route path="/privacy" element={<TermsOfServiceLayout />}>
           <Route index element={<TermsOfService />} />
         </Route>
 

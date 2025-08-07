@@ -2,9 +2,9 @@ import { Box, Typography, Button, Stack, Paper } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import LocalHospitalIcon from "@mui/icons-material/LocalHospital";
 import { motion } from "framer-motion";
-import heroIllustration from "../../assets/ai_assisted_patient_intake.webp";
+// import heroIllustration from "../../assets/ai_assisted_patient_intake.webp";
 import type { Variants } from "framer-motion";
-
+import heroVideo from "../../assets/heroVideo.mp4";
 // Animation variants
 const fadeLeft: Variants = {
   hidden: { opacity: 0, y: 32 },
@@ -20,7 +20,7 @@ const fadeImage: Variants = {
     opacity: 1,
     scale: 1,
     transition: {
-      duration: 0.9,
+      duration: 0.5,
       type: "spring",
       stiffness: 52,
       damping: 22,
@@ -198,7 +198,7 @@ const HeroSection = () => (
           minWidth: { xs: 0, md: 320 },
         }}
       >
-        <Box
+        {/* <Box
           component="img"
           src={heroIllustration}
           alt="Medical consultation"
@@ -209,7 +209,35 @@ const HeroSection = () => (
             objectFit: "cover",
             minHeight: { xs: 180, md: 320 },
           }}
-        />
+        /> */}
+        <Box
+          sx={{
+            width: "100%",
+            maxWidth: { xs: "100%" },
+            borderRadius: "1.5rem",
+            overflow: "hidden",
+            minHeight: { xs: 180, md: 320 },
+          }}
+        >
+          <video
+            src={heroVideo}
+            autoPlay
+            loop
+            muted
+            playsInline
+            
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              borderRadius: "1.5rem",
+              display: "block",
+              scale:1.2,
+
+            }}
+            aria-label="Medical consultation video"
+          />
+        </Box>
       </MotionPaper>
     </Stack>
   </Box>
