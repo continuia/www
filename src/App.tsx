@@ -13,6 +13,7 @@ import NursingAndLivingPartner from "./pages/eachPartners/nursingAndLiving";
 import DoctorsAndSpecialists from "./pages/eachPartners/doctorsAndSpecialists";
 import ClinicsAndDiagnostic from "./pages/eachPartners/clinicsAndDiagnostic";
 import HealthPlansAndTPA from "./pages/eachPartners/healthPlansAndTPA";
+import ConsultantsAndWellness from "./pages/eachPartners/consultantsAndWellness";
 import { useState, useEffect } from "react";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { Fab, Zoom } from "@mui/material";
@@ -49,6 +50,7 @@ function App() {
             <Route path="doctors-and-specialists" element={<DoctorsAndSpecialists />} />
             <Route path="clinics-diagnostics" element={<ClinicsAndDiagnostic />} />
             <Route path="health-plans-tpas" element={<HealthPlansAndTPA />} />
+            <Route path="benefit-consultants" element={<ConsultantsAndWellness />} />
           </Route>
           <Route path="about" element={<AboutPage />} />
           <Route path="terms-of-serivce" element={<TermsOfService />} />
