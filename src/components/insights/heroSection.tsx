@@ -1,4 +1,4 @@
-import { Box, Typography, Button, Stack, Paper } from "@mui/material";
+import { Box, Typography, Button, Stack, Paper  } from "@mui/material";
 import { motion } from "framer-motion";
 import heroIllustration from "../../assets/ai_assisted_patient_intake.webp"; // Replace with your actual doctor-page hero image if different
 import type { Variants } from "framer-motion";
@@ -69,7 +69,7 @@ const HeroSection = () => (
             display: "inline-block",
           }}
         >
-          Insights Where Uncertainty Meets Expertise
+          Continuia Insights <sup style={{fontSize:"0.4em"}} >TM</sup> Where Uncertainty Meets Expertise
         </Typography>
         <Typography
           variant="h6"

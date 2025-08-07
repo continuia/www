@@ -27,7 +27,6 @@ const fadeImage: Variants = {
   },
 };
 
-
 const MotionBox = motion.create(Box);
 const MotionPaper = motion.create(Paper);
 
@@ -70,7 +69,7 @@ const HeroSection = () => (
             display: "inline-block",
           }}
         >
-          AI Meets Clinical Governance Without Compromise
+          Continuia Governance <sup style={{ fontSize: "0.4em" }}>TM</sup> AI Meets Clinical Without Compromise
         </Typography>
         <Typography
           variant="h6"
