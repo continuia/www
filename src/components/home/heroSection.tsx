@@ -1,10 +1,10 @@
-import { Box, Typography, Button, Stack, Paper } from "@mui/material";
+import { Box, Typography, Button, Stack } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import LocalHospitalIcon from "@mui/icons-material/LocalHospital";
 import { motion } from "framer-motion";
-// import heroIllustration from "../../assets/ai_assisted_patient_intake.webp";
 import type { Variants } from "framer-motion";
 import heroVideo from "../../assets/heroVideo.mp4";
+
 // Animation variants
 const fadeLeft: Variants = {
   hidden: { opacity: 0, y: 32 },
@@ -14,47 +14,66 @@ const fadeLeft: Variants = {
     transition: { duration: 0.8, type: "spring", stiffness: 60, damping: 18 },
   },
 };
-const fadeImage: Variants = {
-  hidden: { opacity: 0, scale: 0.96 },
-  visible: {
-    opacity: 1,
-    scale: 1,
-    transition: {
-      duration: 0.5,
-      type: "spring",
-      stiffness: 52,
-      damping: 22,
-      delay: 0.1,
-    },
-  },
-};
 
 const features = ["Board-certified specialists", "AI-enhanced analysis", "Global expertise"];
 
 const MotionBox = motion.create(Box);
-const MotionPaper = motion.create(Paper);
 
 const HeroSection = () => (
   <Box
     sx={{
-      minHeight: { xs: "80vh", md: "70vh" },
+      position: "relative",
+      minHeight: { xs: "80vh", md: "85vh" },
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
       m: { xs: 1, md: 2 },
       px: { xs: 2, sm: 4, md: 8 },
       py: { xs: 3, md: 10 },
-      background: {
-        xs: "none",
-        md: "linear-gradient(150deg, var(--primary-50) 40%, var(--primary-300) 100%)",
-      },
-      borderRadius: { xs: "1rem", md: "2rem" },
+      borderRadius: { xs: "1rem", md: "1rem" },
       boxShadow: "0 4px 32px 0 var(--neutral-300)",
       overflow: "hidden",
-      position: "relative",
+      // no background gradient here as video is now the background
     }}
   >
-    <Stack direction={{ xs: "column", md: "row" }} alignItems="center" justifyContent="space-between" spacing={6} sx={{ width: "100%" }}>
+    {/* Video as background */}
+    <video
+      src={heroVideo}
+      autoPlay
+      loop
+      muted
+      playsInline
+      style={{
+        position: "absolute",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        objectFit: "cover",
+        zIndex: 0,
+        scale: 1.2,
+        borderRadius: "inherit",
+      }}
+      aria-label="Medical consultation background video"
+    />
+
+    {/* Optional: Add an overlay for better readability */}
+    <Box
+      sx={{
+        position: "absolute",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        bgcolor: "rgba(255,255,255,0.65)", // adjust for dark/light overlay as needed
+        zIndex: 1,
+        borderRadius: "inherit",
+        pointerEvents: "none",
+      }}
+    />
+
+    {/* Main Content */}
+    <Stack direction={{ xs: "column", md: "row" }} alignItems="center" justifyContent="space-between" spacing={6} sx={{ width: "100%", position: "relative", zIndex: 2 }}>
       {/* Left: Text Content */}
       <MotionBox initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.22 }} variants={fadeLeft} sx={{ flex: 1, maxWidth: 650 }}>
         <Typography
@@ -177,68 +196,7 @@ const HeroSection = () => (
           ))}
         </Stack>
       </MotionBox>
-      {/* Right: Illustration */}
-      <MotionPaper
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.16 }}
-        variants={fadeImage}
-        elevation={4}
-        sx={{
-          borderRadius: "2rem",
-          p: 1,
-          background: "var(--bg-primary)",
-          boxShadow: "0 8px 32px 0 var(--primary-200)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          maxWidth: { xs: "100%", md: 500, lg: 650 },
-          width: "100%",
-          height: "100%",
-          minWidth: { xs: 0, md: 320 },
-        }}
-      >
-        {/* <Box
-          component="img"
-          src={heroIllustration}
-          alt="Medical consultation"
-          sx={{
-            width: "100%",
-            maxWidth: { xs: "100%" },
-            borderRadius: "1.5rem",
-            objectFit: "cover",
-            minHeight: { xs: 180, md: 320 },
-          }}
-        /> */}
-        <Box
-          sx={{
-            width: "100%",
-            maxWidth: { xs: "100%" },
-            borderRadius: "1.5rem",
-            overflow: "hidden",
-            minHeight: { xs: 180, md: 320 },
-          }}
-        >
-          <video
-            src={heroVideo}
-            autoPlay
-            loop
-            muted
-            playsInline
-            
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-              borderRadius: "1.5rem",
-              display: "block",
-              scale:1.2,
-
-            }}
-            aria-label="Medical consultation video"
-          />
-        </Box>
-      </MotionPaper>
+      {/* Optionally remove right illustration, or include extra imagery if desired */}
     </Stack>
   </Box>
 );
