@@ -1,6 +1,6 @@
 import React from "react";
 import { Box, Typography, Card, Avatar, useMediaQuery } from "@mui/material";
-import { ShieldOutlined, CheckCircleOutline, StarOutline, GavelOutlined, Diversity3Outlined } from "@mui/icons-material";
+import { ShieldOutlined, SavingsOutlined, RocketLaunchOutlined, WorkspacePremiumOutlined, SentimentSatisfiedAltOutlined } from "@mui/icons-material";
 import { motion, type Variants } from "framer-motion";
 
 const coreIconStyle = {
@@ -14,22 +14,23 @@ const coreIconStyle = {
 
 const reasonCards = [
   {
-    icon: <CheckCircleOutline fontSize="inherit" sx={{ color: "var(--primary-400)" }} />,
+    // If clarity on "savings/value" desired, use SavingsOutlined
+    icon: <SavingsOutlined fontSize="inherit" sx={{ color: "var(--primary-400)" }} />,
     title: "Cost-Effective",
     description: "Meaningful value without breaking budgets",
   },
   {
-    icon: <StarOutline fontSize="inherit" sx={{ color: "var(--primary-400)" }} />,
+    icon: <RocketLaunchOutlined fontSize="inherit" sx={{ color: "var(--primary-400)" }} />,
     title: "Simple Deploy",
     description: "Easy implementation and rollout",
   },
   {
-    icon: <GavelOutlined fontSize="inherit" sx={{ color: "var(--primary-400)" }} />,
+    icon: <WorkspacePremiumOutlined fontSize="inherit" sx={{ color: "var(--primary-400)" }} />,
     title: "Employee Value",
     description: "Genuinely useful for teams",
   },
   {
-    icon: <Diversity3Outlined fontSize="inherit" sx={{ color: "var(--primary-400)" }} />,
+    icon: <SentimentSatisfiedAltOutlined fontSize="inherit" sx={{ color: "var(--primary-400)" }} />,
     title: "Peace of Mind",
     description: "Confidence in care decisions",
   },

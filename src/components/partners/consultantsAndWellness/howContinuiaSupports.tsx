@@ -1,21 +1,22 @@
 import React from "react";
 import { Box, Typography, Card, Avatar, useMediaQuery } from "@mui/material";
-import { MemoryOutlined, Diversity3Outlined, DescriptionOutlined } from "@mui/icons-material";
+import { FactCheckOutlined, CloudUploadOutlined, WorkspacePremiumOutlined } from "@mui/icons-material";
 import { motion, type Variants } from "framer-motion";
 
 const featureList = [
   {
-    icon: <MemoryOutlined fontSize="inherit" sx={{ color: "var(--text-inverse)" }} />,
+    icon: <FactCheckOutlined fontSize="inherit" sx={{ color: "var(--text-inverse)" }} />,
     title: "Physician-Led Reviews",
     description: "Continuia provides physician-led second opinions that are fast, neutral, and easy to access. No logins. No portals. No disruption.",
   },
   {
-    icon: <Diversity3Outlined fontSize="inherit" sx={{ color: "var(--text-inverse)" }} />,
+    icon: <CloudUploadOutlined fontSize="inherit" sx={{ color: "var(--text-inverse)" }} />,
     title: "Secure Upload Process",
     description: "Employees or caregivers securely upload records and receive plain-language summaries from licensed physicians — helping them better understand diagnoses, test results, or next steps.",
   },
   {
-    icon: <DescriptionOutlined fontSize="inherit" sx={{ color: "var(--text-inverse)" }} />,
+    icon: <WorkspacePremiumOutlined fontSize="inherit" sx={{ color: "var(--text-inverse)" }} />,
+    // Or <StarOutline fontSize="inherit" ... /> for "standout"
     title: "Differentiate Offerings",
     description: "It's a frictionless way to boost trust, improve decision-making, and differentiate your benefits offering — without adding clinical liability or complexity to your stack.",
   },

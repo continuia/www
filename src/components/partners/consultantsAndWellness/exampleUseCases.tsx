@@ -1,26 +1,26 @@
 import React from "react";
 import { Box, Typography, Card, Avatar, useMediaQuery } from "@mui/material";
-import { EventNoteOutlined, GavelOutlined, SyncAltOutlined, PlaylistAddCheckOutlined } from "@mui/icons-material";
 import { motion, type Variants } from "framer-motion";
+import { FavoriteOutlined, LocalHospitalOutlined, MonetizationOnOutlined, AppShortcutOutlined } from "@mui/icons-material";
 
 const useCases = [
   {
-    icon: <EventNoteOutlined fontSize="inherit" sx={{ color: "var(--text-inverse)" }} />,
+    icon: <FavoriteOutlined fontSize="inherit" sx={{ color: "var(--text-inverse)" }} />,
     title: "Caregiver Support",
     description: "A caregiver needs a second opinion on a parent's care plan",
   },
   {
-    icon: <GavelOutlined fontSize="inherit" sx={{ color: "var(--text-inverse)" }} />,
+    icon: <LocalHospitalOutlined fontSize="inherit" sx={{ color: "var(--text-inverse)" }} />,
     title: "Specialist Clarification",
     description: "An employee is confused after a specialist visit or diagnostic test",
   },
   {
-    icon: <SyncAltOutlined fontSize="inherit" sx={{ color: "var(--text-inverse)" }} />,
+    icon: <MonetizationOnOutlined fontSize="inherit" sx={{ color: "var(--text-inverse)" }} />,
     title: "High-Cost Decisions",
     description: "A high-cost medical decision is looming, and the employee wants reassurance",
   },
   {
-    icon: <PlaylistAddCheckOutlined fontSize="inherit" sx={{ color: "var(--text-inverse)" }} />,
+    icon: <AppShortcutOutlined fontSize="inherit" sx={{ color: "var(--text-inverse)" }} />,
     title: "Platform Enhancement",
     description: "A wellness platform wants to add a clinically credible option to its navigation layer",
   },
