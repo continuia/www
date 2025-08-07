@@ -1,35 +1,219 @@
-import { useState, useEffect } from "react";
-import { AppBar, Box, Toolbar, Button, Typography, Fade, Paper, IconButton, Drawer, List, ListItem, ListItemButton, ListItemText, useTheme, useMediaQuery, Divider } from "@mui/material";
+import { useState } from "react";
+import { AppBar, Box, Toolbar, Button, Typography, Fade, Paper, IconButton, Drawer, List, ListItem, ListItemButton, ListItemText, Divider, Collapse, useTheme, useMediaQuery } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { NavLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
-// Navigation links config
-const navLinks = [
-  { label: "Home", href: "/" },
+type NavScreen = "all" | "small" | "medium" | "large";
+interface NavLinkBase {
+  label: string;
+  href?: string;
+  showOn?: NavScreen | NavScreen[];
+  children?: NavLinkBase[];
+  id?: string;
+}
+
+// ToS sidebar nav (for Drawer only, not in desktop nav)
+const tosSidebarNav: NavLinkBase[] = [
+  { id: "welcome", label: "Welcome" },
+  { id: "scope", label: "Scope of Services" },
+  { id: "who", label: "Who May Use Continuia" },
+  { id: "disclaimers", label: "Important Disclaimers" },
+  { id: "compliance", label: "Global Compliance" },
+  { id: "consent", label: "Consent & Privacy" },
+  { id: "account-security", label: "Accounts & Security" },
+  { id: "for-clinicians", label: "For Clinicians" },
+  { id: "payment-refunds", label: "Payment & Refunds" },
+  { id: "data-ownership", label: "Data Ownership" },
+  { id: "intellectual-property", label: "Intellectual Property" },
+  { id: "termination", label: "Termination" },
+  { id: "disputes", label: "Disputes & Jurisdiction" },
+  { id: "updates", label: "Updates" },
+  { id: "contact", label: "Contact & Support" },
+];
+
+// NavLink config
+const navLinks: NavLinkBase[] = [
+  { label: "Home", href: "/", showOn: "all" },
   { label: "Insights", href: "/patients" },
   { label: "Governance", href: "/doctors" },
   { label: "Partners", href: "/partners" },
-  { label: "About", href: "/about" },
+  { label: "About", href: "/about", showOn: ["large", "medium"] }, // example: hide on mobile
+  {
+    label: "Terms of Service",
+    href: "/terms-of-serivce",
+    children: tosSidebarNav,
+    showOn: "small", // <-- only show in Drawer/mobile, not in desktop
+  },
 ];
 
-const Header = () => {
-  const [show, setShow] = useState(false);
-  const [drawerOpen, setDrawerOpen] = useState(false);
-
+/** Utility to determine what screen we're on ("small", "medium", "large") */
+function useNavScreen() {
   const theme = useTheme();
-  // lg === 1200px by default
-  const isBelowLg = useMediaQuery(theme.breakpoints.down("lg"));
+  const isLarge = useMediaQuery(theme.breakpoints.up("lg")); // ≥1200px
+  const isMedium = useMediaQuery(theme.breakpoints.between("md", "lg")); // 900–1199
+  if (isLarge) return "large";
+  if (isMedium) return "medium";
+  return "small";
+}
 
-  useEffect(() => {
-    setShow(true);
-  }, []);
+function linkVisibleOn(link: NavLinkBase, screen: NavScreen): boolean {
+  const showOn = link.showOn;
+  if (!showOn || showOn === "all") return true; // handles both undefined and "all"
+  if (Array.isArray(showOn)) return showOn.includes(screen) || showOn.includes("all");
+  return showOn === screen;
+}
 
-  // Closing menu on navigation link
-  const handleDrawerNav = () => setDrawerOpen(false);
+function MobileNavDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const [tosOpen, setTosOpen] = useState(false);
+  const screen = useNavScreen();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleTosSectionClick = (sectionId: string) => {
+    onClose();
+    if (window.location.pathname === "/terms-of-serivce") {
+      // Already on ToS page? Scroll now:
+      setTimeout(() => {
+        const section = document.getElementById(sectionId);
+        if (section) {
+          if (screen === "large") {
+            const contentBox = document.getElementById("terms-content-scroll");
+            if (contentBox) {
+              const offset = section.offsetTop - contentBox.offsetTop;
+              contentBox.scrollTo({ top: offset, behavior: "smooth" });
+            }
+          } else {
+            section.scrollIntoView({ behavior: "smooth", block: "start" });
+          }
+        }
+      }, 80);
+    } else {
+      // NOT on ToS page: navigate (the ToS page will auto-scroll via its own code)
+      navigate(`/terms-of-serivce#${sectionId}`);
+    }
+  };
 
   return (
-    <Fade in={show} timeout={700}>
+    <Drawer
+      anchor="right"
+      open={open}
+      onClose={onClose}
+      slotProps={{
+        paper: {
+          sx: { bgcolor: "var(--bg-primary)", minWidth: 250 },
+        },
+      }}
+    >
+      <Box display="flex" alignItems="center" justifyContent="space-between" px={2} py={1}>
+        <Typography variant="h6" sx={{ color: "var(--primary-700)", fontWeight: 700 }}>
+          Menu
+        </Typography>
+        <IconButton onClick={onClose} sx={{ color: "var(--primary-700)" }}>
+          <CloseIcon fontSize="medium" />
+        </IconButton>
+      </Box>
+      <Divider sx={{ mb: 1 }} />
+      <List>
+        {navLinks
+          .filter((link) => linkVisibleOn(link, screen))
+          .map((link) =>
+            !link.children ? (
+              <ListItem key={link.label} disablePadding>
+                <ListItemButton
+                  component={NavLink}
+                  to={link.href ?? "#"}
+                  onClick={onClose}
+                  sx={{
+                    px: 3,
+                    fontWeight: 600,
+                    letterSpacing: 0.6,
+                    // Use "isActive" style by comparing `location.pathname`
+                    bgcolor: location.pathname === link.href ? "var(--primary-50)" : "transparent",
+                    color: location.pathname === link.href ? "var(--primary-800)" : "var(--primary-700)",
+                    "&.active, &:hover": { bgcolor: "var(--primary-50)" },
+                  }}
+                  end
+                >
+                  <ListItemText primary={link.label} />
+                </ListItemButton>
+              </ListItem>
+            ) : (
+              <Box key={link.label}>
+                <ListItem disablePadding>
+                  <ListItemButton onClick={() => setTosOpen((open) => !open)} sx={{ px: 3, fontWeight: 700, color: "var(--primary-700)" }}>
+                    <ListItemText primary={link.label} />
+                    {tosOpen ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                  </ListItemButton>
+                </ListItem>
+                <Collapse in={tosOpen} timeout="auto" unmountOnExit>
+                  <List component="div" disablePadding>
+                    {link.children
+                      ?.filter((child) => linkVisibleOn(child, screen))
+                      .map((section) => (
+                        <ListItem key={section.id || section.label} disablePadding>
+                          <ListItemButton
+                            sx={{
+                              pl: 5.5,
+                              py: 1,
+                              fontSize: "0.98rem",
+                              fontWeight: 500,
+                              "&:hover": { bgcolor: "var(--primary-50)" },
+                              // HIGHLIGHT if matches current hash
+                              bgcolor: location.hash === `#${section.id}` && location.pathname === "/terms-of-serivce" ? "var(--primary-100)" : "transparent",
+                              color: location.hash === `#${section.id}` && location.pathname === "/terms-of-serivce" ? "var(--primary-900)" : "var(--primary-700)",
+                            }}
+                            onClick={() => section.id && handleTosSectionClick(section.id)}
+                          >
+                            <ListItemText primary={section.label} />
+                          </ListItemButton>
+                        </ListItem>
+                      ))}
+                  </List>
+                </Collapse>
+              </Box>
+            )
+          )}
+      </List>
+      <Divider sx={{ my: 2 }} />
+      <ListItem>
+        <Button
+          fullWidth
+          variant="contained"
+          href="#get-started"
+          onClick={onClose}
+          sx={{
+            background: "var(--primary-700)",
+            color: "var(--text-inverse)",
+            fontWeight: 700,
+            borderRadius: 2,
+            px: 2,
+            py: 1.2,
+            fontSize: "1.09rem",
+            boxShadow: "0 2px 8px 0 var(--primary-200)",
+            textTransform: "none",
+            "&:hover": { background: "var(--primary-800)" },
+          }}
+        >
+          Get Started
+        </Button>
+      </ListItem>
+    </Drawer>
+  );
+}
+
+export default function Header() {
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const theme = useTheme();
+  const isLarge = useMediaQuery(theme.breakpoints.up("lg"));
+  const isBelowLg = !isLarge;
+
+  return (
+    <Fade in timeout={700}>
       <AppBar
         position="sticky"
         elevation={0}
@@ -65,12 +249,11 @@ const Header = () => {
               Continuia
             </Typography>
           </Box>
-
-          {/* Desktop Navigation Links (lg and up only) */}
+          {/* Desktop nav – only items with showOn: 'all' or 'large'/'medium' */}
           <Paper
             elevation={2}
             sx={{
-              display: { xs: "none", lg: "flex" }, // show only on lg+
+              display: { xs: "none", lg: "flex" },
               borderRadius: "999px",
               background: "var(--bg-primary)",
               px: 1,
@@ -80,37 +263,38 @@ const Header = () => {
               alignItems: "center",
             }}
           >
-            {navLinks.map((link) => (
-              <NavLink key={link.label} to={link.href} end style={{ textDecoration: "none" }}>
-                {({ isActive }) => (
-                  <Button
-                    disableRipple
-                    sx={{
-                      textTransform: "none",
-                      color: isActive ? "var(--text-inverse)" : "var(--neutral-600)",
-                      background: isActive ? "linear-gradient(90deg, var(--primary-500), var(--primary-700))" : "transparent",
-                      fontWeight: 600,
-                      fontSize: "1rem",
-                      borderRadius: "999px",
-                      px: 2.5,
-                      py: 1,
-                      minWidth: 0,
-                      boxShadow: isActive ? "0 5px 15px 0 var(--primary-200)" : "none",
-                      transition: "background 0.2s, color 0.2s",
-                      "&:hover": {
-                        background: isActive ? "linear-gradient(90deg, var(--primary-400), var(--primary-600))" : "var(--primary-50)",
-                        color: isActive ? "var(--text-inverse)" : "var(--primary-800)",
-                      },
-                    }}
-                  >
-                    {link.label}
-                  </Button>
-                )}
-              </NavLink>
-            ))}
+            {navLinks
+              .filter((link) => linkVisibleOn(link, "large") && !link.children) // hide ToS on big if children
+              .map((link) => (
+                <NavLink key={link.label} to={link.href ?? "#"} end style={{ textDecoration: "none" }}>
+                  {({ isActive }) => (
+                    <Button
+                      disableRipple
+                      sx={{
+                        textTransform: "none",
+                        color: isActive ? "var(--text-inverse)" : "var(--neutral-600)",
+                        background: isActive ? "linear-gradient(90deg, var(--primary-500), var(--primary-700))" : "transparent",
+                        fontWeight: 600,
+                        fontSize: "1rem",
+                        borderRadius: "999px",
+                        px: 2.5,
+                        py: 1,
+                        minWidth: 0,
+                        boxShadow: isActive ? "0 5px 15px 0 var(--primary-200)" : "none",
+                        transition: "background 0.2s, color 0.2s",
+                        "&:hover": {
+                          background: isActive ? "linear-gradient(90deg, var(--primary-400), var(--primary-600))" : "var(--primary-50)",
+                          color: isActive ? "var(--text-inverse)" : "var(--primary-800)",
+                        },
+                      }}
+                    >
+                      {link.label}
+                    </Button>
+                  )}
+                </NavLink>
+              ))}
           </Paper>
-
-          {/* Hamburger menu (only on md and below; i.e., if isBelowLg) */}
+          {/* Hamburger + Drawer only on mobile */}
           {isBelowLg && (
             <>
               <IconButton
@@ -125,97 +309,10 @@ const Header = () => {
               >
                 <MenuIcon fontSize="large" />
               </IconButton>
-              <Drawer
-                anchor="right"
-                open={drawerOpen}
-                onClose={() => setDrawerOpen(false)}
-                slotProps={{
-                  paper: {
-                    sx: {
-                      bgcolor: "var(--bg-primary)",
-                      boxShadow: "0 12px 40px 0 var(--primary-100)",
-                      minWidth: 240,
-                    },
-                  },
-                }}
-              >
-                <Box display="flex" alignItems="center" justifyContent="space-between" px={2} py={1}>
-                  <Typography
-                    variant="h6"
-                    sx={{
-                      color: "var(--primary-700)",
-                      fontWeight: 700,
-                      fontSize: "1.15rem",
-                      letterSpacing: 1,
-                    }}
-                  >
-                    Menu
-                  </Typography>
-                  <IconButton onClick={() => setDrawerOpen(false)} sx={{ color: "var(--primary-700)" }} aria-label="Close navigation menu">
-                    <CloseIcon fontSize="medium" />
-                  </IconButton>
-                </Box>
-                <Divider sx={{ mb: 1, bgcolor: "var(--border-light)" }} />
-                <List>
-                  {navLinks.map((link) => (
-                    <ListItem key={link.label} disablePadding>
-                      <ListItemButton
-                        component={NavLink}
-                        to={link.href}
-                        onClick={handleDrawerNav}
-                        sx={{
-                          mx: 1,
-                          px: 3,
-                          py: 1.3,
-                          color: "var(--primary-700)",
-                          borderRadius: 2.2,
-                          fontWeight: 700,
-                          fontSize: "1.09rem",
-                          letterSpacing: 0.6,
-                          mb: 0.7,
-                          "&.active, &:hover": {
-                            bgcolor: "var(--primary-50)",
-                            color: "var(--primary-800)",
-                          },
-                        }}
-                        end
-                      >
-                        <ListItemText primary={link.label} />
-                      </ListItemButton>
-                    </ListItem>
-                  ))}
-                  <Divider sx={{ my: 2, bgcolor: "var(--primary-100)" }} />
-                  {/* Mobile version of CTA button */}
-                  <ListItem>
-                    <Button
-                      fullWidth
-                      variant="contained"
-                      href="#get-started"
-                      onClick={() => setDrawerOpen(false)}
-                      sx={{
-                        background: "var(--primary-700)",
-                        color: "var(--text-inverse)",
-                        fontWeight: 700,
-                        borderRadius: 2,
-                        px: 2,
-                        py: 1.2,
-                        fontSize: "1.09rem",
-                        boxShadow: "0 2px 8px 0 var(--primary-200)",
-                        textTransform: "none",
-                        "&:hover": {
-                          background: "var(--primary-800)",
-                        },
-                      }}
-                    >
-                      Get Started
-                    </Button>
-                  </ListItem>
-                </List>
-              </Drawer>
+              <MobileNavDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
             </>
           )}
-
-          {/* Desktop CTA (lg and up only) */}
+          {/* Desktop CTA */}
           <Button
             variant="contained"
             href="#get-started"
@@ -241,6 +338,4 @@ const Header = () => {
       </AppBar>
     </Fade>
   );
-};
-
-export default Header;
+}

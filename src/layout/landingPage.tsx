@@ -13,10 +13,9 @@ const HomeLayout = () => (
   >
     <Header />
     {/* Main routed page content */}
-    <Box position="relative" flex={1}>
+    <Box sx={{ containerType: "inline-size",  }} display="flex" flexDirection="column" flex={1}>
       <Outlet />
     </Box>
-
     <Footer />
   </Box>
 );

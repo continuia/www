@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { Fab, Zoom } from "@mui/material";
 import HomeLayout from "./layout/landingPage";
+import TermsOfServiceLayout from "./layout/termsOfService";
 import NotFound from "./pages/notFound";
 import ScrollToTop from "./components/scrollToTop";
 import Homepage from "./pages/home";
@@ -57,9 +58,11 @@ function App() {
             <Route path="medical-tourism" element={<MedicalTourism />} />
           </Route>
           <Route path="about" element={<AboutPage />} />
-          <Route path="terms-of-serivce" element={<TermsOfService />} />
           <Route path="cxa-globallaunch-c1a7e3d" element={<Campaign />} />
           <Route path="*" element={<NotFound />} />
+        </Route>
+        <Route path="/terms-of-serivce" element={<TermsOfServiceLayout />}>
+          <Route index element={<TermsOfService />} />
         </Route>
 
         {/* Unknown routes nagivated to not-found */}
