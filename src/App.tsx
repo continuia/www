@@ -18,6 +18,7 @@ import ClinicsAndDiagnostic from "./pages/eachPartners/clinicsAndDiagnostic";
 import HealthPlansAndTPA from "./pages/eachPartners/healthPlansAndTPA";
 import ConsultantsAndWellness from "./pages/eachPartners/consultantsAndWellness";
 import AdvocacyAndNGOs from "./pages/eachPartners/advocacyAndNGOs";
+import MedicalTourism from "./pages/eachPartners/tourismAndConcierge";
 
 import { TermsOfService } from "./pages/termsOfService";
 function App() {
@@ -53,6 +54,7 @@ function App() {
             <Route path="health-plans-tpas" element={<HealthPlansAndTPA />} />
             <Route path="benefit-consultants" element={<ConsultantsAndWellness />} />
             <Route path="advocacy-ngos" element={<AdvocacyAndNGOs />} />
+            <Route path="medical-tourism" element={<MedicalTourism />} />
           </Route>
           <Route path="about" element={<AboutPage />} />
           <Route path="terms-of-serivce" element={<TermsOfService />} />
