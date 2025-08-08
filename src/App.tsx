@@ -7,8 +7,8 @@ import TermsOfServiceLayout from "./layout/termsOfService";
 import NotFound from "./pages/notFound";
 import ScrollToTop from "./components/scrollToTop";
 import Homepage from "./pages/home";
-import ForPatients from "./pages/insights";
-import ForDoctors from "./pages/governance";
+import Insights from "./pages/insights";
+import Governance from "./pages/governance";
 import Partners from "./pages/partners";
 import AboutPage from "./pages/about";
 import Campaign from "./pages/campaign";
@@ -20,6 +20,7 @@ import HealthPlansAndTPA from "./pages/eachPartners/healthPlansAndTPA";
 import ConsultantsAndWellness from "./pages/eachPartners/consultantsAndWellness";
 import AdvocacyAndNGOs from "./pages/eachPartners/advocacyAndNGOs";
 import MedicalTourism from "./pages/eachPartners/tourismAndConcierge";
+import DoctorsPage from "./pages/doctors";
 
 import { TermsOfService } from "./pages/termsOfService";
 function App() {
@@ -44,8 +45,8 @@ function App() {
         {/* Public Routes */}
         <Route path="/" element={<HomeLayout />}>
           <Route index element={<Homepage />} />
-          <Route path="patients" element={<ForPatients />} />
-          <Route path="doctors" element={<ForDoctors />} />
+          <Route path="insights" element={<Insights />} />
+          <Route path="governance" element={<Governance />} />
           <Route path="/partners">
             <Route index element={<Partners />} />
             <Route path="hospitals" element={<HospitalPartner />} />
@@ -57,6 +58,7 @@ function App() {
             <Route path="advocacy-ngos" element={<AdvocacyAndNGOs />} />
             <Route path="medical-tourism" element={<MedicalTourism />} />
           </Route>
+          <Route path="doctors" element={<DoctorsPage />} />
           <Route path="about" element={<AboutPage />} />
           <Route path="cxa-globallaunch-c1a7e3d" element={<Campaign />} />
           <Route path="*" element={<NotFound />} />
@@ -77,8 +79,8 @@ function App() {
           aria-label="scroll back to top"
           sx={{
             position: "fixed",
-            bottom: { xs: 28, sm: 40 },
-            right: { xs: 20, sm: 36 },
+            bottom: { xs: 28, sm: 100 },
+            right: { xs: 20, sm: 30 },
             zIndex: 1700,
             boxShadow: "var(--shadow-lg)",
             bgcolor: "var(--primary-600)",

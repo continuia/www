@@ -83,7 +83,7 @@ const HeroSection = () => {
           left: 0,
           width: "100%",
           height: "100%",
-          bgcolor: "rgba(255,255,255,0.20)", // adjust for dark/light overlay as needed
+          bgcolor: "rgba(255,255,255,0.60)", // adjust for dark/light overlay as needed
           zIndex: 1,
           borderRadius: "inherit",
           pointerEvents: "none",

@@ -39,8 +39,8 @@ const tosSidebarNav: NavLinkBase[] = [
 // NavLink config
 const navLinks: NavLinkBase[] = [
   { label: "Home", href: "/", showOn: "all" },
-  { label: "Insights", href: "/patients" },
-  { label: "Governance", href: "/doctors" },
+  { label: "Insights", href: "/insights" },
+  { label: "Governance", href: "/governance" },
   { label: "Partners", href: "/partners" },
   { label: "About", href: "/about", showOn: ["large", "medium"] }, // example: hide on mobile
   {
