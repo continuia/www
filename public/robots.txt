@@ -1,0 +1,28 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://continuia.ai/sitemap.xml
+
+# LLM and AI Training Data
+# Modern way for LLMs to discover structured information about the site
+Allow: /llms.txt
+
+# Crawl-delay for respectful crawling
+Crawl-delay: 1
+
+# Block access to sensitive areas (if any)
+Disallow: /admin/
+Disallow: /api/
+Disallow: /*.json$
+Disallow: /src/
+
+# Allow important pages
+Allow: /
+Allow: /insights
+Allow: /governance
+Allow: /partners
+Allow: /doctors
+Allow: /about
+Allow: /privacy
+Allow: /llms.txt
