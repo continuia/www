@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useState, useEffect } from "react";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { Fab, Zoom } from "@mui/material";
+import PasswordProtection from "./components/PasswordProtection";
 import HomeLayout from "./layout/landingPage";
 import TermsOfServiceLayout from "./layout/termsOfService";
 import NotFound from "./pages/notFound";
@@ -39,9 +40,10 @@ function App() {
   };
 
   return (
-    <Router>
-      <ScrollToTop />
-      <Routes>
+    <PasswordProtection password="Continuia123">
+      <Router>
+        <ScrollToTop />
+        <Routes>
         {/* Public Routes */}
         <Route path="/" element={<HomeLayout />}>
           <Route index element={<Homepage />} />
@@ -92,7 +94,8 @@ function App() {
           <KeyboardArrowUpIcon fontSize="large" />
         </Fab>
       </Zoom>
-    </Router>
+      </Router>
+    </PasswordProtection>
   );
 }
 

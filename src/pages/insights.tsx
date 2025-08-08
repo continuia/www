@@ -5,9 +5,20 @@ import WhenYouNeedSecondOpinion from "../components/insights/whenYouNeedSecondOp
 import OurSecondOpinionsDifferent from "../components/insights/ourSecondOpinionsDifferent";
 import WhyPatientsTrustContinua from "../components/insights/whyPatientsTrustContinua";
 import CTASection from "../components/home/ctaSection";
+import SEOHead from "../components/common/SEOHead";
+import { getPageSEO } from "../utils/seoConfig";
+
 const ForPatientsPage = () => {
+  const seoData = getPageSEO('insights');
+  
   return (
     <Box display={"flex"} flexDirection={"column"} position={"relative"} width={"100%"}>
+      <SEOHead
+        title={seoData.title}
+        description={seoData.description}
+        keywords={seoData.keywords}
+        structuredData={seoData.structuredData}
+      />
       <HeroSection />
       <HowItWorks />
       <WhenYouNeedSecondOpinion />

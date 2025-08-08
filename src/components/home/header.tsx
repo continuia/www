@@ -236,8 +236,8 @@ export default function Header() {
         >
           {/* Logo */}
           <Box display="flex" alignItems="center" gap={1.5}>
-            <Box component="img" src="/continuia.webp" alt="Continuia Logo" sx={{ height: 36, width: 36, mr: 1 }} />
-            <Typography
+            <Box component="img" src="/continuia.png" alt="Continuia Logo" height={{ xs: 50, md: 70 }} />
+            {/* <Typography
               variant="h6"
               sx={{
                 fontWeight: 700,
@@ -247,7 +247,7 @@ export default function Header() {
               }}
             >
               Continuia
-            </Typography>
+            </Typography> */}
           </Box>
           {/* Desktop nav – only items with showOn: 'all' or 'large'/'medium' */}
           <Paper
