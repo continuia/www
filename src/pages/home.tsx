@@ -5,11 +5,13 @@ import StatsHighlight from "../components/home/statsHighlight";
 import HeroSplitSection from "../components/home/heroSplitSection";
 import WhyTrustSection from "../components/home/whyTrustSection";
 import CTASection from "../components/home/ctaSection";
+import PartnerLogosMarquee from "../components/home/partnerLogos";
 const LandingPage = () => {
   return (
     <Box display={"flex"} flexDirection={"column"} position={"relative"} width={"100%"}>
       {/* Add your header if needed */}
       <HeroSection />
+      <PartnerLogosMarquee/>
       <JourneySteps />
       <StatsHighlight />
       <HeroSplitSection />
