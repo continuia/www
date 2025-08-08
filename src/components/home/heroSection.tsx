@@ -34,7 +34,7 @@ const HeroSection = () => {
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
   const posterVideoRef = useRef<HTMLVideoElement | null>(null);
   const [videosLoaded, setVideosLoaded] = useState<boolean[]>(new Array(videos.length).fill(false));
-  const transitionTimeoutRef = useRef<number | null>(null);
+  const transitionTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Initialize video refs array
   useEffect(() => {
@@ -43,20 +43,20 @@ const HeroSection = () => {
 
   // Handle video loading
   const handleVideoLoad = (index: number) => {
-    setVideosLoaded(prev => {
+    setVideosLoaded((prev) => {
       const newState = [...prev];
       newState[index] = true;
-      
+
       // When first video is loaded, prepare for seamless transition
       if (index === 0 && !firstVideoReady) {
         setFirstVideoReady(true);
-        
+
         // Start video immediately but keep it hidden behind poster
         const firstVideo = videoRefs.current[0];
         if (firstVideo) {
           firstVideo.currentTime = 0;
           firstVideo.play().catch(console.error);
-          
+
           // Wait for video to actually start playing, then begin seamless transition
           const checkVideoPlaying = () => {
             if (firstVideo.currentTime > 0 && !firstVideo.paused) {
@@ -68,12 +68,12 @@ const HeroSection = () => {
               setTimeout(checkVideoPlaying, 50);
             }
           };
-          
+
           // Start checking after a brief moment
           setTimeout(checkVideoPlaying, 100);
         }
       }
-      
+
       return newState;
     });
   };
@@ -83,11 +83,11 @@ const HeroSection = () => {
     const video = videoRefs.current[index];
     if (video && index === currentVideoIndex && !isTransitioning) {
       const timeRemaining = video.duration - video.currentTime;
-      
+
       // Start transition 0.5 seconds before video ends
       if (timeRemaining <= 0.5 && timeRemaining > 0) {
         setIsTransitioning(true);
-        
+
         // Prepare next video
         const nextIndex = (currentVideoIndex + 1) % videos.length;
         const nextVideo = videoRefs.current[nextIndex];
@@ -95,9 +95,9 @@ const HeroSection = () => {
           nextVideo.currentTime = 0;
           nextVideo.play().catch(console.error);
         }
-        
+
         setNextVideoIndex(nextIndex);
-        
+
         // Complete transition after 0.5 seconds
         transitionTimeoutRef.current = setTimeout(() => {
           setCurrentVideoIndex(nextIndex);
@@ -112,14 +112,14 @@ const HeroSection = () => {
   const handleVideoEnd = (index: number) => {
     if (index === currentVideoIndex && !isTransitioning) {
       const nextIndex = (currentVideoIndex + 1) % videos.length;
-      
+
       // Start the next video immediately
       const nextVideo = videoRefs.current[nextIndex];
       if (nextVideo && videosLoaded[nextIndex]) {
         nextVideo.currentTime = 0;
         nextVideo.play().catch(console.error);
       }
-      
+
       setCurrentVideoIndex(nextIndex);
       setNextVideoIndex((nextIndex + 1) % videos.length);
     }
@@ -132,13 +132,13 @@ const HeroSection = () => {
     if (posterVideo) {
       posterVideo.load();
     }
-    
+
     // Load first video immediately for fast transition from poster
     const firstVideo = videoRefs.current[0];
     if (firstVideo) {
       firstVideo.load();
     }
-    
+
     // Load other videos with a slight delay to prioritize first video
     const loadOtherVideos = setTimeout(() => {
       videoRefs.current.forEach((video, index) => {
@@ -147,7 +147,7 @@ const HeroSection = () => {
         }
       });
     }, 500);
-    
+
     return () => clearTimeout(loadOtherVideos);
   }, []);
 
@@ -209,7 +209,7 @@ const HeroSection = () => {
         const isCurrentVideo = index === currentVideoIndex;
         const isNextVideo = index === nextVideoIndex && isTransitioning;
         const shouldShow = (isCurrentVideo || isNextVideo) && videoStarted;
-        
+
         return (
           <video
             key={index}
