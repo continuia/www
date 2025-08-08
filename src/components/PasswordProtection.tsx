@@ -16,8 +16,8 @@ const PasswordProtection: React.FC<PasswordProtectionProps> = ({ password, child
     // Check if we're on a Netlify site
     const isNetlifySite = window.location.hostname.includes("netlify.app");
     
-    // Check if already authenticated in this session
-    const authenticated = sessionStorage.getItem("continuia-authenticated") === "true";
+    // Check if already authenticated (persists across browser sessions)
+    const authenticated = localStorage.getItem("continuia-authenticated") === "true";
     
     // Only show password modal on Netlify sites and if not authenticated
     if (isNetlifySite && !authenticated) {
@@ -34,8 +34,8 @@ const PasswordProtection: React.FC<PasswordProtectionProps> = ({ password, child
       setIsAuthenticated(true);
       setOpen(false);
       setError(false);
-      // Store authentication in session storage
-      sessionStorage.setItem("continuia-authenticated", "true");
+      // Store authentication in local storage for persistence
+      localStorage.setItem("continuia-authenticated", "true");
     } else {
       setError(true);
     }
