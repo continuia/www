@@ -1,126 +1,319 @@
-import { Box, Typography,  Grid } from "@mui/material";
-import { motion , type Variants} from "framer-motion";
-import heroIllustration from "../../assets/ai_assisted_patient_intake.webp";
+import React, { useState, useEffect } from "react";
+import { Box, Typography, IconButton, Avatar, Chip } from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { motion, type Variants } from "framer-motion";
 
-// Sample doctors data for demonstration
-const doctors = [
-  {
-    name: "Dr. Sarah Johnson",
-    specialty: "Cardiologist",
-    description: "15+ years of experience in cardiovascular medicine & heart surgery",
-    image: "PATH_TO_IMAGE1", // Replace with real image path or import
-  },
-  {
-    name: "Dr. Michael Chen",
-    specialty: "Neurologist",
-    description: "Specialist in brain disorders and neurological conditions",
-    image: "PATH_TO_IMAGE2",
-  },
-  {
-    name: "Dr. Emily Rodriguez",
-    specialty: "Pediatrician",
-    description: "Caring for children's health and development for over 12 years",
-    image: "PATH_TO_IMAGE3",
-  },
-  {
-    name: "Dr. David Thompson",
-    specialty: "Orthopedic Surgeon",
-    description: "Expert in bone, joint, and musculoskeletal system treatments",
-    image: "PATH_TO_IMAGE4",
-  },
-  {
-    name: "Dr. Lisa Park",
-    specialty: "Dermatologist",
-    description: "Skin care specialist with expertise in cosmetic dermatology",
-    image: "PATH_TO_IMAGE5",
-  },
-  {
-    name: "Dr. James Wilson",
-    specialty: "General Practitioner",
-    description: "Primary care physician providing comprehensive health services",
-    image: "PATH_TO_IMAGE6",
-  },
-];
+// Doctor data type
+export interface Doctor {
+  hospital: string;
+  image: string;
+  doctorName: string;
+  qualification: string;
+  specialist: string[];
+  licensed: string[];
+}
 
-// Framer Motion variant for entrance
-const fadeUp : Variants = {
-  hidden: { opacity: 0, y: 40 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
+// Card animation configs
+const cardAnim: Variants = {
+  hidden: { opacity: 0, scale: 0.96, y: 24 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    y: 0,
+    transition: { duration: 0.46, ease: [0.22, 1, 0.36, 1] },
+  },
 };
 
 const MotionBox = motion(Box);
 
-const ExpertCard = ({ doctor }: any) => (
-  <MotionBox
-    variants={fadeUp}
-    whileHover={{ scale: 1.045, boxShadow: "0 6px 28px 0 var(--primary-100)" }}
-    sx={{
-      bgcolor: "var(--primary-50)",
-      borderRadius: "2rem",
-      boxShadow: "0 2px 18px 0 var(--neutral-200)",
-      p: { xs: 2.5, md: 3 },
-      overflow: "hidden",
-      transition: "box-shadow 0.3s cubic-bezier(.4,2,.3,1)",
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      minHeight: 384,
-    }}
-  >
-    <Box
+export const ExpertCard: React.FC<{ doctor: Doctor }> = ({ doctor }) => {
+  const [showMore, setShowMore] = useState(false);
+
+  // Split qualification into bullet points (by newline, bullet, comma, semicolon)
+  const bulletPoints = doctor.qualification
+    .split(/\n|•|;|,/)
+    .map((s) => s.trim())
+    .filter(Boolean);
+
+  // Show first 3, or expandable
+  const collapseThreshold = 3;
+  const isLongQualification = bulletPoints.length > collapseThreshold;
+
+  const displayedPoints = isLongQualification && !showMore ? bulletPoints.slice(0, collapseThreshold) : bulletPoints;
+
+  return (
+    <MotionBox
+      variants={cardAnim}
+      whileHover={{
+        scale: 1.03,
+        boxShadow: "var(--shadow-xl)",
+        y: -4,
+      }}
       sx={{
-        width: 120,
-        height: 120,
-        borderRadius: "50%",
+        borderRadius: "var(--radius-2xl)",
+        boxShadow: "var(--shadow-lg)",
+        background: "var(--bg-primary)",
+        width: { xs: 300, sm: 350 },
+        minHeight: 520,
+        pb: "var(--space-5)",
         overflow: "hidden",
-        boxShadow: "0 6px 24px 0 var(--primary-200)",
-        mb: 2.5,
-        background: "var(--neutral-100)",
-        border: "4px solid var(--primary-200)",
         display: "flex",
-        justifyContent: "center",
+        flexDirection: "column",
         alignItems: "center",
+        transition: "box-shadow var(--transition-normal), transform var(--transition-normal)",
       }}
     >
-      <img
-        src={heroIllustration}
-        alt={doctor.name}
-        style={{
+      {/* Large image inside card box */}
+      <Box
+        sx={{
           width: "100%",
-          height: "100%",
-          objectFit: "cover",
-          display: "block",
+          height: 190,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          background: "linear-gradient(120deg, var(--primary-100), var(--bg-tertiary))",
+          mb: "var(--space-3)",
         }}
-      />
-    </Box>
-    <Typography variant="h6" sx={{ fontWeight: 700, color: "var(--neutral-900)", mb: 0.5, mt: 1, textAlign: "center" }}>
-      {doctor.name}
-    </Typography>
-    <Typography variant="subtitle2" sx={{ color: "var(--primary-700)", fontWeight: 600, mb: 1, textAlign: "center" }}>
-      {doctor.specialty}
-    </Typography>
-    <Typography variant="body2" sx={{ color: "var(--neutral-600)", textAlign: "center", lineHeight: 1.6, px: 1 }}>
-      {doctor.description}
-    </Typography>
-  </MotionBox>
-);
+      >
+        <Avatar
+          src={doctor.image}
+          alt={doctor.doctorName}
+          sx={{
+            width: 128,
+            height: 128,
+            boxShadow: "var(--shadow-md)",
+            border: "3px solid var(--bg-primary)",
+            background: "var(--primary-200)",
+            fontSize: "var(--text-2xl)",
+          }}
+        />
+      </Box>
+      <Box
+        sx={{
+          px: "var(--space-3)",
+          width: "100%",
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
+        <Typography
+          variant="h6"
+          sx={{
+            fontWeight: 800,
+            letterSpacing: -0.5,
+            fontSize: "var(--text-xl)",
+            textAlign: "center",
+            color: "var(--text-primary)",
+            mb: "var(--space-1)",
+          }}
+        >
+          {doctor.doctorName}
+        </Typography>
+        <Typography
+          variant="subtitle2"
+          sx={{
+            color: "var(--primary-700)",
+            fontWeight: 600,
+            textAlign: "center",
+            fontSize: "var(--text-base)",
+            mb: "var(--space-2)",
+          }}
+        >
+          {doctor.hospital}
+        </Typography>
+        {/* Specialist Chips */}
+        {doctor.specialist.length > 0 && (
+          <Box
+            sx={{
+              display: "flex",
+              flexWrap: "wrap",
+              gap: "var(--space-1)",
+              justifyContent: "center",
+              mb: "var(--space-2)",
+            }}
+          >
+            {doctor.specialist.map((spec, idx) => (
+              <Chip label={spec} key={spec + idx} color="success" size="small" sx={{ borderRadius: "var(--radius-lg)" }} />
+            ))}
+          </Box>
+        )}
+        {/* Licenses Chips */}
+        {doctor.licensed.length > 0 && (
+          <Box
+            sx={{
+              display: "flex",
+              flexWrap: "wrap",
+              gap: "var(--space-1)",
+              justifyContent: "center",
+              mb: "var(--space-2)",
+            }}
+          >
+            {doctor.licensed.map((lic, idx) => (
+              <Chip
+                label={lic}
+                key={lic + idx}
+                size="small"
+                sx={{
+                  background: "var(--neutral-100)",
+                  color: "var(--neutral-700)",
+                  borderRadius: "var(--radius-lg)",
+                  fontWeight: 500,
+                  border: "1px solid var(--neutral-200)",
+                }}
+              />
+            ))}
+          </Box>
+        )}
+        {/* Qualifications as bullet points */}
+        <Box sx={{ width: "100%", mt: "var(--space-2)", flexGrow: 1 }}>
+          <Box sx={{ display: "flex", alignItems: "center", mb: "var(--space-1)" }}>
+            <Typography
+              sx={{
+                color: "var(--text-secondary)",
+                fontWeight: 700,
+                fontSize: "var(--text-base)",
+                mr: "var(--space-1)",
+              }}
+            >
+              Qualifications
+            </Typography>
+            {isLongQualification && (
+              <IconButton size="small" edge="end" onClick={() => setShowMore((v) => !v)}>
+                <ExpandMoreIcon
+                  sx={{
+                    transform: showMore ? "rotate(180deg)" : "rotate(0)",
+                    transition: "transform 0.2s",
+                  }}
+                />
+              </IconButton>
+            )}
+          </Box>
+          <ul
+            style={{
+              paddingLeft: "var(--space-4)",
+              color: "var(--text-secondary)",
+              fontSize: "var(--text-base)",
+              margin: 0,
+              lineHeight: "var(--leading-normal)",
+            }}
+          >
+            {displayedPoints.map((point, idx) => (
+              <li key={idx} style={{ marginBottom: "var(--space-1)" }}>
+                {point}
+              </li>
+            ))}
+          </ul>
+        </Box>
+      </Box>
+    </MotionBox>
+  );
+};
 
-const MedicalExperts = () => (
-  <Box sx={{ px: { xs: 2, md: 4 }, pt: 3, pb: 5 }}>
-    <Typography variant="h4" sx={{ fontWeight: 800, mb: 2, textAlign: "center", letterSpacing: -0.5, color: "var(--neutral-900)" }}>
-      Our Medical Experts
-    </Typography>
-    <Typography variant="subtitle1" sx={{ mb: 5, color: "var(--neutral-600)", textAlign: "center", maxWidth: 600, mx: "auto", fontWeight: 500 }}>
-      Meet our team of highly qualified doctors dedicated to providing you with the best possible care.
-    </Typography>
-    <Grid container spacing={4} justifyContent="center">
-      {doctors.map((doctor) => (
-        <Grid key={doctor.name}>
-          <ExpertCard doctor={doctor} />
-        </Grid>
-      ))}
-    </Grid>
-  </Box>
-);
+// Main parent container
+const API_URL = "https://coda.io/apis/v1/docs/xVB9OfVCsI/tables/grid-Nao6Gri_WW/rows?query=c-veetlBuEX9:true&useColumnNames=true";
+const BEARER_TOKEN = "cbdf9ec2-b48d-4b2d-aa72-3a567c4b6122";
+
+export const MedicalExperts: React.FC = () => {
+  const [doctors, setDoctors] = useState<Doctor[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchDoctors = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const response = await fetch(API_URL, {
+          headers: {
+            Authorization: `Bearer ${BEARER_TOKEN}`,
+            "Content-Type": "application/json",
+          },
+        });
+        if (!response.ok) throw new Error("Failed to fetch");
+        const data = await response.json();
+        const doctorsArray: Doctor[] = (data.items ?? []).map((item: any): Doctor => {
+          const values = item.values ?? {};
+          return {
+            hospital: values["Affililation"] ?? item.name ?? "",
+            image: values["ImageURL"] !== "" ? values["ImageURL"] : "https://www.shutterstock.com/image-photo/smiling-indian-man-doctor-wearing-600nw-2558930081.jpg",
+            doctorName: values["DoctorName"] ?? "",
+            qualification: values["Qualification"] ?? "",
+            specialist: values["Specialist"] ? [values["Specialist"]] : [],
+            licensed: values["LicensedIn"] ? [values["LicensedIn"]] : [],
+          };
+        });
+        setDoctors(doctorsArray);
+      } catch (err) {
+        setError((err as Error).message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchDoctors();
+  }, []);
+
+  return (
+    <Box
+      sx={{
+        py: { xs: "var(--space-6)", md: "var(--space-12)" },
+        px: { xs: "var(--space-2)", md: "var(--space-24)" },
+        background: "var(--bg-secondary)",
+        width: "100%",
+        minHeight: "100vh",
+      }}
+    >
+      <Typography
+        variant="h3"
+        sx={{
+          textAlign: "center",
+          fontWeight: 900,
+          fontSize: { xs: "var(--text-2xl)", sm: "var(--text-4xl)" },
+          color: "var(--primary-700)",
+          mb: "var(--space-2)",
+          letterSpacing: -1,
+        }}
+      >
+        Our Medical Experts
+      </Typography>
+      <Typography
+        variant="subtitle1"
+        sx={{
+          mb: "var(--space-6)",
+          color: "var(--text-secondary)",
+          textAlign: "center",
+          fontWeight: 500,
+          fontSize: { xs: "var(--text-base)", md: "var(--text-lg)" },
+          maxWidth: 580,
+          mx: "auto",
+        }}
+      >
+        Meet our team of highly qualified doctors dedicated to providing you with the best possible care.
+      </Typography>
+      {loading && <Typography sx={{ textAlign: "center", my: "var(--space-12)" }}>Loading...</Typography>}
+      {error && <Typography sx={{ color: "var(--error)", textAlign: "center", my: "var(--space-12)" }}>{error}</Typography>}
+      {!loading && !error && (
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection:"row",
+            flexWrap:"wrap",
+            // gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr", md: "1fr 1fr 1fr" },
+            gap: { xs: "var(--space-4)", md: "var(--space-10)" },
+            justifyItems: "center",
+            justifyContent: "center",
+            alignItems: "stretch",
+            maxWidth: 1200,
+            mx: "auto",
+          }}
+        >
+          {doctors.map((doctor, idx) => (
+            <ExpertCard doctor={doctor} key={doctor.doctorName + idx} />
+          ))}
+        </Box>
+      )}
+    </Box>
+  );
+};
 
 export default MedicalExperts;
