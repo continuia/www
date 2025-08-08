@@ -1,5 +1,5 @@
-import { Box, Typography, Stack, Grid } from "@mui/material";
-import { motion } from "framer-motion";
+import { Box, Typography,  Grid } from "@mui/material";
+import { motion , type Variants} from "framer-motion";
 import heroIllustration from "../../assets/ai_assisted_patient_intake.webp";
 
 // Sample doctors data for demonstration
@@ -43,7 +43,7 @@ const doctors = [
 ];
 
 // Framer Motion variant for entrance
-const fadeUp = {
+const fadeUp : Variants = {
   hidden: { opacity: 0, y: 40 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
 };
@@ -114,8 +114,8 @@ const MedicalExperts = () => (
       Meet our team of highly qualified doctors dedicated to providing you with the best possible care.
     </Typography>
     <Grid container spacing={4} justifyContent="center">
-      {doctors.map((doctor, idx) => (
-        <Grid item xs={12} sm={6} md={4} key={doctor.name}>
+      {doctors.map((doctor) => (
+        <Grid key={doctor.name}>
           <ExpertCard doctor={doctor} />
         </Grid>
       ))}
