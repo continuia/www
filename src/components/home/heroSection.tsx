@@ -266,20 +266,6 @@ const HeroSection = () => {
         {/* Left: Text Content */}
         <MotionBox initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.22 }} variants={fadeLeft} sx={{ flex: 1, maxWidth: 650 }}>
           <Typography
-            variant="subtitle1"
-            sx={{
-              mt: 1,
-              mb: 1,
-              fontWeight: 600,
-              fontSize: { xs: "1rem", sm: "1.1rem" },
-              color: "var(--neutral-800)",
-              display: "flex",
-              alignItems: "center",
-            }}
-          >
-            Global Happy Customers
-          </Typography>
-          <Typography
             variant="h2"
             sx={{
               fontWeight: 800,
