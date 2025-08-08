@@ -47,19 +47,31 @@ const HeroSection = () => {
       const newState = [...prev];
       newState[index] = true;
       
-      // When first video is loaded, start transition from placeholder
+      // When first video is loaded, prepare for seamless transition
       if (index === 0 && !firstVideoReady) {
         setFirstVideoReady(true);
-        // Start video after a brief delay to ensure smooth transition
-        setTimeout(() => {
-          const firstVideo = videoRefs.current[0];
-          if (firstVideo) {
-            firstVideo.play().catch(console.error);
-            setVideoStarted(true);
-            // Fade out placeholder after video starts
-            setTimeout(() => setShowPlaceholder(false), 300);
-          }
-        }, 100);
+        
+        // Start video immediately but keep it hidden behind placeholder
+        const firstVideo = videoRefs.current[0];
+        if (firstVideo) {
+          firstVideo.currentTime = 0;
+          firstVideo.play().catch(console.error);
+          
+          // Wait for video to actually start playing, then begin seamless transition
+          const checkVideoPlaying = () => {
+            if (firstVideo.currentTime > 0 && !firstVideo.paused) {
+              setVideoStarted(true);
+              // Seamless crossfade: show video while fading out placeholder
+              setTimeout(() => setShowPlaceholder(false), 50);
+            } else {
+              // Keep checking until video is actually playing
+              setTimeout(checkVideoPlaying, 50);
+            }
+          };
+          
+          // Start checking after a brief moment
+          setTimeout(checkVideoPlaying, 100);
+        }
       }
       
       return newState;
@@ -172,11 +184,15 @@ const HeroSection = () => {
             width: "100%",
             height: "100%",
             objectFit: "cover",
+            objectPosition: "center center", // Ensure consistent positioning
             zIndex: 1,
             scale: 1.2,
             borderRadius: "inherit",
             opacity: videoStarted ? 0 : 1,
             transition: "opacity 0.8s ease-in-out",
+            // Ensure image fills exactly the same space as videos
+            transform: "scale(1.2)", // Match video scaling exactly
+            transformOrigin: "center center",
           }}
         />
       )}
@@ -208,11 +224,15 @@ const HeroSection = () => {
               width: "100%",
               height: "100%",
               objectFit: "cover",
+              objectPosition: "center center", // Match placeholder positioning
               zIndex: 0,
               scale: 1.2,
               borderRadius: "inherit",
               opacity: shouldShow ? (isTransitioning && isNextVideo ? 1 : isCurrentVideo ? 1 : 0) : 0,
               transition: "opacity 0.5s ease-in-out",
+              // Explicit transform to match placeholder exactly
+              transform: "scale(1.2)",
+              transformOrigin: "center center",
             }}
             aria-label={`Medical consultation background video ${index + 1}`}
           />
