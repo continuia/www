@@ -6,7 +6,6 @@ import type { Variants } from "framer-motion";
 // import video3 from "../../assets/heroVideo1.mp4";
 import video2 from "../../assets/heroVideo3.mp4";
 import video1 from "../../assets/heroVideo2.mp4";
-import placeholderImage from "../../assets/ai_assisted_patient_intake.webp";
 import { useRef, useState, useEffect } from "react";
 
 const videos = [video2, video1];
@@ -29,10 +28,11 @@ const HeroSection = () => {
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
   const [nextVideoIndex, setNextVideoIndex] = useState(1 % videos.length);
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const [showPlaceholder, setShowPlaceholder] = useState(true);
+  const [showPoster, setShowPoster] = useState(true);
   const [firstVideoReady, setFirstVideoReady] = useState(false);
   const [videoStarted, setVideoStarted] = useState(false);
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
+  const posterVideoRef = useRef<HTMLVideoElement | null>(null);
   const [videosLoaded, setVideosLoaded] = useState<boolean[]>(new Array(videos.length).fill(false));
   const transitionTimeoutRef = useRef<number | null>(null);
 
@@ -51,7 +51,7 @@ const HeroSection = () => {
       if (index === 0 && !firstVideoReady) {
         setFirstVideoReady(true);
         
-        // Start video immediately but keep it hidden behind placeholder
+        // Start video immediately but keep it hidden behind poster
         const firstVideo = videoRefs.current[0];
         if (firstVideo) {
           firstVideo.currentTime = 0;
@@ -61,8 +61,8 @@ const HeroSection = () => {
           const checkVideoPlaying = () => {
             if (firstVideo.currentTime > 0 && !firstVideo.paused) {
               setVideoStarted(true);
-              // Seamless crossfade: show video while fading out placeholder
-              setTimeout(() => setShowPlaceholder(false), 50);
+              // Seamless crossfade: show video while fading out poster
+              setTimeout(() => setShowPoster(false), 50);
             } else {
               // Keep checking until video is actually playing
               setTimeout(checkVideoPlaying, 50);
@@ -125,9 +125,15 @@ const HeroSection = () => {
     }
   };
 
-  // Progressive video loading - start with first video, then load others
+  // Progressive video loading - start with poster video, then first video, then others
   useEffect(() => {
-    // Load first video immediately for fast transition from placeholder
+    // Load poster video first for immediate first frame display
+    const posterVideo = posterVideoRef.current;
+    if (posterVideo) {
+      posterVideo.load();
+    }
+    
+    // Load first video immediately for fast transition from poster
     const firstVideo = videoRefs.current[0];
     if (firstVideo) {
       firstVideo.load();
@@ -171,31 +177,32 @@ const HeroSection = () => {
         // no background gradient here as video is now the background
       }}
     >
-      {/* Fast-loading placeholder image */}
-      {showPlaceholder && (
-        <Box
-          component="img"
-          src={placeholderImage}
-          alt="Medical consultation placeholder"
-          sx={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
-            objectPosition: "center center", // Ensure consistent positioning
-            zIndex: 1,
-            scale: 1.2,
-            borderRadius: "inherit",
-            opacity: videoStarted ? 0 : 1,
-            transition: "opacity 0.8s ease-in-out",
-            // Ensure image fills exactly the same space as videos
-            transform: "scale(1.2)", // Match video scaling exactly
-            transformOrigin: "center center",
-          }}
-        />
-      )}
+      {/* Video poster (first frame) for instant loading and perfect alignment */}
+      <video
+        ref={posterVideoRef}
+        src={videos[0]}
+        muted
+        playsInline
+        preload="metadata" // Only load metadata and first frame
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+          objectPosition: "center center",
+          zIndex: showPoster ? 1 : -1,
+          scale: 1.2,
+          borderRadius: "inherit",
+          opacity: showPoster ? 1 : 0,
+          transition: "opacity 0.8s ease-in-out, z-index 0s linear 0.8s",
+          transform: "scale(1.2)",
+          transformOrigin: "center center",
+          pointerEvents: "none", // Prevent interaction with poster video
+        }}
+        aria-label="Video poster frame"
+      />
 
       {/* Multiple preloaded videos as background */}
       {videos.map((videoSrc, index) => {
