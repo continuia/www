@@ -4,9 +4,10 @@ import LocalHospitalIcon from "@mui/icons-material/LocalHospital";
 import { motion } from "framer-motion";
 import type { Variants } from "framer-motion";
 // import video3 from "../../assets/heroVideo1.mp4";
-import video2 from "../../assets/heroVideo2.mp4";
-import video1 from "../../assets/heroVideo3.mp4";
-import { useRef, useState } from "react";
+import video2 from "../../assets/heroVideo3.mp4";
+import video1 from "../../assets/heroVideo2.mp4";
+import placeholderImage from "../../assets/ai_assisted_patient_intake.webp";
+import { useRef, useState, useEffect } from "react";
 
 const videos = [video2, video1];
 
@@ -25,13 +26,121 @@ const features = ["Board-certified specialists", "AI-enhanced analysis", "Global
 const MotionBox = motion.create(Box);
 
 const HeroSection = () => {
-  const [videoIndex, setVideoIndex] = useState(0);
-  const videoRef = useRef(null);
+  const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
+  const [nextVideoIndex, setNextVideoIndex] = useState(1 % videos.length);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [showPlaceholder, setShowPlaceholder] = useState(true);
+  const [firstVideoReady, setFirstVideoReady] = useState(false);
+  const [videoStarted, setVideoStarted] = useState(false);
+  const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
+  const [videosLoaded, setVideosLoaded] = useState<boolean[]>(new Array(videos.length).fill(false));
+  const transitionTimeoutRef = useRef<number | null>(null);
 
-  // Function to handle advancing to next video
-  const handleVideoEnd = () => {
-    setVideoIndex((prev) => (prev + 1) % videos.length);
+  // Initialize video refs array
+  useEffect(() => {
+    videoRefs.current = videoRefs.current.slice(0, videos.length);
+  }, []);
+
+  // Handle video loading
+  const handleVideoLoad = (index: number) => {
+    setVideosLoaded(prev => {
+      const newState = [...prev];
+      newState[index] = true;
+      
+      // When first video is loaded, start transition from placeholder
+      if (index === 0 && !firstVideoReady) {
+        setFirstVideoReady(true);
+        // Start video after a brief delay to ensure smooth transition
+        setTimeout(() => {
+          const firstVideo = videoRefs.current[0];
+          if (firstVideo) {
+            firstVideo.play().catch(console.error);
+            setVideoStarted(true);
+            // Fade out placeholder after video starts
+            setTimeout(() => setShowPlaceholder(false), 300);
+          }
+        }, 100);
+      }
+      
+      return newState;
+    });
   };
+
+  // Function to start transition 0.5 seconds before video ends
+  const handleTimeUpdate = (index: number) => {
+    const video = videoRefs.current[index];
+    if (video && index === currentVideoIndex && !isTransitioning) {
+      const timeRemaining = video.duration - video.currentTime;
+      
+      // Start transition 0.5 seconds before video ends
+      if (timeRemaining <= 0.5 && timeRemaining > 0) {
+        setIsTransitioning(true);
+        
+        // Prepare next video
+        const nextIndex = (currentVideoIndex + 1) % videos.length;
+        const nextVideo = videoRefs.current[nextIndex];
+        if (nextVideo && videosLoaded[nextIndex]) {
+          nextVideo.currentTime = 0;
+          nextVideo.play().catch(console.error);
+        }
+        
+        setNextVideoIndex(nextIndex);
+        
+        // Complete transition after 0.5 seconds
+        transitionTimeoutRef.current = setTimeout(() => {
+          setCurrentVideoIndex(nextIndex);
+          setNextVideoIndex((nextIndex + 1) % videos.length);
+          setIsTransitioning(false);
+        }, 500);
+      }
+    }
+  };
+
+  // Function to handle video end (fallback)
+  const handleVideoEnd = (index: number) => {
+    if (index === currentVideoIndex && !isTransitioning) {
+      const nextIndex = (currentVideoIndex + 1) % videos.length;
+      
+      // Start the next video immediately
+      const nextVideo = videoRefs.current[nextIndex];
+      if (nextVideo && videosLoaded[nextIndex]) {
+        nextVideo.currentTime = 0;
+        nextVideo.play().catch(console.error);
+      }
+      
+      setCurrentVideoIndex(nextIndex);
+      setNextVideoIndex((nextIndex + 1) % videos.length);
+    }
+  };
+
+  // Progressive video loading - start with first video, then load others
+  useEffect(() => {
+    // Load first video immediately for fast transition from placeholder
+    const firstVideo = videoRefs.current[0];
+    if (firstVideo) {
+      firstVideo.load();
+    }
+    
+    // Load other videos with a slight delay to prioritize first video
+    const loadOtherVideos = setTimeout(() => {
+      videoRefs.current.forEach((video, index) => {
+        if (video && index > 0) {
+          video.load();
+        }
+      });
+    }, 500);
+    
+    return () => clearTimeout(loadOtherVideos);
+  }, []);
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (transitionTimeoutRef.current) {
+        clearTimeout(transitionTimeoutRef.current);
+      }
+    };
+  }, []);
 
   return (
     <Box
@@ -50,30 +159,65 @@ const HeroSection = () => {
         // no background gradient here as video is now the background
       }}
     >
-      {/* Video as background */}
-      <video
-        ref={videoRef}
-        src={videos[videoIndex]}
-        autoPlay
-        muted
-        playsInline
-        key={videoIndex} // ensures video restarts when src changes
-        loop={false} // we want to handle looping manually
-        onEnded={handleVideoEnd}
-        style={{
-          /* ...your styling */
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100%",
-          objectFit: "cover",
-          zIndex: 0,
-          scale: 1.2,
-          borderRadius: "inherit",
-        }}
-        aria-label="Medical consultation background video"
-      />
+      {/* Fast-loading placeholder image */}
+      {showPlaceholder && (
+        <Box
+          component="img"
+          src={placeholderImage}
+          alt="Medical consultation placeholder"
+          sx={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            zIndex: 1,
+            scale: 1.2,
+            borderRadius: "inherit",
+            opacity: videoStarted ? 0 : 1,
+            transition: "opacity 0.8s ease-in-out",
+          }}
+        />
+      )}
+
+      {/* Multiple preloaded videos as background */}
+      {videos.map((videoSrc, index) => {
+        const isCurrentVideo = index === currentVideoIndex;
+        const isNextVideo = index === nextVideoIndex && isTransitioning;
+        const shouldShow = (isCurrentVideo || isNextVideo) && videoStarted;
+        
+        return (
+          <video
+            key={index}
+            ref={(el) => {
+              videoRefs.current[index] = el;
+            }}
+            src={videoSrc}
+            muted
+            playsInline
+            loop={false}
+            preload={index === 0 ? "auto" : "metadata"} // Prioritize first video
+            onLoadedData={() => handleVideoLoad(index)}
+            onTimeUpdate={() => handleTimeUpdate(index)}
+            onEnded={() => handleVideoEnd(index)}
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              zIndex: 0,
+              scale: 1.2,
+              borderRadius: "inherit",
+              opacity: shouldShow ? (isTransitioning && isNextVideo ? 1 : isCurrentVideo ? 1 : 0) : 0,
+              transition: "opacity 0.5s ease-in-out",
+            }}
+            aria-label={`Medical consultation background video ${index + 1}`}
+          />
+        );
+      })}
 
       {/* Optional: Add an overlay for better readability */}
       <Box
