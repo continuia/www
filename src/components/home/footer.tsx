@@ -38,22 +38,9 @@ const Footer = () => {
       }}
     >
       <Container maxWidth="xl">
-        <Stack direction={{ xs: "column", sm: "row" }} justifyContent="space-between" alignItems={{ xs: "flex-start", sm: "center" }} spacing={{ xs: 2, sm: 3 }}>
+        <Stack direction={{ xs: "column", sm: "row" }} justifyContent="space-between" alignItems={{ xs: "flex-start", sm: "center" }} gap={{ xs: 2, sm: 3 }}>
           {/* Logo and Brand */}
-          <Stack order={0} direction="row" alignItems="center" spacing={1.5} mb={{ xs: 1, sm: 0 }}>
-            <Box component="img" src="/continuia.webp" alt="Continuia Logo" sx={{ height: { xs: 28, sm: 32 }, width: { xs: 28, sm: 32 } }} />
-            <Typography
-              variant="h6"
-              sx={{
-                fontWeight: 700,
-                color: "var(--primary-700)",
-                letterSpacing: 1,
-                fontSize: { xs: "1rem", sm: "1.2rem" },
-              }}
-            >
-              Continuia
-            </Typography>
-          </Stack>
+          <Box component="img" src="/continuia.png" alt="Continuia Logo" height={{ xs: 50, md: 70 }} />
 
           {/* Terms and Copyright (center) */}
           <Stack
