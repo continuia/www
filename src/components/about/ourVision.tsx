@@ -2,27 +2,20 @@ import { Box, Typography, Paper, Stack } from "@mui/material";
 import { motion } from "framer-motion";
 import heroIllustration from "../../assets/ai_assisted_patient_intake.webp"; // Substitute your actual image if needed
 import type { Variants } from "framer-motion";
-
+// Animation variants
 const fadeLeft: Variants = {
-  hidden: { opacity: 0, y: 40 },
+  hidden: { opacity: 0, y: 32 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.96, type: "spring", stiffness: 60, damping: 18 },
+    transition: { duration: 0.2, type: "spring", stiffness: 60, damping: 18 },
   },
 };
 const fadeImage: Variants = {
-  hidden: { opacity: 0, scale: 0.98 },
+  hidden: { opacity: 0, scale: 0.96 },
   visible: {
     opacity: 1,
     scale: 1,
-    transition: {
-      duration: 1,
-      type: "spring",
-      stiffness: 41,
-      damping: 24,
-      delay: 0.13,
-    },
   },
 };
 
@@ -39,7 +32,7 @@ const VisionSection = () => (
       boxShadow: { md: "0 4px 32px 0 var(--primary-100)" },
     }}
   >
-    <Stack direction={{ xs: "column", md: "row" }} alignItems="stretch" gap={0}>
+    <Stack direction={{ xs: "column", md: "row" }} alignItems="center" gap={0}>
       {/* Left: Content */}
       <MotionBox
         initial="hidden"
@@ -141,40 +134,37 @@ const VisionSection = () => (
         </Typography>
       </MotionBox>
 
-      {/* Right: Large image card */}
+      {/* Right: Illustration */}
       <MotionPaper
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, amount: 0.13 }}
+        viewport={{ once: true, amount: 0.16 }}
         variants={fadeImage}
-        elevation={5}
+        elevation={4}
         sx={{
-          flex: 1,
-          minHeight: { xs: 220, md: "100%" },
-          py: { xs: 2 },
-          px: { xs: 2 },
+          borderRadius: "2rem",
+          p: 1,
           background: "var(--bg-primary)",
+          boxShadow: "0 8px 32px 0 var(--primary-200)",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          borderRadius: { xs: 0, md: "2rem" },
-          boxShadow: { md: "0 10px 38px 0 var(--primary-100)" },
+          maxWidth: { xs: "100%", md: 500, lg: 650 },
+          width: "100%",
+          height: "100%",
+          minWidth: { xs: 0, md: 320 },
         }}
       >
         <Box
           component="img"
           src={heroIllustration}
-          alt="Doctor reviews patient consultation"
+          alt="Medical consultation"
           sx={{
             width: "100%",
-            height: { xs: 220, sm: 295, md: "100%" },
-            minHeight: { xs: 180, sm: 220, md: "100%" },
-            maxHeight: { md: "calc(76vh - 3rem)" },
+            maxWidth: { xs: "100%" },
+            borderRadius: "1.5rem",
             objectFit: "cover",
-            borderRadius: { xs: "1.5rem", md: "1.7rem" },
-            boxShadow: "0 4px 22px 0 var(--primary-50)",
-            display: "block",
-            position: "relative",
+            minHeight: { xs: 180, md: 320 },
           }}
         />
       </MotionPaper>

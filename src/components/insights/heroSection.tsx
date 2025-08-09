@@ -1,4 +1,4 @@
-import { Box, Typography, Button, Stack, Paper  } from "@mui/material";
+import { Box, Typography, Button, Stack, Paper } from "@mui/material";
 import { motion } from "framer-motion";
 import heroIllustration from "../../assets/ai_assisted_patient_intake.webp"; // Replace with your actual doctor-page hero image if different
 import type { Variants } from "framer-motion";
@@ -9,7 +9,7 @@ const fadeLeft: Variants = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.8, type: "spring", stiffness: 60, damping: 18 },
+    transition: { duration: 0.2, type: "spring", stiffness: 60, damping: 18 },
   },
 };
 const fadeImage: Variants = {
@@ -17,13 +17,6 @@ const fadeImage: Variants = {
   visible: {
     opacity: 1,
     scale: 1,
-    transition: {
-      duration: 0.9,
-      type: "spring",
-      stiffness: 52,
-      damping: 22,
-      delay: 0.1,
-    },
   },
 };
 
@@ -69,7 +62,7 @@ const HeroSection = () => (
             display: "inline-block",
           }}
         >
-          Continuia Insights <sup style={{fontSize:"0.4em"}} >TM</sup> Where Uncertainty Meets Expertise
+          Continuia Insights <sup style={{ fontSize: "0.4em" }}>TM</sup> Where Uncertainty Meets Expertise
         </Typography>
         <Typography
           variant="h6"
