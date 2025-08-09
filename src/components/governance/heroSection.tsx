@@ -1,6 +1,6 @@
-import { Box, Typography, Stack, Paper } from "@mui/material";
+import { Box, Typography, Button, Stack, Paper } from "@mui/material";
 import { motion } from "framer-motion";
-import heroIllustration from "../../assets/ai_assisted_patient_intake.webp";
+import heroIllustration from "../../assets/ai_assisted_patient_intake.webp"; // Replace with your actual doctor-page hero image if different
 import type { Variants } from "framer-motion";
 
 // Animation variants
@@ -69,7 +69,7 @@ const HeroSection = () => (
             display: "inline-block",
           }}
         >
-          Meet Our Expert Medical Team
+          Continuia Governance <sup style={{ fontSize: "0.4em" }}>TM</sup> AI Meets Clinical Without Compromise
         </Typography>
         <Typography
           variant="h6"
@@ -81,8 +81,84 @@ const HeroSection = () => (
             maxWidth: 600,
           }}
         >
-          Our dedicated team of board-certified physicians and specialists are committed to providing exceptional healthcare with compassion and expertise.
+          Healthcare leaders choose Continuia to transform their clinical governance, reduce medical errors, and ensure the highest standards of patient care. Our AI-powered platform integrates seamlessly with your existing workflows while providing real-time oversight and expert guidance.{" "}
         </Typography>
+        <Stack direction={{ xs: "column", sm: "row" }} spacing={2} mb={3}>
+          <Button
+            variant="contained"
+            size="large"
+            sx={{
+              background: "var(--primary-600)",
+              color: "var(--text-inverse)",
+              fontWeight: 700,
+              px: 3,
+              py: 1.7,
+              fontSize: "1.15rem",
+              borderRadius: "14px",
+              boxShadow: "0 2px 12px 0 var(--primary-200)",
+              textTransform: "none",
+              "&:hover": {
+                background: "var(--primary-700)",
+              },
+            }}
+          >
+            Become a Specialist
+          </Button>
+          <Button
+            variant="outlined"
+            size="large"
+            sx={{
+              color: "var(--primary-700)",
+              borderColor: "var(--primary-300)",
+              fontWeight: 700,
+              px: 3,
+              py: 1.7,
+              fontSize: "1.15rem",
+              borderRadius: "14px",
+              background: "var(--bg-primary)",
+              textTransform: "none",
+              "&:hover": {
+                borderColor: "var(--primary-500)",
+                background: "var(--primary-50)",
+              },
+            }}
+          >
+            Learn How It Works
+          </Button>
+        </Stack>
+
+        <Stack direction="row" spacing={2.3} mt={2} flexWrap="wrap">
+          <Box
+            sx={{
+              bgcolor: "var(--primary-50)",
+              color: "var(--primary-800)",
+              fontWeight: 600,
+              fontSize: { xs: "0.97rem", md: "1.01rem" },
+              px: 2.0,
+              py: "6px",
+              borderRadius: 999,
+              boxShadow: "0 1px 4px 0 var(--primary-100)",
+              mb: { xs: 0.7, sm: 0 },
+            }}
+          >
+            Case reviews from anywhere
+          </Box>
+          <Box
+            sx={{
+              bgcolor: "var(--secondary-50)",
+              color: "var(--secondary-800)",
+              fontWeight: 600,
+              fontSize: { xs: "0.97rem", md: "1.01rem" },
+              px: 2.0,
+              py: "6px",
+              borderRadius: 999,
+              boxShadow: "0 1px 4px 0 var(--secondary-100)",
+              mb: { xs: 0.7, sm: 0 },
+            }}
+          >
+            Flexible scheduling & compensation
+          </Box>
+        </Stack>
       </MotionBox>
       {/* Right: Illustration */}
       <MotionPaper
