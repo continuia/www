@@ -6,9 +6,9 @@ import type { Variants } from "framer-motion";
 const MotionPaper = motion.create(Paper);
 
 const stats = [
-  { label: "Expert Specialists", value: "500+", color: "var(--primary-600)" },
-  { label: "Medical Specialties", value: "50+", color: "var(--primary-700)" },
-  { label: "Cases Reviewed", value: "15K+", color: "var(--primary-800)" },
+  { label: "Expert Specialists", value: "50+", color: "var(--primary-600)" },
+  // { label: "Medical Specialties", value: "50+", color: "var(--primary-700)" },
+  // { label: "Cases Reviewed", value: "15K+", color: "var(--primary-800)" },
   { label: "Patient Satisfaction", value: "98%", color: "var(--success)" },
 ];
 
