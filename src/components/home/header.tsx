@@ -211,6 +211,7 @@ export default function Header() {
   const theme = useTheme();
   const isLarge = useMediaQuery(theme.breakpoints.up("lg"));
   const isBelowLg = !isLarge;
+  const navigate = useNavigate();
 
   return (
     <Fade in timeout={700}>
