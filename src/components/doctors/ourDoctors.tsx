@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Box, Typography, IconButton, Avatar, Chip } from "@mui/material";
+import { Box, Typography, IconButton, Avatar, Chip, Skeleton, Paper } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { motion, type Variants } from "framer-motion";
 
@@ -26,19 +26,72 @@ const cardAnim: Variants = {
 
 const MotionBox = motion(Box);
 
+// Skeleton Doctor Card
+function SkeletonExpertCard() {
+  return (
+    <Paper
+      elevation={2}
+      sx={{
+        borderRadius: "var(--radius-2xl)",
+        boxShadow: "var(--shadow-lg)",
+        background: "var(--bg-primary)",
+        width: { xs: 300, sm: 350 },
+        minHeight: 520,
+        pb: "var(--space-5)",
+        overflow: "hidden",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
+      <Box
+        sx={{
+          width: "100%",
+          height: 190,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          background: "linear-gradient(120deg, var(--primary-100), var(--bg-tertiary))",
+          mb: "var(--space-3)",
+        }}
+      >
+        <Skeleton variant="circular" width={128} height={128} />
+      </Box>
+      <Box sx={{ px: "var(--space-3)", width: "100%" }}>
+        <Skeleton variant="text" width="60%" height={30} sx={{ mx: "auto", mb: 2 }} />
+        <Skeleton variant="text" width="40%" height={20} sx={{ mx: "auto", mb: 2 }} />
+        <Box sx={{ display: "flex", justifyContent: "center", gap: 1, mb: 2 }}>
+          {[1, 2].map((i) => (
+            <Skeleton variant="rounded" width={60} height={28} key={i} />
+          ))}
+        </Box>
+        <Box sx={{ mb: 1 }}>
+          <Skeleton variant="text" width="30%" height={20} />
+        </Box>
+        <ul style={{ paddingLeft: 24 }}>
+          {[1, 2, 3].map((i) => (
+            <li key={i} style={{ marginBottom: 8 }}>
+              <Skeleton variant="text" width="80%" height={18} />
+            </li>
+          ))}
+        </ul>
+      </Box>
+    </Paper>
+  );
+}
+
+// Actual Doctor Card
 export const ExpertCard: React.FC<{ doctor: Doctor }> = ({ doctor }) => {
   const [showMore, setShowMore] = useState(false);
 
-  // Split qualification into bullet points (by newline, bullet, comma, semicolon)
+  // Split qualification into bullet points
   const bulletPoints = doctor.qualification
     .split(/\n|•|;|,/)
     .map((s) => s.trim())
     .filter(Boolean);
 
-  // Show first 3, or expandable
   const collapseThreshold = 3;
   const isLongQualification = bulletPoints.length > collapseThreshold;
-
   const displayedPoints = isLongQualification && !showMore ? bulletPoints.slice(0, collapseThreshold) : bulletPoints;
 
   return (
@@ -63,7 +116,7 @@ export const ExpertCard: React.FC<{ doctor: Doctor }> = ({ doctor }) => {
         transition: "box-shadow var(--transition-normal), transform var(--transition-normal)",
       }}
     >
-      {/* Large image inside card box */}
+      {/* Image */}
       <Box
         sx={{
           width: "100%",
@@ -165,7 +218,7 @@ export const ExpertCard: React.FC<{ doctor: Doctor }> = ({ doctor }) => {
             ))}
           </Box>
         )}
-        {/* Qualifications as bullet points */}
+        {/* Qualifications */}
         <Box sx={{ width: "100%", mt: "var(--space-2)", flexGrow: 1 }}>
           <Box sx={{ display: "flex", alignItems: "center", mb: "var(--space-1)" }}>
             <Typography
@@ -255,6 +308,7 @@ export const MedicalExperts: React.FC = () => {
 
   return (
     <Box
+      id="ourDoctors"
       sx={{
         py: { xs: "var(--space-6)", md: "var(--space-12)" },
         px: { xs: "var(--space-2)", md: "var(--space-24)" },
@@ -290,17 +344,32 @@ export const MedicalExperts: React.FC = () => {
       >
         Meet our team of highly qualified doctors dedicated to providing you with the best possible care.
       </Typography>
-      {loading && <Typography sx={{ textAlign: "center", my: "var(--space-12)" }}>Loading...</Typography>}
       {error && <Typography sx={{ color: "var(--error)", textAlign: "center", my: "var(--space-12)" }}>{error}</Typography>}
-      {!loading && !error && (
+      {/* Skeleton cards while loading */}
+      {loading ? (
         <Box
           sx={{
             display: "flex",
-            flexDirection:"row",
-            flexWrap:"wrap",
-            // gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr", md: "1fr 1fr 1fr" },
+            flexDirection: "row",
+            flexWrap: "wrap",
             gap: { xs: "var(--space-4)", md: "var(--space-10)" },
-            justifyItems: "center",
+            justifyContent: "center",
+            alignItems: "stretch",
+            maxWidth: 1200,
+            mx: "auto",
+          }}
+        >
+          {[1, 2, 3].map((i) => (
+            <SkeletonExpertCard key={i} />
+          ))}
+        </Box>
+      ) : (
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            flexWrap: "wrap",
+            gap: { xs: "var(--space-4)", md: "var(--space-10)" },
             justifyContent: "center",
             alignItems: "stretch",
             maxWidth: 1200,

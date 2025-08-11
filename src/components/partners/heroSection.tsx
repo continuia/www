@@ -1,5 +1,5 @@
-import { Box, Typography, Button, Stack, Paper } from "@mui/material";
-import LocalHospitalIcon from "@mui/icons-material/LocalHospital";
+import { Box, Typography,  Stack, Paper } from "@mui/material";
+// import LocalHospitalIcon from "@mui/icons-material/LocalHospital";
 import { motion } from "framer-motion";
 import heroIllustration from "../../assets/partnersMain/img1.webp";
 import type { Variants } from "framer-motion";
@@ -61,7 +61,7 @@ const HeroSection = () => (
             display: "inline-block",
           }}
         >
-          Trusted Medical Second Opinions
+          Strategic Healthcare Partnership Network
         </Typography>
         <Typography
           variant="h6"
@@ -73,10 +73,15 @@ const HeroSection = () => (
             maxWidth: 600,
           }}
         >
-          Structured physician reviews that complement your clinical workflow. No diagnosis, no treatment recommendations --just thoughtful clarity for between patient outcomes.{" "}
+          Our comprehensive partnership network connects healthcare organizations, medical professionals, and innovative technology providers to create a collaborative ecosystem that enhances patient care delivery and operational excellence. Through strategic alliances, we foster an environment where medical expertise meets cutting-edge innovation. <br />
+          <br />
+          We believe that the future of healthcare lies in meaningful collaborations that bridge the gap between clinical practice and technological advancement. Our partnership program is designed to support healthcare providers at every level, from individual practitioners to large health systems, enabling them to leverage shared resources, knowledge, and best practices.
+          <br />
+          <br />
+          Join a community of forward-thinking healthcare professionals who are committed to transforming the delivery of medical care through strategic partnerships, shared expertise, and collaborative innovation. Together, we're building the future of healthcare, one partnership at a time.
         </Typography>
         <Stack direction={{ xs: "column", sm: "row" }} spacing={2} mb={3}>
-          <Button
+          {/* <Button
             variant="contained"
             size="large"
             startIcon={<LocalHospitalIcon />}
@@ -117,7 +122,7 @@ const HeroSection = () => (
             }}
           >
             Learn More
-          </Button>
+          </Button> */}
         </Stack>
       </MotionBox>
       {/* Right: Illustration */}

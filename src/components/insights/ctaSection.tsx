@@ -45,7 +45,7 @@ const CTASection = () => {
           letterSpacing: 0.8,
         }}
       >
-        Ready to Partner with Continuia ?
+        Ready to Experience Expert Medical Care?
       </Typography>
       <Typography
         variant="subtitle1"
@@ -59,13 +59,36 @@ const CTASection = () => {
           lineHeight: 1.44,
         }}
       >
-        Join our network of healthcare partners and provide your patients with trusted medical clarity.
+        Join thousands of patients and healthcare institutions who trust Continuia for expert medical opinions and clinical excellence.
       </Typography>
 
       <Stack direction={{ xs: "column", sm: "row" }} spacing={2.5} alignItems="center" justifyContent="center" sx={{ mt: 2 }}>
         <Button
+          variant="outlined"
+          onClick={() => {
+            navigate("/governance");
+          }}
+          sx={{
+            color: "white",
+            borderColor: "white",
+            px: 3.2,
+            py: 1.2,
+            borderRadius: 1.5,
+            fontWeight: 700,
+            fontSize: { xs: "1rem", md: "1.07rem" },
+            "&:hover": {
+              bgcolor: "rgba(255,255,255,0.12)",
+              borderColor: "var(--primary-100)",
+            },
+          }}
+        >
+          Explore Governance
+        </Button>
+        <Button
           variant="contained"
-          onClick={() => navigate("/doctors")}
+          onClick={() => {
+            navigate("/partners");
+          }}
           sx={{
             bgcolor: "white",
             color: "var(--primary-600)",
@@ -78,26 +101,8 @@ const CTASection = () => {
             "&:hover": { bgcolor: "var(--primary-100)" },
           }}
         >
-          Explore Doctors
+          Explore Partners
         </Button>
-        {/* <Button
-        variant="outlined"
-        sx={{
-          color: "white",
-          borderColor: "white",
-          px: 3.2,
-          py: 1.2,
-          borderRadius: 1.5,
-          fontWeight: 700,
-          fontSize: { xs: "1rem", md: "1.07rem" },
-          "&:hover": {
-            bgcolor: "rgba(255,255,255,0.12)",
-            borderColor: "var(--primary-100)",
-          },
-        }}
-      >
-        Download Partnership Guide
-      </Button> */}
       </Stack>
     </MotionBox>
   );

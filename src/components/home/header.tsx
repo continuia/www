@@ -45,7 +45,7 @@ const navLinks: NavLinkBase[] = [
   { label: "About", href: "/about", showOn: ["large", "medium"] }, // example: hide on mobile
   {
     label: "Terms of Service",
-    href: "/terms-of-serivce",
+    href: "/privacy",
     children: tosSidebarNav,
     showOn: "small", // <-- only show in Drawer/mobile, not in desktop
   },
@@ -76,7 +76,7 @@ function MobileNavDrawer({ open, onClose }: { open: boolean; onClose: () => void
 
   const handleTosSectionClick = (sectionId: string) => {
     onClose();
-    if (window.location.pathname === "/terms-of-serivce") {
+    if (window.location.pathname === "/privacy") {
       // Already on ToS page? Scroll now:
       setTimeout(() => {
         const section = document.getElementById(sectionId);
@@ -94,7 +94,7 @@ function MobileNavDrawer({ open, onClose }: { open: boolean; onClose: () => void
       }, 80);
     } else {
       // NOT on ToS page: navigate (the ToS page will auto-scroll via its own code)
-      navigate(`/terms-of-serivce#${sectionId}`);
+      navigate(`/privacy#${sectionId}`);
     }
   };
 
@@ -164,8 +164,8 @@ function MobileNavDrawer({ open, onClose }: { open: boolean; onClose: () => void
                               fontWeight: 500,
                               "&:hover": { bgcolor: "var(--primary-50)" },
                               // HIGHLIGHT if matches current hash
-                              bgcolor: location.hash === `#${section.id}` && location.pathname === "/terms-of-serivce" ? "var(--primary-100)" : "transparent",
-                              color: location.hash === `#${section.id}` && location.pathname === "/terms-of-serivce" ? "var(--primary-900)" : "var(--primary-700)",
+                              bgcolor: location.hash === `#${section.id}` && location.pathname === "/privacy" ? "var(--primary-100)" : "transparent",
+                              color: location.hash === `#${section.id}` && location.pathname === "/privacy" ? "var(--primary-900)" : "var(--primary-700)",
                             }}
                             onClick={() => section.id && handleTosSectionClick(section.id)}
                           >
