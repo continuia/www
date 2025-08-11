@@ -7,8 +7,8 @@ import QueryBuilderIcon from "@mui/icons-material/QueryBuilder";
 import SettingsInputComponentIcon from "@mui/icons-material/SettingsInputComponent";
 import SupervisorAccountIcon from "@mui/icons-material/SupervisorAccount";
 import { motion } from "framer-motion";
-import heroDoctorImage from "../../assets/continuia_clinical_governance.webp";
-import continuia_doctor_team from "../../assets/continuia_doctor_team.webp";
+import Image4 from "../../assets/home/img4.webp";
+import Image5 from "../../assets/home/img5.webp";
 
 // import { useTheme, useMediaQuery } from "@mui/material";
 
@@ -187,7 +187,7 @@ const HeroSplitSection: React.FC = () => {
             }}
           >
             <img
-              src={continuia_doctor_team}
+              src={Image4}
               alt="Doctor with patient"
               style={{
                 width: "100%",
@@ -365,7 +365,7 @@ const HeroSplitSection: React.FC = () => {
             }}
           >
             <img
-              src={heroDoctorImage}
+              src={Image5}
               alt="Clinical Dashboard"
               style={{
                 width: "100%",

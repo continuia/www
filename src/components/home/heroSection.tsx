@@ -129,14 +129,12 @@ const HeroSection = () => {
     <Box
       sx={{
         position: "relative",
-        minHeight: { xs: "calc(var(--space-48) + var(--space-16))", md: "70vh" },
+        minHeight: { xs: "calc(var(--space-48) + var(--space-16))", md: "90vh" },
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        m: { xs: "var(--space-2)", md: "var(--space-4)" },
         px: { xs: "var(--space-4)", sm: "var(--space-8)", md: "var(--space-8)" },
         py: { xs: "var(--space-6)", md: "var(--space-8)" },
-        borderRadius: "var(--radius-xl)",
         boxShadow: "var(--shadow-lg)",
         overflow: "hidden",
         background: "transparent",

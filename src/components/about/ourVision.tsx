@@ -1,6 +1,6 @@
 import { Box, Typography, Paper, Stack } from "@mui/material";
 import { motion } from "framer-motion";
-import heroIllustration from "../../assets/ai_assisted_patient_intake.webp"; // Substitute your actual image if needed
+import Bosses from "../../assets/shreeAndUnni.webp";
 import type { Variants } from "framer-motion";
 // Animation variants
 const fadeLeft: Variants = {
@@ -25,11 +25,19 @@ const MotionPaper = motion.create(Paper);
 const VisionSection = () => (
   <Box
     sx={{
+      minHeight: { xs: "80vh", md: "90vh" },
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      px: { xs: 2, sm: 4, md: 8 },
+      py: { xs: 3, md: 10 },
       background: {
         xs: "none",
-        md: "linear-gradient(120deg, var(--primary-50) 0%, var(--primary-100) 100%)",
+        md: "linear-gradient(150deg, var(--primary-50) 40%, var(--primary-300) 100%)",
       },
-      boxShadow: { md: "0 4px 32px 0 var(--primary-100)" },
+      boxShadow: "0 4px 32px 0 var(--neutral-300)",
+      overflow: "hidden",
+      position: "relative",
     }}
   >
     <Stack direction={{ xs: "column", md: "row" }} alignItems="center" gap={0}>
@@ -43,7 +51,6 @@ const VisionSection = () => (
           flex: 1.25,
           minWidth: 0,
           width: { xs: "100%", md: "50%" },
-          p: { xs: 3, sm: 6, md: 8, lg: 10 },
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
@@ -157,9 +164,10 @@ const VisionSection = () => (
       >
         <Box
           component="img"
-          src={heroIllustration}
+          src={Bosses}
           alt="Medical consultation"
           sx={{
+            aspectRatio: "3/2",
             width: "100%",
             maxWidth: { xs: "100%" },
             borderRadius: "1.5rem",

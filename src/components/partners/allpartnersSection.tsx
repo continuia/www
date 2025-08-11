@@ -3,7 +3,14 @@ import { Box, Typography, Card, CardContent, CardMedia, Avatar, useMediaQuery, D
 import { LocalHospital, Elderly, Person, Biotech, HealthAndSafety, WorkspacePremium, Diversity3, FlightTakeoff } from "@mui/icons-material";
 import { motion, type Variants } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import heroIllustration from "../../assets/ai_assisted_patient_intake.webp";
+import hosiptals from "../../assets/partnersMain/hosiptals.webp";
+import skilledNursingLiving from "../../assets/partnersMain/skilledNursingLiving.webp";
+import individualDoctors from "../../assets/home/img4.webp";
+import clinicsAndDiagnostic from "../../assets/partnersMain/clinicsAndDiagnostic.webp";
+import healthPlanTPAs from "../../assets/partnersMain/healthPlanTPAs.webp";
+import consultatntsAndWellness from "../../assets/partnersMain/consultatntsAndWellness.webp";
+import groupsAndNGOs from "../../assets/partnersMain/groupsAndNGOs.webp";
+import tourismAndHealth from "../../assets/partnersMain/tourismAndHealth.webp";
 
 const partnerIcons = [
   <LocalHospital fontSize="inherit" sx={{ color: "var(--primary-700)" }} />,
@@ -22,11 +29,13 @@ const partnersData = [
     description: "Discharge with Confidence, Reduce Risk, and Build Trust",
     details: "Reduce 30-day readmissions with structured second opinions that complement your clinical workflow. Our licensed physicians provide concise summaries—no diagnosis, just thoughtful clarity",
     path: "/partners/hospitals",
+    imgPath: hosiptals,
   },
   {
     title: "Skilled Nursing & Assisted Living",
     description: "Support Your Residents Without Overloading Your Staff",
     details: "On-demand case reviews delivered in plain language summaries. No apps, no logins, no disruption—just improved family confidence and reduced transfers.",
+    imgPath: skilledNursingLiving,
     path: "/partners/nursing-and-living",
   },
   {
@@ -34,36 +43,42 @@ const partnersData = [
     description: "You Stay in Control—We Simply Support Your Patients",
     details: "Invite a second pair of eyes without giving up control. Our interpretive role helps patients understand what's been done, not what to do next.",
     path: "/partners/doctors-and-specialists",
+    imgPath: individualDoctors,
   },
   {
     title: "Outpatient Clinics & Diagnostic Centers",
     description: "Add Value to Every Report—Extend Patient Engagement",
     details: "Bridge interpretation gaps with one-click physician-led second opinions on imaging, pathology, or lab reports. Build long-term patient loyalty.",
     path: "/partners/clinics-diagnostics",
+    imgPath: clinicsAndDiagnostic,
   },
   {
     title: "Health Plans & TPAs",
     description: "Reduce Avoidable Costs and Improve Member Decision-Making",
     details: "Help members make informed choices before unnecessary procedures. Lower downstream costs while boosting satisfaction with neutral, non-disruptive support.",
     path: "/partners/health-plans-tpas",
+    imgPath: healthPlanTPAs,
   },
   {
     title: "Benefit Consultants & Wellness Platforms",
     description: "Offer Your Clients a High-Trust, Low-Friction Medical Add-On",
     details: "Turnkey second-opinion layer that adds medical clarity without legal risk. Fast to deploy, highly valued, and customizable for any population.",
     path: "/partners/benefit-consultants",
+    imgPath: consultatntsAndWellness,
   },
   {
     title: "Patient Advocacy Groups & NGOs",
     description: "Empower Your Members with Expert Reviews—Delivered with Empathy",
     details: "Non-judgmental, structured second opinions in plain language. Perfect for rare disease groups and chronic illness organizations seeking clarity without cost burden.",
     path: "/partners/advocacy-ngos",
+    imgPath: groupsAndNGOs,
   },
   {
     title: "Medical Tourism & Concierge Health",
     description: "Make Every Flight Count—Pre-Screen Medical Cases Before Travel",
     details: "Offer second opinions before patients commit to travel. Match patients to the right facility and reduce friction with multi-lingual support and global networks.",
     path: "/partners/medical-tourism",
+    imgPath: tourismAndHealth,
   },
 ];
 
@@ -257,17 +272,16 @@ export const PartnersSection: React.FC = () => {
               <Box sx={{ mt: "auto", px: "var(--space-4)", pb: "var(--space-5)" }}>
                 <CardMedia
                   component="img"
-                  image={heroIllustration}
+                  image={partner.imgPath}
                   alt={partner.title}
                   sx={{
+                    aspectRatio: "3/2",
                     borderRadius: "var(--radius-xl)",
-                    height: 180,
                     objectFit: "cover",
                     boxShadow: "var(--shadow-md)",
                     mb: "var(--space-3)",
                   }}
                 />
-    
               </Box>
             </Card>
           </motion.div>

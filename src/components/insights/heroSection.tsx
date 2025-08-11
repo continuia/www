@@ -1,6 +1,6 @@
 import { Box, Typography, Button, Stack, Paper } from "@mui/material";
 import { motion } from "framer-motion";
-import heroIllustration from "../../assets/ai_assisted_patient_intake.webp"; // Replace with your actual doctor-page hero image if different
+import heroIllustration from "../../assets/insights/img1.webp"; // Replace with your actual doctor-page hero image if different
 import type { Variants } from "framer-motion";
 
 // Animation variants
@@ -26,18 +26,16 @@ const MotionPaper = motion.create(Paper);
 const HeroSection = () => (
   <Box
     sx={{
-      minHeight: { xs: "80vh", md: "70vh" },
+      minHeight: { xs: "80vh", md: "90vh" },
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
-      m: { xs: 1, md: 2 },
       px: { xs: 2, sm: 4, md: 8 },
       py: { xs: 3, md: 10 },
       background: {
         xs: "none",
         md: "linear-gradient(150deg, var(--primary-50) 40%, var(--primary-300) 100%)",
       },
-      borderRadius: { xs: "1rem", md: "2rem" },
       boxShadow: "0 4px 32px 0 var(--neutral-300)",
       overflow: "hidden",
       position: "relative",
@@ -125,6 +123,7 @@ const HeroSection = () => (
           src={heroIllustration}
           alt="Medical consultation"
           sx={{
+            aspectRatio: "3/2",
             width: "100%",
             maxWidth: { xs: "100%" },
             borderRadius: "1.5rem",

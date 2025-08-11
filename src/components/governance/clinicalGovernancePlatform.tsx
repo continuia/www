@@ -1,7 +1,7 @@
 // ClinicalGovernancePlatform.tsx
 import { Box, Typography } from "@mui/material";
 import { motion } from "framer-motion";
-import heroIllustration from "../../assets/ai_assisted_patient_intake.webp";
+import heroIllustration from "../../assets/governance/img2.webp";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 
 const features = [
@@ -165,9 +165,9 @@ export default function ClinicalGovernancePlatform() {
           {/* Right Column: Illustration */}
           <Box
             sx={{
-              flex: "1 1 320px",
+              flex: "1 1 360px",
               minWidth: 260,
-              maxWidth: 480,
+              maxWidth: 540,
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -179,8 +179,9 @@ export default function ClinicalGovernancePlatform() {
               src={heroIllustration}
               alt="Clinical Dashboard Demo"
               style={{
+                aspectRatio: "3/2",
                 width: "100%",
-                maxWidth: 400,
+                maxWidth: 540,
                 height: "auto",
                 borderRadius: "var(--radius-lg)",
                 boxShadow: "var(--shadow-lg)",

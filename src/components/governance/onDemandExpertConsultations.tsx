@@ -2,7 +2,7 @@
 import { Box, Typography } from "@mui/material";
 import { motion } from "framer-motion";
 // Swap this import with your world map artwork
-import heroIllustration from "../../assets/ai_assisted_patient_intake.webp";
+import heroIllustration from "../../assets/governance/img3.webp";
 
 const stats = [
   {
@@ -49,13 +49,13 @@ export default function OnDemandExpertConsultations() {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            height: { xs: 220, sm: 310 },
           }}
         >
           <motion.img
             src={heroIllustration}
             alt="World map with expert locations"
             style={{
+              aspectRatio: "3/2",
               width: "100%",
               height: "100%",
               objectFit: "cover",

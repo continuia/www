@@ -6,9 +6,10 @@ import VerifiedUserIcon from "@mui/icons-material/VerifiedUser";
 import QueryBuilderIcon from "@mui/icons-material/QueryBuilder";
 import { motion } from "framer-motion";
 import type { Variants } from "framer-motion";
-import expertAnalysisImg from "../../assets/expert_analysis.webp";
-import continuiaInsightsLaptop from "../../assets/continuia_insights_laptop.webp";
-import ShareYOurStory from "../../assets/share_your_story.webp";
+import Image1 from "../../assets/home/img1.webp";
+import Image2 from "../../assets/home/img2.webp";
+import Image3 from "../../assets/home/img3.webp";
+
 const MotionBox = motion(Box);
 
 const fadeInVariants: Variants = {
@@ -36,7 +37,7 @@ const steps = [
       { label: "HIPAA Secure", sx: { bgcolor: "var(--primary-100)", color: "var(--primary-700)" } },
       { label: "AI Organized", sx: { bgcolor: "var(--primary-50)", color: "var(--primary-600)" } },
     ],
-    img: ShareYOurStory,
+    img: Image1,
     imgAlt: "Share your story",
   },
   {
@@ -62,7 +63,7 @@ const steps = [
         </ul>
       </>
     ),
-    img: expertAnalysisImg,
+    img: Image2,
     imgAlt: "expert Analysis",
   },
   {
@@ -128,7 +129,7 @@ const steps = [
         </Stack>
       </>
     ),
-    img: continuiaInsightsLaptop,
+    img: Image3,
     imgAlt: "Continuia Insights laptop",
   },
 ];
@@ -321,7 +322,6 @@ const JourneySteps: React.FC = () => {
                   border: "3px solid var(--primary-200)",
                   boxShadow: idx % 2 === 1 ? "14px 6px 32px 0 rgba(168,139,250,0.08)" : "-14px 6px 32px 0 rgba(168,139,250,0.08)",
                   mx: "auto",
-                  p: "var(--space-2)",
                   mt: isMobile ? "var(--space-2)" : 0,
                   maxWidth: { xs: "100%", md: 500, lg: 650 },
                 }}
@@ -330,6 +330,7 @@ const JourneySteps: React.FC = () => {
                   src={step.img}
                   alt={step.imgAlt}
                   style={{
+                    aspectRatio: "3/2",
                     width: "100%",
                     height: "100%",
                     objectFit: "cover",

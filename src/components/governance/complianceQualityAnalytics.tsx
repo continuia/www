@@ -2,7 +2,7 @@
 import { Box, Typography } from "@mui/material";
 import { motion } from "framer-motion";
 // Swap this with your dashboard/analytics art as needed
-import heroIllustration from "../../assets/ai_assisted_patient_intake.webp";
+import heroIllustration from "../../assets/governance/img4.webp";
 
 const cards = [
   {
@@ -121,7 +121,7 @@ export default function ComplianceQualityAnalytics() {
           sx={{
             flex: "1 1 350px",
             minWidth: 340,
-            maxWidth: 500,
+            maxWidth: 560,
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -133,7 +133,8 @@ export default function ComplianceQualityAnalytics() {
             alt="Analytics dashboard"
             style={{
               width: "100%",
-              maxWidth: 440,
+              maxWidth: 560,
+              aspectRatio: "3/2",
               borderRadius: "var(--radius-xl)",
               boxShadow: "var(--shadow-lg)",
               display: "block",

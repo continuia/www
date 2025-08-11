@@ -22,8 +22,8 @@ import ConsultantsAndWellness from "./pages/eachPartners/consultantsAndWellness"
 import AdvocacyAndNGOs from "./pages/eachPartners/advocacyAndNGOs";
 import MedicalTourism from "./pages/eachPartners/tourismAndConcierge";
 import DoctorsPage from "./pages/doctors";
-
-import { TermsOfService } from "./pages/termsOfService";
+import DoctorProfile from "./components/doctors/doctorProfile";
+import { TermsOfService } from "./pages/privacy";
 function App() {
   const [showButton, setShowButton] = useState(false);
 
@@ -44,56 +44,58 @@ function App() {
       <Router>
         <ScrollToTop />
         <Routes>
-        {/* Public Routes */}
-        <Route path="/" element={<HomeLayout />}>
-          <Route index element={<Homepage />} />
-          <Route path="insights" element={<Insights />} />
-          <Route path="governance" element={<Governance />} />
-          <Route path="/partners">
-            <Route index element={<Partners />} />
-            <Route path="hospitals" element={<HospitalPartner />} />
-            <Route path="nursing-and-living" element={<NursingAndLivingPartner />} />
-            <Route path="doctors-and-specialists" element={<DoctorsAndSpecialists />} />
-            <Route path="clinics-diagnostics" element={<ClinicsAndDiagnostic />} />
-            <Route path="health-plans-tpas" element={<HealthPlansAndTPA />} />
-            <Route path="benefit-consultants" element={<ConsultantsAndWellness />} />
-            <Route path="advocacy-ngos" element={<AdvocacyAndNGOs />} />
-            <Route path="medical-tourism" element={<MedicalTourism />} />
+          {/* Public Routes */}
+          <Route path="/" element={<HomeLayout />}>
+            <Route index element={<Homepage />} />
+            <Route path="insights" element={<Insights />} />
+            <Route path="governance" element={<Governance />} />
+            <Route path="/partners">
+              <Route index element={<Partners />} />
+              <Route path="hospitals" element={<HospitalPartner />} />
+              <Route path="nursing-and-living" element={<NursingAndLivingPartner />} />
+              <Route path="doctors-and-specialists" element={<DoctorsAndSpecialists />} />
+              <Route path="clinics-diagnostics" element={<ClinicsAndDiagnostic />} />
+              <Route path="health-plans-tpas" element={<HealthPlansAndTPA />} />
+              <Route path="benefit-consultants" element={<ConsultantsAndWellness />} />
+              <Route path="advocacy-ngos" element={<AdvocacyAndNGOs />} />
+              <Route path="medical-tourism" element={<MedicalTourism />} />
+            </Route>
+            <Route path="doctors" element={<DoctorsPage />} />
+            <Route path="doctorProfile/:id" element={<DoctorProfile />} />
+
+            <Route path="about" element={<AboutPage />} />
+            <Route path="cxa-globallaunch-c1a7e3d" element={<Campaign />} />
+            <Route path="*" element={<NotFound />} />
           </Route>
-          <Route path="doctors" element={<DoctorsPage />} />
-          <Route path="about" element={<AboutPage />} />
-          <Route path="cxa-globallaunch-c1a7e3d" element={<Campaign />} />
-          <Route path="*" element={<NotFound />} />
-        </Route>
-        <Route path="/privacy" element={<TermsOfServiceLayout />}>
-          <Route index element={<TermsOfService />} />
-        </Route>
+          <Route path="/privacy" element={<TermsOfServiceLayout />}>
+            <Route index element={<TermsOfService />} />
+          </Route>
 
-        {/* Unknown routes nagivated to not-found */}
-      </Routes>
+          {/* Unknown routes nagivated to not-found */}
+        </Routes>
 
-      {/* Floating Scroll-to-Top Button */}
-      <Zoom in={showButton}>
-        <Fab
-          color="primary"
-          size="medium"
-          onClick={scrollToTop}
-          aria-label="scroll back to top"
-          sx={{
-            position: "fixed",
-            bottom: { xs: 28, sm: 100 },
-            right: { xs: 20, sm: 30 },
-            zIndex: 1700,
-            boxShadow: "var(--shadow-lg)",
-            bgcolor: "var(--primary-600)",
-            color: "var(--text-inverse)",
-            "&:hover": { bgcolor: "var(--primary-700)" },
-            transition: "background 0.2s",
-          }}
-        >
-          <KeyboardArrowUpIcon fontSize="large" />
-        </Fab>
-      </Zoom>
+        {/* Floating Scroll-to-Top Button */}
+        <Zoom in={showButton}>
+          <Fab
+            color="primary"
+            size="medium"
+            onClick={scrollToTop}
+            aria-label="scroll back to top"
+            sx={{
+              position: "fixed",
+              bottom: { xs: 28, sm: 100 },
+              right: { xs: 20, sm: 30 },
+              zIndex: 1700,
+              boxShadow: "var(--shadow-lg)",
+              bgcolor: "var(--primary-600)",
+              color: "var(--text-inverse)",
+              "&:hover": { bgcolor: "var(--primary-700)" },
+              transition: "background 0.2s",
+            }}
+          >
+            <KeyboardArrowUpIcon fontSize="large" />
+          </Fab>
+        </Zoom>
       </Router>
     </PasswordProtection>
   );

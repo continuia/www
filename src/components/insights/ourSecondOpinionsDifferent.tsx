@@ -1,7 +1,7 @@
 // OurSecondOpinionsDifferent.tsx
 import { Box, Typography } from "@mui/material";
 import { motion } from "framer-motion";
-import heroIllustration from "../../assets/ai_assisted_patient_intake.webp";
+import heroIllustration from "../../assets/insights/img2.webp";
 
 const items = [
   {
