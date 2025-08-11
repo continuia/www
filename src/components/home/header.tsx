@@ -314,7 +314,7 @@ export default function Header() {
           {/* Desktop CTA */}
           <Button
             variant="contained"
-            href="#get-started"
+            onClick={() => navigate("/getInTouch")}
             sx={{
               background: "var(--primary-900)",
               color: "var(--text-inverse)",
