@@ -65,7 +65,7 @@ const CTASection = () => {
       <Stack direction={{ xs: "column", sm: "row" }} spacing={2.5} alignItems="center" justifyContent="center" sx={{ mt: 2 }}>
         <Button
           variant="contained"
-          onClick={() => navigate("/doctors")}
+          onClick={() => navigate("/getInTouch")}
           sx={{
             bgcolor: "white",
             color: "var(--primary-600)",
@@ -78,7 +78,7 @@ const CTASection = () => {
             "&:hover": { bgcolor: "var(--primary-100)" },
           }}
         >
-          Explore Doctors
+          Get In Touch
         </Button>
         {/* <Button
         variant="outlined"

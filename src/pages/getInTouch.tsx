@@ -46,6 +46,7 @@ export default function GetInTouchPage() {
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: encode({
           "form-name": "get-in-touch",
+          title: "Get-In-Touch Form",
           email: data.email,
           phone: data.phone,
           message: data.message,

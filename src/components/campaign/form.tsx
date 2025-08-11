@@ -46,6 +46,7 @@ export default function ContactForm() {
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: encode({
           "form-name": "campaign-initiative", // Must match the name in your static form
+          title:"Campaign-Form",
           email: data.email,
           phone: data.phone,
           message: data.message,
