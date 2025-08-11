@@ -1,6 +1,6 @@
 import { Box, Typography, Stack, Paper } from "@mui/material";
 import { motion } from "framer-motion";
-import heroIllustration from "../../../assets/partners/hospitals.webp";
+import heroIllustration from "../../../assets/partners/hosiptals.webp";
 import type { Variants } from "framer-motion";
 
 // Animation variants

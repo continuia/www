@@ -3,9 +3,9 @@ import { Box, Typography, Card, CardContent, CardMedia, Avatar, useMediaQuery, D
 import { LocalHospital, Elderly, Person, Biotech, HealthAndSafety, WorkspacePremium, Diversity3, FlightTakeoff } from "@mui/icons-material";
 import { motion, type Variants } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import hosiptals from "../../assets/partnersMain/hosiptals.webp";
+import hosiptals from "../../assets/partnersMain/hospitals.webp";
 import skilledNursingLiving from "../../assets/partnersMain/skilledNursingLiving.webp";
-import individualDoctors from "../../assets/home/img4.webp";
+import individualDoctors from "../../assets/partnersMain/individualDoctors.webp";
 import clinicsAndDiagnostic from "../../assets/partnersMain/clinicsAndDiagnostic.webp";
 import healthPlanTPAs from "../../assets/partnersMain/healthPlanTPAs.webp";
 import consultatntsAndWellness from "../../assets/partnersMain/consultatntsAndWellness.webp";
