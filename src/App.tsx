@@ -24,6 +24,7 @@ import MedicalTourism from "./pages/eachPartners/tourismAndConcierge";
 import DoctorsPage from "./pages/doctors";
 import DoctorProfile from "./components/doctors/doctorProfile";
 import { TermsOfService } from "./pages/privacy";
+import GetInTouchPage from "./pages/getInTouch";
 function App() {
   const [showButton, setShowButton] = useState(false);
 
@@ -61,6 +62,7 @@ function App() {
               <Route path="medical-tourism" element={<MedicalTourism />} />
             </Route>
             <Route path="doctors" element={<DoctorsPage />} />
+            <Route path="getInTouch" element={<GetInTouchPage />} />
             <Route path="doctorProfile/:id" element={<DoctorProfile />} />
 
             <Route path="about" element={<AboutPage />} />
