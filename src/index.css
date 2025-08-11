@@ -45,7 +45,7 @@ body {
 
   /* Text Hierarchy */
   --text-primary: var(--neutral-900);
-  --text-secondary: var(--neutral-600);
+  --text-secondary: var(--neutral-800);
   --text-tertiary: var(--neutral-500);
   --text-inverse: #ffffff;
   --text-muted: var(--neutral-400);

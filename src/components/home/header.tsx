@@ -221,7 +221,6 @@ export default function Header() {
           background: "var(--bg-primary)",
           color: "var(--text-primary)",
           borderBottom: "1px solid var(--border-light)",
-          py: 1,
           zIndex: 100,
           boxShadow: "0 2px 12px 0 var(--primary-50)",
         }}
@@ -235,8 +234,8 @@ export default function Header() {
           }}
         >
           {/* Logo */}
-          <Box display="flex" alignItems="center" gap={1.5}>
-            <Box component="img" src="/continuia.png" alt="Continuia Logo" height={{ xs: 50, md: 70 }} />
+          <Box display="flex" alignItems="center">
+            <Box component="img" src="/continuia.png" alt="Continuia Logo" height={{ xs: 36, md: 50 }} />
             {/* <Typography
               variant="h6"
               sx={{

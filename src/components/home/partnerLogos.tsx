@@ -16,7 +16,7 @@ const useLogoSize = () => {
   const isMd = useMediaQuery(theme.breakpoints.down("md"));
 
   if (isSm) {
-    return { width: 100, gap: 16 };
+    return { width: 140, gap: 16 };
   }
   if (isMd) {
     return { width: 140, gap: 24 };

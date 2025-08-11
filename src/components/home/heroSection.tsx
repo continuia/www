@@ -3,18 +3,19 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import LocalHospitalIcon from "@mui/icons-material/LocalHospital";
 import { motion } from "framer-motion";
 import type { Variants } from "framer-motion";
-import video2 from "../../assets/heroVideo3.mp4";
+import video2 from "../../assets/heroVideo2.mp4";
 import video1 from "../../assets/heroVideo2.mp4";
 import { useRef, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const videos = [video2, video1];
 
 const fadeLeft: Variants = {
-  hidden: { opacity: 0, y: 32 },
+  hidden: { opacity: 0, y: 20 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.8, type: "spring", stiffness: 60, damping: 18 },
+    transition: { duration: 0.5, type: "spring", stiffness: 60, damping: 18 },
   },
 };
 
@@ -37,6 +38,11 @@ const HeroSection = () => {
   useEffect(() => {
     videoRefs.current = videoRefs.current.slice(0, videos.length);
   }, []);
+
+  const navigate = useNavigate();
+  const handleHowItworks = () => {
+    navigate("/insights#howItWorks");
+  };
 
   const handleVideoLoad = (index: number) => {
     setVideosLoaded((prev) => {
@@ -123,13 +129,13 @@ const HeroSection = () => {
     <Box
       sx={{
         position: "relative",
-        minHeight: { xs: "calc(var(--space-48) + var(--space-16))", md: "calc(var(--space-56) + var(--space-20))" },
+        minHeight: { xs: "calc(var(--space-48) + var(--space-16))", md: "70vh" },
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
         m: { xs: "var(--space-2)", md: "var(--space-4)" },
-        px: { xs: "var(--space-4)", sm: "var(--space-8)", md: "var(--space-16)" },
-        py: { xs: "var(--space-6)", md: "var(--space-20)" },
+        px: { xs: "var(--space-4)", sm: "var(--space-8)", md: "var(--space-8)" },
+        py: { xs: "var(--space-6)", md: "var(--space-8)" },
         borderRadius: "var(--radius-xl)",
         boxShadow: "var(--shadow-lg)",
         overflow: "hidden",
@@ -211,7 +217,7 @@ const HeroSection = () => {
           left: 0,
           width: "100%",
           height: "100%",
-          bgcolor: "rgba(255,255,255,0.42)",
+          bgcolor: "rgba(255,255,255,0.35)",
           zIndex: 1,
           borderRadius: "inherit",
           pointerEvents: "none",
@@ -238,7 +244,7 @@ const HeroSection = () => {
           variants={fadeLeft}
           sx={{
             flex: 1,
-            maxWidth: 650,
+            maxWidth: "650",
             px: { xs: 0, sm: "var(--space-2)" },
           }}
         >
@@ -251,7 +257,7 @@ const HeroSection = () => {
               lineHeight: "var(--leading-tight)",
               letterSpacing: "-0.04em",
               display: "block",
-              background: "linear-gradient(90deg, var(--primary-900), var(--primary-900))",
+              background: "linear-gradient(1800deg, var(--primary-900), var(--primary-900))",
               WebkitBackgroundClip: "text",
               backgroundClip: "text",
               WebkitTextFillColor: "transparent",
@@ -287,6 +293,9 @@ const HeroSection = () => {
               variant="contained"
               size="large"
               startIcon={<LocalHospitalIcon />}
+              onClick={() => {
+                navigate("/insights");
+              }}
               sx={{
                 background: "var(--primary-700)",
                 color: "var(--text-inverse)",
@@ -303,11 +312,12 @@ const HeroSection = () => {
                 },
               }}
             >
-              Get Expert Opinion
+              Explore Insights
             </Button>
             <Button
               variant="outlined"
               size="large"
+              onClick={handleHowItworks}
               sx={{
                 color: "var(--primary-700)",
                 borderColor: "var(--primary-300)",

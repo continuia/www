@@ -12,15 +12,15 @@ import ShareYOurStory from "../../assets/share_your_story.webp";
 const MotionBox = motion(Box);
 
 const fadeInVariants: Variants = {
-  hidden: { opacity: 0, y: 40 },
+  hidden: { opacity: 0, y: 20 },
   visible: {
     opacity: 1,
     y: 0,
     transition: {
       type: "spring",
-      stiffness: 70,
+      stiffness: 50,
       damping: 20,
-      duration: 0.7,
+      duration: 0.3,
     },
   },
 };
@@ -192,7 +192,7 @@ const JourneySteps: React.FC = () => {
               key={step.num}
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: true, amount: 0.6 }}
+              viewport={{ once: true, amount: 0.3 }}
               variants={fadeInVariants}
               sx={{
                 display: "flex",
