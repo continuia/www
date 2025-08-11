@@ -87,7 +87,8 @@
   <!-- Hidden static form for Netlify detection -->
   <!-- html-validate-disable-next wcag/h32 -->
   <!-- This goes in public/index.html -->
-  <form name="contact-initiative" netlify netlify-honeypot="bot-field" hidden>
+  <form name="campaign-initiative" netlify netlify-honeypot="bot-field" hidden>
+    <input type="text" name="title" value="Campaign-form">
     <input type="email" name="email">
     <input type="tel" name="phone">
     <textarea name="message"></textarea>
@@ -95,6 +96,7 @@
   </form>
 
   <form name="get-in-touch" netlify netlify-honeypot="bot-field" hidden>
+    <input type="text" name="title" value="Get-In-Touch-Form">
     <input type="email" name="email">
     <input type="tel" name="phone">
     <textarea name="message"></textarea>

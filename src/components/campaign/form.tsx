@@ -45,7 +45,7 @@ export default function ContactForm() {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: encode({
-          "form-name": "contact-initiative", // Must match the name in your static form
+          "form-name": "campaign-initiative", // Must match the name in your static form
           email: data.email,
           phone: data.phone,
           message: data.message,
@@ -77,7 +77,7 @@ export default function ContactForm() {
       {/* Hidden static form for Netlify detection - place this in your main HTML file or component */}
       <form
         {...({
-          name: "contact-initiative",
+          name: "campaign-initiative",
           netlify: true,
           "netlify-honeypot": "bot-field",
           hidden: true,
@@ -119,9 +119,9 @@ export default function ContactForm() {
             Join the Initiative
           </Typography>
 
-          <form onSubmit={handleSubmit(onSubmit)} noValidate autoComplete="off" name="contact-initiative" data-netlify="true" data-netlify-honeypot="bot-field">
+          <form onSubmit={handleSubmit(onSubmit)} noValidate autoComplete="off" name="campaign-initiative" data-netlify="true" data-netlify-honeypot="bot-field">
             {/* Hidden fields for Netlify */}
-            <input type="hidden" name="form-name" value="contact-initiative" />
+            <input type="hidden" name="form-name" value="campaign-initiative" />
 
             {/* Honeypot field for spam protection */}
             <div style={{ display: "none" }}>
