@@ -88,8 +88,15 @@
   <!-- html-validate-disable-next wcag/h32 -->
   <!-- This goes in public/index.html -->
   <form name="contact-initiative" netlify netlify-honeypot="bot-field" hidden>
-    <input type="email" name="email" >
-    <input type="tel" name="phone" >
+    <input type="email" name="email">
+    <input type="tel" name="phone">
+    <textarea name="message"></textarea>
+    <button type="submit" hidden>Submit</button>
+  </form>
+
+  <form name="get-in-touch" netlify netlify-honeypot="bot-field" hidden>
+    <input type="email" name="email">
+    <input type="tel" name="phone">
     <textarea name="message"></textarea>
     <button type="submit" hidden>Submit</button>
   </form>
