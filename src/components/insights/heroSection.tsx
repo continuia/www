@@ -1,22 +1,28 @@
-import { Box, Typography, Button, Stack, Paper } from "@mui/material";
+import { Box, Typography, Button, Stack, Paper, Skeleton } from "@mui/material";
 import { motion } from "framer-motion";
-import heroIllustration from "../../assets/insights/img1.webp"; // Replace with your actual doctor-page hero image if different
-import type { Variants } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import type { Variants } from "framer-motion";
+
+// Preload the image
+import heroIllustration from "../../assets/insights/img1.webp";
+
 // Animation variants
 const fadeLeft: Variants = {
-  hidden: { opacity: 0, y: 32 },
+  hidden: { opacity: 0, y: 10 },
   visible: {
     opacity: 1,
     y: 0,
     transition: { duration: 0.2, type: "spring", stiffness: 60, damping: 18 },
   },
 };
+
 const fadeImage: Variants = {
-  hidden: { opacity: 0, scale: 0.96 },
+  hidden: { opacity: 0, scale: 0.95 },
   visible: {
     opacity: 1,
     scale: 1,
+    transition: { duration: 0.3, delay: 0.1 },
   },
 };
 
@@ -25,6 +31,17 @@ const MotionPaper = motion.create(Paper);
 
 const HeroSection = () => {
   const navigate = useNavigate();
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [imageError, setImageError] = useState(false);
+
+  // Preload image on component mount
+  useEffect(() => {
+    const img = new Image();
+    img.onload = () => setImageLoaded(true);
+    img.onerror = () => setImageError(true);
+    img.src = heroIllustration;
+  }, []);
+
   return (
     <Box
       sx={{
@@ -45,7 +62,7 @@ const HeroSection = () => {
     >
       <Stack direction={{ xs: "column", md: "row" }} alignItems="center" justifyContent="space-between" spacing={6} sx={{ width: "100%" }}>
         {/* Left: Text Content */}
-        <MotionBox initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.22 }} variants={fadeLeft} sx={{ flex: 1, maxWidth: 650 }}>
+        <MotionBox initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeLeft} sx={{ flex: 1, maxWidth: 650 }}>
           <Typography
             variant="h2"
             sx={{
@@ -74,15 +91,13 @@ const HeroSection = () => {
               maxWidth: 600,
             }}
           >
-            Facing a serious diagnosis or complex medical decision? You deserve clarity, confidence, and peace of mind. Our global network of board-certified specialists provides expert second opinions that help you understand your options and make informed decisions about your health.{" "}
+            Facing a serious diagnosis or complex medical decision? You deserve clarity, confidence, and peace of mind. Our global network of board-certified specialists provides expert second opinions that help you understand your options and make informed decisions about your health.
           </Typography>
           <Stack direction={{ xs: "column", sm: "row" }} spacing={2} mb={3}>
             <Button
               variant="contained"
               size="large"
-              onClick={() => {
-                navigate("/doctors");
-              }}
+              onClick={() => navigate("/doctors")}
               sx={{
                 background: "var(--primary-600)",
                 color: "var(--text-inverse)",
@@ -102,6 +117,7 @@ const HeroSection = () => {
             </Button>
           </Stack>
         </MotionBox>
+
         {/* Right: Illustration */}
         <MotionPaper
           initial="hidden"
@@ -121,21 +137,60 @@ const HeroSection = () => {
             width: "100%",
             height: "100%",
             minWidth: { xs: 0, md: 320 },
+            position: "relative",
           }}
         >
-          <Box
-            component="img"
-            src={heroIllustration}
-            alt="Medical consultation"
-            sx={{
-              aspectRatio: "3/2",
-              width: "100%",
-              maxWidth: { xs: "100%" },
-              borderRadius: "1.5rem",
-              objectFit: "cover",
-              minHeight: { xs: 180, md: 320 },
-            }}
-          />
+          {/* Loading skeleton */}
+          {!imageLoaded && !imageError && (
+            <Skeleton
+              variant="rectangular"
+              sx={{
+                aspectRatio: "3/2",
+                width: "100%",
+                borderRadius: "1.5rem",
+                minHeight: { xs: 180, md: 320 },
+              }}
+            />
+          )}
+
+          {/* Error fallback */}
+          {imageError && (
+            <Box
+              sx={{
+                aspectRatio: "3/2",
+                width: "100%",
+                borderRadius: "1.5rem",
+                minHeight: { xs: 180, md: 320 },
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                background: "var(--neutral-100)",
+                color: "var(--neutral-500)",
+              }}
+            >
+              <Typography>Image unavailable</Typography>
+            </Box>
+          )}
+
+          {/* Actual image */}
+          {imageLoaded && (
+            <Box
+              component="img"
+              src={heroIllustration}
+              alt="Medical consultation"
+              loading="eager" // Priority loading for hero image
+              sx={{
+                aspectRatio: "3/2",
+                width: "100%",
+                maxWidth: { xs: "100%" },
+                borderRadius: "1.5rem",
+                objectFit: "cover",
+                minHeight: { xs: 180, md: 320 },
+                opacity: imageLoaded ? 1 : 0,
+                transition: "opacity 0.3s ease-in-out",
+              }}
+            />
+          )}
         </MotionPaper>
       </Stack>
     </Box>
