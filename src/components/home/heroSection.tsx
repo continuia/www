@@ -30,6 +30,7 @@ const HeroSection = () => {
   const [showPoster, setShowPoster] = useState(true);
   const [firstVideoReady, setFirstVideoReady] = useState(false);
   const [videoStarted, setVideoStarted] = useState(false);
+  const [allVideosLoaded, setAllVideosLoaded] = useState(false);
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
   const posterVideoRef = useRef<HTMLVideoElement | null>(null);
   const [videosLoaded, setVideosLoaded] = useState<boolean[]>(new Array(videos.length).fill(false));
@@ -48,21 +49,41 @@ const HeroSection = () => {
     setVideosLoaded((prev) => {
       const newState = [...prev];
       newState[index] = true;
+
+      // Check if all videos are loaded
+      const allLoaded = newState.every((loaded) => loaded);
+      if (allLoaded && !allVideosLoaded) {
+        setAllVideosLoaded(true);
+      }
+
+      // Start first video only when it's loaded and ready
       if (index === 0 && !firstVideoReady) {
         setFirstVideoReady(true);
         const firstVideo = videoRefs.current[0];
         if (firstVideo) {
+          // Ensure video is ready to play
           firstVideo.currentTime = 0;
-          firstVideo.play().catch(console.error);
-          const checkVideoPlaying = () => {
-            if (firstVideo.currentTime > 0 && !firstVideo.paused) {
-              setVideoStarted(true);
-              setTimeout(() => setShowPoster(false), 50);
-            } else {
-              setTimeout(checkVideoPlaying, 50);
-            }
+
+          const startPlayback = () => {
+            firstVideo
+              .play()
+              .then(() => {
+                setVideoStarted(true);
+                // Wait for actual video frames before hiding poster
+                const checkVideoPlaying = () => {
+                  if (firstVideo.currentTime > 0.1 && !firstVideo.paused) {
+                    setTimeout(() => setShowPoster(false), 100);
+                  } else {
+                    setTimeout(checkVideoPlaying, 50);
+                  }
+                };
+                setTimeout(checkVideoPlaying, 50);
+              })
+              .catch(console.error);
           };
-          setTimeout(checkVideoPlaying, 100);
+
+          // Small delay to ensure smooth transition
+          setTimeout(startPlayback, 100);
         }
       }
       return newState;
@@ -104,17 +125,32 @@ const HeroSection = () => {
     }
   };
 
+  // Aggressive preloading strategy
   useEffect(() => {
-    const posterVideo = posterVideoRef.current;
-    if (posterVideo) posterVideo.load();
-    const firstVideo = videoRefs.current[0];
-    if (firstVideo) firstVideo.load();
-    const loadOtherVideos = setTimeout(() => {
-      videoRefs.current.forEach((video, index) => {
-        if (video && index > 0) video.load();
-      });
-    }, 500);
-    return () => clearTimeout(loadOtherVideos);
+    const loadVideos = async () => {
+      // Load poster video first for immediate display
+      const posterVideo = posterVideoRef.current;
+      if (posterVideo) {
+        posterVideo.load();
+      }
+
+      // Load first video immediately
+      const firstVideo = videoRefs.current[0];
+      if (firstVideo) {
+        firstVideo.load();
+      }
+
+      // Load other videos with slight delay to prioritize first video
+      setTimeout(() => {
+        videoRefs.current.forEach((video, index) => {
+          if (video && index > 0) {
+            video.load();
+          }
+        });
+      }, 200);
+    };
+
+    loadVideos();
   }, []);
 
   useEffect(() => {
@@ -124,6 +160,9 @@ const HeroSection = () => {
       }
     };
   }, []);
+
+  // Show loading skeleton if videos aren't ready
+  const showLoadingSkeleton = !firstVideoReady && !videoStarted;
 
   return (
     <Box
@@ -137,9 +176,24 @@ const HeroSection = () => {
         py: { xs: "var(--space-6)", md: "var(--space-8)" },
         boxShadow: "var(--shadow-lg)",
         overflow: "hidden",
-        background: "transparent",
+        background: showLoadingSkeleton ? "var(--neutral-100)" : "transparent",
       }}
     >
+      {/* Loading Skeleton Background */}
+      {showLoadingSkeleton && (
+        <Box
+          sx={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            zIndex: 0,
+            background: "linear-gradient(135deg, var(--primary-50) 0%, var(--primary-100) 100%)",
+          }}
+        />
+      )}
+
       {/* Background Video Poster */}
       <video
         ref={posterVideoRef}
@@ -147,6 +201,7 @@ const HeroSection = () => {
         muted
         playsInline
         preload="metadata"
+        poster="" // Remove default poster to prevent flash
         style={{
           position: "absolute",
           top: 0,
@@ -158,7 +213,7 @@ const HeroSection = () => {
           zIndex: showPoster ? 1 : -1,
           borderRadius: "inherit",
           opacity: showPoster ? 1 : 0,
-          transition: "opacity 0.8s ease-in-out, z-index 0s linear 0.8s",
+          transition: "opacity 0.3s ease-in-out",
           scale: 1.2,
           transform: "scale(1.2)",
           pointerEvents: "none",
@@ -183,9 +238,16 @@ const HeroSection = () => {
             playsInline
             loop={false}
             preload={index === 0 ? "auto" : "metadata"}
+            poster="" // Remove default poster
             onLoadedData={() => handleVideoLoad(index)}
             onTimeUpdate={() => handleTimeUpdate(index)}
             onEnded={() => handleVideoEnd(index)}
+            onCanPlay={() => {
+              // Additional check to ensure video can play smoothly
+              if (index === 0 && !videoStarted) {
+                handleVideoLoad(index);
+              }
+            }}
             style={{
               position: "absolute",
               top: 0,
@@ -197,7 +259,7 @@ const HeroSection = () => {
               zIndex: 0,
               borderRadius: "inherit",
               opacity: shouldShow ? 1 : 0,
-              transition: "opacity 0.5s ease-in-out",
+              transition: "opacity 0.3s ease-in-out",
               scale: 1.2,
               transform: "scale(1.2)",
               pointerEvents: "none",
@@ -215,7 +277,7 @@ const HeroSection = () => {
           left: 0,
           width: "100%",
           height: "100%",
-          bgcolor: "rgba(255,255,255,0.35)",
+          bgcolor: showLoadingSkeleton ? "transparent" : "rgba(255,255,255,0.35)",
           zIndex: 1,
           borderRadius: "inherit",
           pointerEvents: "none",
