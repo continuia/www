@@ -10,7 +10,7 @@ import Image1 from "../../assets/home/img1.webp";
 import Image2 from "../../assets/home/img2.webp";
 import Image3 from "../../assets/home/img3.webp";
 
-const MotionBox = motion(Box);
+const MotionBox = motion.create(Box);
 
 const fadeInVariants: Variants = {
   hidden: { opacity: 0, y: 20 },

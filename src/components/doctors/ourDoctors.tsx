@@ -24,7 +24,7 @@ const cardAnim: Variants = {
   },
 };
 
-const MotionBox = motion(Box);
+const MotionBox = motion.create(Box);
 
 // Skeleton Doctor Card
 function SkeletonExpertCard() {
