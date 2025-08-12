@@ -15,7 +15,7 @@ const cardVariants: Variants = {
     scale: 1,
     transition: {
       delay: i * 0.14,
-      duration: 0.66,
+      duration: 0.3,
       type: "spring",
       stiffness: 65,
       damping: 22,
@@ -103,7 +103,7 @@ const WhyTrustSection: React.FC = () => {
             key={card.title}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, amount: 0.7 }}
+            viewport={{ once: true, amount: 0.3 }}
             variants={cardVariants}
             custom={i}
             elevation={5}

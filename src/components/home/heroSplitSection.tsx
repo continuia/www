@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Typography, Stack, Button, List, ListItem, ListItemIcon, ListItemText, Chip } from "@mui/material";
+import { Box, Typography, Stack, List, ListItem, ListItemIcon, ListItemText, Chip } from "@mui/material";
 import MedicalServicesIcon from "@mui/icons-material/MedicalServices";
 import InsightsIcon from "@mui/icons-material/Insights";
 import VerifiedUserIcon from "@mui/icons-material/VerifiedUser";
@@ -7,22 +7,21 @@ import QueryBuilderIcon from "@mui/icons-material/QueryBuilder";
 import SettingsInputComponentIcon from "@mui/icons-material/SettingsInputComponent";
 import SupervisorAccountIcon from "@mui/icons-material/SupervisorAccount";
 import { motion } from "framer-motion";
-import heroDoctorImage from "../../assets/continuia_clinical_governance.webp";
-import continuia_doctor_team from "../../assets/continuia_doctor_team.webp";
+import Image4 from "../../assets/home/img4.webp";
+import Image5 from "../../assets/home/img5.webp";
 
 // import { useTheme, useMediaQuery } from "@mui/material";
 
 // Animation variant for fade-in
 const fadeIn = {
-  hidden: { opacity: 0, y: 25 },
-  visible: (i: number = 1) => ({
+  hidden: { opacity: 0, y: 0 },
+  visible: (_: number = 1) => ({
     opacity: 1,
     y: 0,
     transition: {
-      delay: i * 0.14,
       type: "spring" as const,
-      stiffness: 70,
-      damping: 18,
+      stiffness: 50,
+      damping: 20,
     },
   }),
 };
@@ -47,7 +46,7 @@ const HeroSplitSection: React.FC = () => {
         <MotionBox
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, amount: 0.4 }}
+          viewport={{ once: true, amount: 0.1 }}
           variants={fadeIn}
           custom={1}
           sx={{
@@ -137,7 +136,7 @@ const HeroSplitSection: React.FC = () => {
           </List>
 
           {/* CTA buttons */}
-          <Stack direction={{ xs: "column", md: "row" }} spacing={2} mt={1} mb={2} sx={{ width: "100%", maxWidth: 460 }}>
+          {/* <Stack direction={{ xs: "column", md: "row" }} spacing={2} mt={1} mb={2} sx={{ width: "100%", maxWidth: 460 }}>
             <Button
               variant="contained"
               sx={{
@@ -169,7 +168,7 @@ const HeroSplitSection: React.FC = () => {
             >
               View Success Stories
             </Button>
-          </Stack>
+          </Stack> */}
 
           {/* Doctor + patient image */}
           <Box
@@ -188,7 +187,7 @@ const HeroSplitSection: React.FC = () => {
             }}
           >
             <img
-              src={continuia_doctor_team}
+              src={Image4}
               alt="Doctor with patient"
               style={{
                 width: "100%",
@@ -204,7 +203,7 @@ const HeroSplitSection: React.FC = () => {
         <MotionBox
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, amount: 0.4 }}
+          viewport={{ once: true, amount: 0.1 }}
           variants={fadeIn}
           custom={2}
           sx={{
@@ -316,7 +315,7 @@ const HeroSplitSection: React.FC = () => {
             </ListItem>
           </List>
           {/* Call-to-action buttons */}
-          <Stack direction={{ xs: "column", md: "row" }} spacing={2} mt={3} sx={{ width: "100%", maxWidth: 460 }}>
+          {/* <Stack direction={{ xs: "column", md: "row" }} gap={1} mt={3} sx={{ width: "100%", maxWidth: 460 }}>
             <Button
               variant="contained"
               sx={{
@@ -350,7 +349,7 @@ const HeroSplitSection: React.FC = () => {
             >
               Schedule Demo
             </Button>
-          </Stack>
+          </Stack> */}
 
           {/* Dashboard image */}
           <Box
@@ -362,14 +361,11 @@ const HeroSplitSection: React.FC = () => {
               boxShadow: "0 7px 24px 0 var(--primary-200)",
               mx: { xs: "auto", md: 0 },
               mt: 3,
-              /* Add this line: */
-              alignSelf: { xs: "center", md: "stretch" },
-              // MOST IMPORTANT for sticking at bottom:
-              marginTop: "auto", // or mt: "auto" in sx shorthand
+              alignSelf: "end",
             }}
           >
             <img
-              src={heroDoctorImage}
+              src={Image5}
               alt="Clinical Dashboard"
               style={{
                 width: "100%",

@@ -4,7 +4,7 @@ import HowItWorks from "../components/insights/howItWorks";
 import WhenYouNeedSecondOpinion from "../components/insights/whenYouNeedSecondOpinion";
 import OurSecondOpinionsDifferent from "../components/insights/ourSecondOpinionsDifferent";
 import WhyPatientsTrustContinua from "../components/insights/whyPatientsTrustContinua";
-import CTASection from "../components/home/ctaSection";
+import CTASection from "../components/insights/ctaSection";
 import SEOHead from "../components/common/SEOHead";
 import { getPageSEO } from "../utils/seoConfig";
 

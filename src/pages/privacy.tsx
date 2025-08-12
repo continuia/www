@@ -24,7 +24,7 @@ export const TermsOfService: React.FC = () => {
 
   useEffect(() => {
     // Only scroll if hash is present and path is correct
-    if (location.pathname === "/terms-of-serivce" && location.hash) {
+    if (location.pathname === "/privacy" && location.hash) {
       const id = location.hash.replace(/^#/, "");
       // Wait for content to render
       setTimeout(() => {

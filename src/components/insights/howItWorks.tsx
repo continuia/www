@@ -4,6 +4,7 @@ import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import VerifiedUserIcon from "@mui/icons-material/VerifiedUser";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { motion } from "framer-motion";
+import { useEffect } from "react";
 
 const cardData = [
   {
@@ -14,7 +15,7 @@ const cardData = [
   },
   {
     icon: <AccessTimeIcon sx={{ fontSize: 40, color: "var(--info)" }} />,
-    title: "48-hour Response",
+    title: "72-hour Response",
     description: "Get expert opinions quickly when time matters most",
     bg: "var(--primary-50)",
   },
@@ -33,8 +34,19 @@ const cardData = [
 ];
 
 export default function HowItWorks() {
+  useEffect(() => {
+    // Scroll to section if hash exists in URL
+    if (window.location.hash) {
+      const element = document.querySelector(window.location.hash);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  }, []);
+
   return (
     <Box
+      id="howItWorks"
       sx={{
         width: "100%",
         bgcolor: "var(--bg-primary)",

@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { Box, Typography, useTheme, useMediaQuery } from "@mui/material";
 import { motion, useAnimationFrame } from "framer-motion";
-import logo1 from "../../assets/partners/Partner 1.png";
-import logo2 from "../../assets/partners/Partner 2.png";
-import logo3 from "../../assets/partners/Partner 3.png";
-import logo4 from "../../assets/partners/Partner 4.png";
-import logo5 from "../../assets/partners/Partner 5.png";
-import logo6 from "../../assets/partners/Partner 6.png";
-import logo7 from "../../assets/partners/Partner 7.png";
+import logo1 from "../../assets/partnersLogos/Partner 1.png";
+import logo2 from "../../assets/partnersLogos/Partner 2.png";
+import logo3 from "../../assets/partnersLogos/Partner 3.png";
+import logo4 from "../../assets/partnersLogos/Partner 4.png";
+import logo5 from "../../assets/partnersLogos/Partner 5.png";
+import logo6 from "../../assets/partnersLogos/Partner 6.png";
+import logo7 from "../../assets/partnersLogos/Partner 7.png";
 
 // Helper for responsive logo/gap
 const useLogoSize = () => {
@@ -16,7 +16,7 @@ const useLogoSize = () => {
   const isMd = useMediaQuery(theme.breakpoints.down("md"));
 
   if (isSm) {
-    return { width: 100, gap: 16 };
+    return { width: 140, gap: 16 };
   }
   if (isMd) {
     return { width: 140, gap: 24 };

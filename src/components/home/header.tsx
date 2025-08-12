@@ -45,7 +45,7 @@ const navLinks: NavLinkBase[] = [
   { label: "About", href: "/about", showOn: ["large", "medium"] }, // example: hide on mobile
   {
     label: "Terms of Service",
-    href: "/terms-of-serivce",
+    href: "/privacy",
     children: tosSidebarNav,
     showOn: "small", // <-- only show in Drawer/mobile, not in desktop
   },
@@ -76,7 +76,7 @@ function MobileNavDrawer({ open, onClose }: { open: boolean; onClose: () => void
 
   const handleTosSectionClick = (sectionId: string) => {
     onClose();
-    if (window.location.pathname === "/terms-of-serivce") {
+    if (window.location.pathname === "/privacy") {
       // Already on ToS page? Scroll now:
       setTimeout(() => {
         const section = document.getElementById(sectionId);
@@ -94,7 +94,7 @@ function MobileNavDrawer({ open, onClose }: { open: boolean; onClose: () => void
       }, 80);
     } else {
       // NOT on ToS page: navigate (the ToS page will auto-scroll via its own code)
-      navigate(`/terms-of-serivce#${sectionId}`);
+      navigate(`/privacy#${sectionId}`);
     }
   };
 
@@ -164,8 +164,8 @@ function MobileNavDrawer({ open, onClose }: { open: boolean; onClose: () => void
                               fontWeight: 500,
                               "&:hover": { bgcolor: "var(--primary-50)" },
                               // HIGHLIGHT if matches current hash
-                              bgcolor: location.hash === `#${section.id}` && location.pathname === "/terms-of-serivce" ? "var(--primary-100)" : "transparent",
-                              color: location.hash === `#${section.id}` && location.pathname === "/terms-of-serivce" ? "var(--primary-900)" : "var(--primary-700)",
+                              bgcolor: location.hash === `#${section.id}` && location.pathname === "/privacy" ? "var(--primary-100)" : "transparent",
+                              color: location.hash === `#${section.id}` && location.pathname === "/privacy" ? "var(--primary-900)" : "var(--primary-700)",
                             }}
                             onClick={() => section.id && handleTosSectionClick(section.id)}
                           >
@@ -211,6 +211,7 @@ export default function Header() {
   const theme = useTheme();
   const isLarge = useMediaQuery(theme.breakpoints.up("lg"));
   const isBelowLg = !isLarge;
+  const navigate = useNavigate();
 
   return (
     <Fade in timeout={700}>
@@ -221,7 +222,6 @@ export default function Header() {
           background: "var(--bg-primary)",
           color: "var(--text-primary)",
           borderBottom: "1px solid var(--border-light)",
-          py: 1,
           zIndex: 100,
           boxShadow: "0 2px 12px 0 var(--primary-50)",
         }}
@@ -235,8 +235,8 @@ export default function Header() {
           }}
         >
           {/* Logo */}
-          <Box display="flex" alignItems="center" gap={1.5}>
-            <Box component="img" src="/continuia.png" alt="Continuia Logo" height={{ xs: 50, md: 70 }} />
+          <Box display="flex" alignItems="center">
+            <Box component="img" src="/continuia.png" alt="Continuia Logo" height={{ xs: 36, md: 50 }} />
             {/* <Typography
               variant="h6"
               sx={{
@@ -315,7 +315,7 @@ export default function Header() {
           {/* Desktop CTA */}
           <Button
             variant="contained"
-            href="#get-started"
+            onClick={() => navigate("/getInTouch")}
             sx={{
               background: "var(--primary-900)",
               color: "var(--text-inverse)",

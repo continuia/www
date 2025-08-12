@@ -3,102 +3,93 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import LocalHospitalIcon from "@mui/icons-material/LocalHospital";
 import { motion } from "framer-motion";
 import type { Variants } from "framer-motion";
-// import video3 from "../../assets/heroVideo1.mp4";
-import video2 from "../../assets/heroVideo3.mp4";
+import poster from "../../assets/poster.webp";
+import video2 from "../../assets/heroVideo2.mp4";
 import video1 from "../../assets/heroVideo2.mp4";
 import { useRef, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const videos = [video2, video1];
 
-// Animation variants
 const fadeLeft: Variants = {
-  hidden: { opacity: 0, y: 32 },
+  hidden: { opacity: 0, y: 20 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.8, type: "spring", stiffness: 60, damping: 18 },
+    transition: { duration: 0.5, type: "spring", stiffness: 60, damping: 18 },
   },
 };
 
 const features = ["Board-certified specialists", "AI-enhanced analysis", "Global expertise"];
 
-const MotionBox = motion.create(Box);
+const MotionBox = motion(Box);
 
 const HeroSection = () => {
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
   const [nextVideoIndex, setNextVideoIndex] = useState(1 % videos.length);
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const [showPoster, setShowPoster] = useState(true);
-  const [firstVideoReady, setFirstVideoReady] = useState(false);
   const [videoStarted, setVideoStarted] = useState(false);
+  const [allVideosLoaded, setAllVideosLoaded] = useState(false);
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
-  const posterVideoRef = useRef<HTMLVideoElement | null>(null);
   const [videosLoaded, setVideosLoaded] = useState<boolean[]>(new Array(videos.length).fill(false));
   const transitionTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Initialize video refs array
   useEffect(() => {
     videoRefs.current = videoRefs.current.slice(0, videos.length);
   }, []);
 
-  // Handle video loading
+  const navigate = useNavigate();
+  const handleHowItworks = () => {
+    navigate("/insights#howItWorks");
+  };
+
   const handleVideoLoad = (index: number) => {
     setVideosLoaded((prev) => {
       const newState = [...prev];
       newState[index] = true;
 
-      // When first video is loaded, prepare for seamless transition
-      if (index === 0 && !firstVideoReady) {
-        setFirstVideoReady(true);
+      // Check if all videos are loaded
+      const allLoaded = newState.every((loaded) => loaded);
+      if (allLoaded && !allVideosLoaded) {
+        setAllVideosLoaded(true);
+      }
 
-        // Start video immediately but keep it hidden behind poster
+      // Start first video when it's ready
+      if (index === 0 && !videoStarted) {
         const firstVideo = videoRefs.current[0];
         if (firstVideo) {
           firstVideo.currentTime = 0;
-          firstVideo.play().catch(console.error);
 
-          // Wait for video to actually start playing, then begin seamless transition
-          const checkVideoPlaying = () => {
-            if (firstVideo.currentTime > 0 && !firstVideo.paused) {
-              setVideoStarted(true);
-              // Seamless crossfade: show video while fading out poster
-              setTimeout(() => setShowPoster(false), 50);
-            } else {
-              // Keep checking until video is actually playing
-              setTimeout(checkVideoPlaying, 50);
-            }
+          const startPlayback = () => {
+            firstVideo
+              .play()
+              .then(() => {
+                setVideoStarted(true);
+              })
+              .catch(console.error);
           };
 
-          // Start checking after a brief moment
-          setTimeout(checkVideoPlaying, 100);
+          // Small delay to ensure smooth transition from poster
+          setTimeout(startPlayback, 1000);
         }
       }
-
       return newState;
     });
   };
 
-  // Function to start transition 0.5 seconds before video ends
   const handleTimeUpdate = (index: number) => {
     const video = videoRefs.current[index];
     if (video && index === currentVideoIndex && !isTransitioning) {
       const timeRemaining = video.duration - video.currentTime;
-
-      // Start transition 0.5 seconds before video ends
       if (timeRemaining <= 0.5 && timeRemaining > 0) {
         setIsTransitioning(true);
-
-        // Prepare next video
         const nextIndex = (currentVideoIndex + 1) % videos.length;
         const nextVideo = videoRefs.current[nextIndex];
         if (nextVideo && videosLoaded[nextIndex]) {
           nextVideo.currentTime = 0;
           nextVideo.play().catch(console.error);
         }
-
         setNextVideoIndex(nextIndex);
-
-        // Complete transition after 0.5 seconds
         transitionTimeoutRef.current = setTimeout(() => {
           setCurrentVideoIndex(nextIndex);
           setNextVideoIndex((nextIndex + 1) % videos.length);
@@ -108,50 +99,41 @@ const HeroSection = () => {
     }
   };
 
-  // Function to handle video end (fallback)
   const handleVideoEnd = (index: number) => {
     if (index === currentVideoIndex && !isTransitioning) {
       const nextIndex = (currentVideoIndex + 1) % videos.length;
-
-      // Start the next video immediately
       const nextVideo = videoRefs.current[nextIndex];
       if (nextVideo && videosLoaded[nextIndex]) {
         nextVideo.currentTime = 0;
         nextVideo.play().catch(console.error);
       }
-
       setCurrentVideoIndex(nextIndex);
       setNextVideoIndex((nextIndex + 1) % videos.length);
     }
   };
 
-  // Progressive video loading - start with poster video, then first video, then others
+  // Load videos with priority
   useEffect(() => {
-    // Load poster video first for immediate first frame display
-    const posterVideo = posterVideoRef.current;
-    if (posterVideo) {
-      posterVideo.load();
-    }
+    const loadVideos = async () => {
+      // Load first video immediately
+      const firstVideo = videoRefs.current[0];
+      if (firstVideo) {
+        firstVideo.load();
+      }
 
-    // Load first video immediately for fast transition from poster
-    const firstVideo = videoRefs.current[0];
-    if (firstVideo) {
-      firstVideo.load();
-    }
+      // Load other videos with slight delay to prioritize first video
+      setTimeout(() => {
+        videoRefs.current.forEach((video, index) => {
+          if (video && index > 0) {
+            video.load();
+          }
+        });
+      }, 200);
+    };
 
-    // Load other videos with a slight delay to prioritize first video
-    const loadOtherVideos = setTimeout(() => {
-      videoRefs.current.forEach((video, index) => {
-        if (video && index > 0) {
-          video.load();
-        }
-      });
-    }, 500);
-
-    return () => clearTimeout(loadOtherVideos);
+    loadVideos();
   }, []);
 
-  // Cleanup timeout on unmount
   useEffect(() => {
     return () => {
       if (transitionTimeoutRef.current) {
@@ -164,51 +146,22 @@ const HeroSection = () => {
     <Box
       sx={{
         position: "relative",
-        minHeight: { xs: "80vh", md: "85vh" },
+        minHeight: { xs: "calc(var(--space-48) + var(--space-16))", md: "90vh" },
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        m: { xs: 1, md: 2 },
-        px: { xs: 2, sm: 4, md: 8 },
-        py: { xs: 3, md: 10 },
-        borderRadius: { xs: "1rem", md: "1rem" },
-        boxShadow: "0 4px 32px 0 var(--neutral-300)",
+        px: { xs: "var(--space-4)", sm: "var(--space-8)", md: "var(--space-8)" },
+        py: { xs: "var(--space-6)", md: "var(--space-8)" },
+        boxShadow: "var(--shadow-lg)",
         overflow: "hidden",
-        // no background gradient here as video is now the background
+        background: !videoStarted ? "var(--neutral-100)" : "transparent",
       }}
     >
-      {/* Video poster (first frame) for instant loading and perfect alignment */}
-      <video
-        ref={posterVideoRef}
-        src={videos[0]}
-        muted
-        playsInline
-        preload="metadata" // Only load metadata and first frame
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100%",
-          objectFit: "cover",
-          objectPosition: "center center",
-          zIndex: showPoster ? 1 : -1,
-          scale: 1.2,
-          borderRadius: "inherit",
-          opacity: showPoster ? 1 : 0,
-          transition: "opacity 0.8s ease-in-out, z-index 0s linear 0.8s",
-          transform: "scale(1.2)",
-          transformOrigin: "center center",
-          pointerEvents: "none", // Prevent interaction with poster video
-        }}
-        aria-label="Video poster frame"
-      />
-
-      {/* Multiple preloaded videos as background */}
+      {/* Video Loop with Poster */}
       {videos.map((videoSrc, index) => {
         const isCurrentVideo = index === currentVideoIndex;
         const isNextVideo = index === nextVideoIndex && isTransitioning;
-        const shouldShow = (isCurrentVideo || isNextVideo) && videoStarted;
+        const shouldShow = isCurrentVideo || isNextVideo;
 
         return (
           <video
@@ -217,13 +170,19 @@ const HeroSection = () => {
               videoRefs.current[index] = el;
             }}
             src={videoSrc}
+            poster={index === 0 ? poster : undefined} // Only first video gets poster
             muted
             playsInline
             loop={false}
-            preload={index === 0 ? "auto" : "metadata"} // Prioritize first video
+            preload={index === 0 ? "auto" : "metadata"}
             onLoadedData={() => handleVideoLoad(index)}
             onTimeUpdate={() => handleTimeUpdate(index)}
             onEnded={() => handleVideoEnd(index)}
+            onCanPlay={() => {
+              if (index === 0 && !videoStarted) {
+                handleVideoLoad(index);
+              }
+            }}
             style={{
               position: "absolute",
               top: 0,
@@ -231,22 +190,20 @@ const HeroSection = () => {
               width: "100%",
               height: "100%",
               objectFit: "cover",
-              objectPosition: "center center", // Match placeholder positioning
-              zIndex: 0,
-              scale: 1.2,
+              objectPosition: "center center",
+              zIndex: shouldShow ? 1 : 0,
               borderRadius: "inherit",
-              opacity: shouldShow ? (isTransitioning && isNextVideo ? 1 : isCurrentVideo ? 1 : 0) : 0,
+              opacity: shouldShow ? 1 : 0,
               transition: "opacity 0.5s ease-in-out",
-              // Explicit transform to match placeholder exactly
               transform: "scale(1.2)",
-              transformOrigin: "center center",
+              pointerEvents: "none",
             }}
             aria-label={`Medical consultation background video ${index + 1}`}
           />
         );
       })}
 
-      {/* Optional: Add an overlay for better readability */}
+      {/* Overlay for text contrast */}
       <Box
         sx={{
           position: "absolute",
@@ -254,84 +211,119 @@ const HeroSection = () => {
           left: 0,
           width: "100%",
           height: "100%",
-          bgcolor: "rgba(255,255,255,0.60)", // adjust for dark/light overlay as needed
-          zIndex: 1,
+          bgcolor: "rgba(255,255,255,0.35)",
+          zIndex: 2,
           borderRadius: "inherit",
           pointerEvents: "none",
         }}
       />
 
       {/* Main Content */}
-      <Stack direction={{ xs: "column", md: "row" }} alignItems="center" justifyContent="space-between" spacing={6} sx={{ width: "100%", position: "relative", zIndex: 2 }}>
-        {/* Left: Text Content */}
-        <MotionBox initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.22 }} variants={fadeLeft} sx={{ flex: 1, maxWidth: 650 }}>
+      <Stack
+        direction={{ xs: "column", md: "row" }}
+        alignItems="center"
+        justifyContent="start"
+        spacing={{ xs: "var(--space-8)", md: "var(--space-16)" }}
+        sx={{
+          width: "100%",
+          position: "relative",
+          zIndex: 3,
+        }}
+      >
+        {/* Text Content */}
+        <MotionBox
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.22 }}
+          variants={fadeLeft}
+          sx={{
+            flex: 1,
+            maxWidth: "650",
+            px: { xs: 0, sm: "var(--space-2)" },
+          }}
+        >
           <Typography
-            variant="h2"
+            variant="h1"
             sx={{
               fontWeight: 800,
-              fontSize: { xs: "2.5rem", sm: "3.2rem", md: "3.8rem" },
-              mb: 2,
-              lineHeight: 1.08,
-              letterSpacing: "-1px",
-              background: "linear-gradient(90deg, var(--neutral-50), var(--neutral-50))",
+              fontSize: { xs: "var(--text-4xl)", sm: "var(--text-5xl)", md: "var(--text-6xl)" },
+              mb: "var(--space-3)",
+              lineHeight: "var(--leading-tight)",
+              letterSpacing: "-0.04em",
+              display: "block",
+              background: "linear-gradient(1800deg, var(--primary-900), var(--primary-900))",
               WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
               backgroundClip: "text",
+              WebkitTextFillColor: "transparent",
               color: "transparent",
-              display: "inline-block",
+              textAlign: { xs: "center", md: "left" },
             }}
           >
-            When Medical Decisions Matter Most
+            When Medical
+            <br />
+            Decisions Matter Most
           </Typography>
+
           <Typography
-            variant="h6"
+            variant="h5"
             sx={{
-              color: "var(--neutral-100)",
+              color: "var(--text-secondary)",
               fontWeight: 500,
-              mb: 4,
-              fontSize: { xs: "1rem", sm: "1.1rem" },
-              maxWidth: 600,
+              mb: "var(--space-6)",
+              fontSize: { xs: "var(--text-lg)", sm: "var(--text-xl)", md: "var(--text-2xl)" },
+              lineHeight: "var(--leading-relaxed)",
+              maxWidth: 580,
+              mx: { xs: "auto", md: 0 },
+              textAlign: { xs: "center", md: "left" },
             }}
           >
-            Every patient deserves confidence in their care. Our AI-powered platform connects you with world-class specialists who provide expert second opinions, ensuring you make informed decisions about your health journey.
+            Every patient deserves confidence in their care.
+            <br />
+            Our AI-powered platform connects you with world-class specialists who provide expert second opinions—ensuring you make informed decisions about your health journey.
           </Typography>
-          <Stack direction={{ xs: "column", sm: "row" }} spacing={2} mb={3}>
+
+          <Stack direction={{ xs: "column", sm: "row" }} spacing={"var(--space-3)"} mb={"var(--space-5)"} alignItems={{ xs: "center", sm: "flex-start" }} justifyContent={{ xs: "center", sm: "flex-start" }}>
             <Button
               variant="contained"
               size="large"
               startIcon={<LocalHospitalIcon />}
+              onClick={() => {
+                navigate("/insights");
+              }}
               sx={{
-                background: "var(--primary-600)",
+                background: "var(--primary-700)",
                 color: "var(--text-inverse)",
                 fontWeight: 700,
-                px: 3,
-                py: 1.7,
-                fontSize: "1.15rem",
-                borderRadius: "14px",
-                boxShadow: "0 2px 12px 0 var(--primary-200)",
+                px: "var(--space-5)",
+                py: "calc(var(--space-2) + var(--space-1))",
+                fontSize: "var(--text-lg)",
+                borderRadius: "var(--radius-xl)",
+                boxShadow: "var(--shadow-md)",
                 textTransform: "none",
                 "&:hover": {
-                  background: "var(--primary-700)",
+                  background: "var(--primary-900)",
+                  boxShadow: "var(--shadow-lg)",
                 },
               }}
             >
-              Get Expert Opinion
+              Explore Insights
             </Button>
             <Button
               variant="outlined"
               size="large"
+              onClick={handleHowItworks}
               sx={{
                 color: "var(--primary-700)",
                 borderColor: "var(--primary-300)",
-                fontWeight: 700,
-                px: 3,
-                py: 1.7,
-                fontSize: "1.15rem",
-                borderRadius: "14px",
                 background: "var(--bg-primary)",
+                fontWeight: 700,
+                px: "var(--space-5)",
+                py: "calc(var(--space-2) + var(--space-1))",
+                fontSize: "var(--text-lg)",
+                borderRadius: "var(--radius-xl)",
                 textTransform: "none",
                 "&:hover": {
-                  borderColor: "var(--primary-500)",
+                  borderColor: "var(--primary-700)",
                   background: "var(--primary-50)",
                 },
               }}
@@ -339,30 +331,31 @@ const HeroSection = () => {
               Learn How It Works
             </Button>
           </Stack>
-          <Stack direction={{ xs: "column", sm: "row" }} gap={1} mt={2} flexWrap="wrap">
+
+          {/* Features */}
+          <Stack direction="row" spacing={"var(--space-2)"} mt={"var(--space-2)"} flexWrap="wrap" rowGap={"var(--space-2)"} justifyContent={{ xs: "center", md: "flex-start" }}>
             {features.map((feature) => (
               <Stack
                 direction="row"
                 alignItems="center"
-                spacing={1}
+                spacing={"var(--space-1)"}
                 key={feature}
                 sx={{
-                  borderRadius: "10px",
-                  px: 1.1,
-                  py: 0.7,
-                  bgcolor: "var(--primary-50)",
-                  mb: { xs: 1, sm: 0 },
-                  boxShadow: "0 1px 4px 0 var(--primary-100)",
+                  borderRadius: "var(--radius-md)",
+                  px: "var(--space-3)",
+                  py: "var(--space-1)",
+                  bgcolor: "var(--primary-100)",
+                  boxShadow: "var(--shadow-xs)",
                 }}
               >
-                <CheckCircleIcon sx={{ color: "var(--success)", fontSize: 20 }} />
+                <CheckCircleIcon sx={{ color: "var(--success)", fontSize: "var(--text-xl)" }} />
                 <Typography
-                  variant="body2"
+                  variant="body1"
                   sx={{
-                    color: "var(--neutral-700)",
-                    fontWeight: 500,
-                    fontSize: { xs: "0.98rem", sm: "1.05rem" },
-                    whiteSpace: "nowrap",
+                    color: "var(--text-primary)",
+                    fontWeight: 600,
+                    fontSize: "var(--text-base)",
+                    letterSpacing: "0.01em",
                   }}
                 >
                   {feature}
@@ -371,7 +364,6 @@ const HeroSection = () => {
             ))}
           </Stack>
         </MotionBox>
-        {/* Optionally remove right illustration, or include extra imagery if desired */}
       </Stack>
     </Box>
   );

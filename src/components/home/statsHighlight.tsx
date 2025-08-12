@@ -6,9 +6,9 @@ import type { Variants } from "framer-motion";
 const MotionPaper = motion.create(Paper);
 
 const stats = [
-  { label: "Expert Specialists", value: "500+", color: "var(--primary-600)" },
-  { label: "Medical Specialties", value: "50+", color: "var(--primary-700)" },
-  { label: "Cases Reviewed", value: "15K+", color: "var(--primary-800)" },
+  { label: "Expert Specialists", value: "50+", color: "var(--primary-600)" },
+  // { label: "Medical Specialties", value: "50+", color: "var(--primary-700)" },
+  // { label: "Cases Reviewed", value: "15K+", color: "var(--primary-800)" },
   { label: "Patient Satisfaction", value: "98%", color: "var(--success)" },
 ];
 
@@ -20,10 +20,10 @@ const statVariant: Variants = {
     y: 0,
     scale: 1,
     transition: {
-      delay: i * 0.14,
+      delay: i * 0.05,
       type: "spring" as const,
-      stiffness: 60,
-      damping: 13,
+      damping: 20,
+      duration: 0.3,
     },
   }),
 };
@@ -32,7 +32,7 @@ const StatsHighlight = () => (
   <Box
     sx={{
       background: "linear-gradient(110deg, var(--primary-50) 0%, var(--bg-secondary) 100%)",
-      py: { xs: 6, md: 10 },
+      py: { xs: 6, md: 6 },
       px: { xs: 1, md: 4 },
       textAlign: "center",
     }}
@@ -43,7 +43,6 @@ const StatsHighlight = () => (
         fontWeight: 800,
         color: "var(--primary-700)",
         letterSpacing: 1.1,
-        mb: 1.5,
         fontSize: { xs: "1.7rem", md: "2.3rem" },
         background: "linear-gradient(90deg, var(--primary-400), var(--primary-700))",
         WebkitBackgroundClip: "text",
