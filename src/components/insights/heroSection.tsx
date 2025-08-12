@@ -1,7 +1,7 @@
 import { Box, Typography, Button, Stack, Paper, Skeleton } from "@mui/material";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import type { Variants } from "framer-motion";
 
 // Preload the image
@@ -34,13 +34,36 @@ const HeroSection = () => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
 
-  // Preload image on component mount
-  useEffect(() => {
-    const img = new Image();
-    img.onload = () => setImageLoaded(true);
-    img.onerror = () => setImageError(true);
-    img.src = heroIllustration;
+  // Optimized image loading with useCallback
+  const handleImageLoad = useCallback(() => {
+    setImageLoaded(true);
   }, []);
+
+  const handleImageError = useCallback(() => {
+    setImageError(true);
+  }, []);
+
+  // Preload image immediately on component mount
+  useEffect(() => {
+    // Check if image is already cached
+    if (heroIllustration) {
+      const img = new Image();
+
+      // Set loading attributes for better performance
+      img.loading = "eager";
+      img.fetchPriority = "high";
+
+      img.onload = handleImageLoad;
+      img.onerror = handleImageError;
+      img.src = heroIllustration;
+
+      // Cleanup function
+      return () => {
+        img.onload = null;
+        img.onerror = null;
+      };
+    }
+  }, [handleImageLoad, handleImageError]);
 
   return (
     <Box
@@ -140,15 +163,41 @@ const HeroSection = () => {
             position: "relative",
           }}
         >
-          {/* Loading skeleton */}
+          {/* Optimized image rendering */}
+          <Box
+            component="img"
+            src={heroIllustration}
+            alt="Medical consultation"
+            loading="eager"
+            fetchPriority="high"
+            onLoad={handleImageLoad}
+            onError={handleImageError}
+            sx={{
+              aspectRatio: "3/2",
+              width: "100%",
+              maxWidth: { xs: "100%" },
+              borderRadius: "1.5rem",
+              objectFit: "cover",
+              minHeight: { xs: 180, md: 320 },
+              opacity: imageLoaded ? 1 : 0,
+              transition: "opacity 0.2s ease-in-out",
+              display: imageLoaded ? "block" : "none",
+            }}
+          />
+
+          {/* Loading skeleton - only show when image is not loaded and no error */}
           {!imageLoaded && !imageError && (
             <Skeleton
               variant="rectangular"
+              animation="wave"
               sx={{
                 aspectRatio: "3/2",
                 width: "100%",
                 borderRadius: "1.5rem",
                 minHeight: { xs: 180, md: 320 },
+                position: imageLoaded ? "absolute" : "static",
+                top: 0,
+                left: 0,
               }}
             />
           )}
@@ -170,26 +219,6 @@ const HeroSection = () => {
             >
               <Typography>Image unavailable</Typography>
             </Box>
-          )}
-
-          {/* Actual image */}
-          {imageLoaded && (
-            <Box
-              component="img"
-              src={heroIllustration}
-              alt="Medical consultation"
-              loading="eager" // Priority loading for hero image
-              sx={{
-                aspectRatio: "3/2",
-                width: "100%",
-                maxWidth: { xs: "100%" },
-                borderRadius: "1.5rem",
-                objectFit: "cover",
-                minHeight: { xs: 180, md: 320 },
-                opacity: imageLoaded ? 1 : 0,
-                transition: "opacity 0.3s ease-in-out",
-              }}
-            />
           )}
         </MotionPaper>
       </Stack>

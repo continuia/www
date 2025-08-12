@@ -1,128 +1,209 @@
-import { Box, Typography, Stack, Paper } from "@mui/material";
+import { Box, Typography, Stack, Paper, Skeleton } from "@mui/material";
 import { motion } from "framer-motion";
-import heroIllustration from "../../../assets/partners/hosiptals.webp";
+import { useState, useEffect, useCallback } from "react";
 import type { Variants } from "framer-motion";
+
+// Preload the image
+import heroIllustration from "../../../assets/partners/hosiptals.webp";
 
 // Animation variants
 const fadeLeft: Variants = {
-  hidden: { opacity: 0, y: 32 },
+  hidden: { opacity: 0, y: 10 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.8, type: "spring", stiffness: 60, damping: 18 },
+    transition: { duration: 0.2, type: "spring", stiffness: 60, damping: 18 },
   },
 };
+
 const fadeImage: Variants = {
-  hidden: { opacity: 0, scale: 0.96 },
+  hidden: { opacity: 0, scale: 0.95 },
   visible: {
     opacity: 1,
     scale: 1,
-    transition: {
-      duration: 0.9,
-      type: "spring",
-      stiffness: 52,
-      damping: 22,
-      delay: 0.1,
-    },
+    transition: { duration: 0.3, delay: 0.1 },
   },
 };
 
 const MotionBox = motion.create(Box);
 const MotionPaper = motion.create(Paper);
 
-const HeroSection = () => (
-  <Box
-    sx={{
-      minHeight: { xs: "80vh", md: "90vh" },
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      px: { xs: 2, sm: 4, md: 8 },
-      py: { xs: 3, md: 10 },
-      background: {
-        xs: "none",
-        md: "linear-gradient(150deg, var(--primary-50) 40%, var(--primary-300) 100%)",
-      },
-      boxShadow: "0 4px 32px 0 var(--neutral-300)",
-      overflow: "hidden",
-      position: "relative",
-    }}
-  >
-    <Stack direction={{ xs: "column", md: "row" }} alignItems="center" justifyContent="space-between" spacing={6} sx={{ width: "100%" }}>
-      {/* Left: Text Content */}
-      <MotionBox initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.22 }} variants={fadeLeft} sx={{ flex: 1, maxWidth: 650 }}>
-        <Typography
-          variant="h2"
+const HeroSection = () => {
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [imageError, setImageError] = useState(false);
+
+  // Optimized image loading with useCallback
+  const handleImageLoad = useCallback(() => {
+    setImageLoaded(true);
+  }, []);
+
+  const handleImageError = useCallback(() => {
+    setImageError(true);
+  }, []);
+
+  // Preload image immediately on component mount
+  useEffect(() => {
+    if (heroIllustration) {
+      const img = new Image();
+
+      // Set loading attributes for better performance
+      img.loading = "eager";
+      img.fetchPriority = "high";
+
+      img.onload = handleImageLoad;
+      img.onerror = handleImageError;
+      img.src = heroIllustration;
+
+      // Cleanup function
+      return () => {
+        img.onload = null;
+        img.onerror = null;
+      };
+    }
+  }, [handleImageLoad, handleImageError]);
+
+  return (
+    <Box
+      sx={{
+        minHeight: { xs: "80vh", md: "90vh" },
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        px: { xs: 2, sm: 4, md: 8 },
+        py: { xs: 3, md: 10 },
+        background: {
+          xs: "none",
+          md: "linear-gradient(150deg, var(--primary-50) 40%, var(--primary-300) 100%)",
+        },
+        boxShadow: "0 4px 32px 0 var(--neutral-300)",
+        overflow: "hidden",
+        position: "relative",
+      }}
+    >
+      <Stack direction={{ xs: "column", md: "row" }} alignItems="center" justifyContent="space-between" spacing={6} sx={{ width: "100%" }}>
+        {/* Left: Text Content */}
+        <MotionBox initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeLeft} sx={{ flex: 1, maxWidth: 650 }}>
+          <Typography
+            variant="h2"
+            sx={{
+              fontWeight: 800,
+              fontSize: { xs: "2.5rem", sm: "3.2rem", md: "3.8rem" },
+              mb: 2,
+              lineHeight: 1.08,
+              letterSpacing: "-1px",
+              background: "linear-gradient(90deg, var(--neutral-800), var(--primary-800))",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundClip: "text",
+              color: "transparent",
+              display: "inline-block",
+            }}
+          >
+            Discharge with Confidence, Reduce Risk, and Build Trust
+          </Typography>
+          <Typography
+            variant="h6"
+            sx={{
+              color: "var(--neutral-600)",
+              fontWeight: 500,
+              mb: 4,
+              fontSize: { xs: "1rem", sm: "1.1rem" },
+              maxWidth: 600,
+            }}
+          >
+            Hospitals face growing pressure to ensure safe discharges, reduce 30-day readmissions, and maintain a strong reputation. Continuia offers structured second opinions that complement your clinical workflow without requiring EHR integration or extra staff training.
+            <br />
+            <br />
+            Our licensed physicians review patient records and provide a concise summary of findings—no diagnosis, no treatment recommendations, just a thoughtful second look. You can trigger a Continuia review at any point: during discharge, care transitions, or in ethically complex cases.
+            <br />
+            <br />
+            Your patients get peace of mind, and your team gets legal and clinical assurance. Our governance-ready stack includes BAAs, audit trails, and turnaround commitments.
+          </Typography>
+        </MotionBox>
+
+        {/* Right: Illustration */}
+        <MotionPaper
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.16 }}
+          variants={fadeImage}
+          elevation={4}
           sx={{
-            fontWeight: 800,
-            fontSize: { xs: "2.5rem", sm: "3.2rem", md: "3.8rem" },
-            mb: 2,
-            lineHeight: 1.08,
-            letterSpacing: "-1px",
-            background: "linear-gradient(90deg, var(--neutral-800), var(--primary-800))",
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
-            backgroundClip: "text",
-            color: "transparent",
-            display: "inline-block",
-          }}
-        >
-          Discharge with Confidence, Reduce Risk, and Build Trust
-        </Typography>
-        <Typography
-          variant="h6"
-          sx={{
-            color: "var(--neutral-600)",
-            fontWeight: 500,
-            mb: 4,
-            fontSize: { xs: "1rem", sm: "1.1rem" },
-            maxWidth: 600,
-          }}
-        >
-          Hospitals face growing pressure to ensure safe discharges, reduce 30-day readmissions, and maintain a strong reputation. Continuia offers structured second opinions that complement your clinical workflow without requiring EHR integration or extra staff training. <br /> <br />
-          Our licensed physicians review patient records and provide a concise summary of findings—no diagnosis, no treatment recommendations, just a thoughtful second look. You can trigger a Continuia review at any point: during discharge, care transitions, or in ethically complex cases.
-          <br />
-          <br />
-          Your patients get peace of mind, and your team gets legal and clinical assurance. Our governance-ready stack includes BAAs, audit trails, and turnaround commitments.
-        </Typography>
-      </MotionBox>
-      {/* Right: Illustration */}
-      <MotionPaper
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.16 }}
-        variants={fadeImage}
-        elevation={4}
-        sx={{
-          borderRadius: "2rem",
-          p: 1,
-          background: "var(--bg-primary)",
-          boxShadow: "0 8px 32px 0 var(--primary-200)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          maxWidth: { xs: "100%", md: 500, lg: 650 },
-          width: "100%",
-          height: "100%",
-          minWidth: { xs: 0, md: 320 },
-        }}
-      >
-        <Box
-          component="img"
-          src={heroIllustration}
-          alt="Medical consultation"
-          sx={{
-            aspectRatio: "3/2",
+            borderRadius: "2rem",
+            p: 1,
+            background: "var(--bg-primary)",
+            boxShadow: "0 8px 32px 0 var(--primary-200)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            maxWidth: { xs: "100%", md: 500, lg: 650 },
             width: "100%",
-            maxWidth: { xs: "100%" },
-            borderRadius: "1.5rem",
-            objectFit: "top",
-            minHeight: { xs: 180, md: 320 },
+            height: "100%",
+            minWidth: { xs: 0, md: 320 },
+            position: "relative",
           }}
-        />
-      </MotionPaper>
-    </Stack>
-  </Box>
-);
+        >
+          {/* Optimized image rendering */}
+          <Box
+            component="img"
+            src={heroIllustration}
+            alt="Hospital healthcare partnership"
+            loading="eager"
+            fetchPriority="high"
+            onLoad={handleImageLoad}
+            onError={handleImageError}
+            sx={{
+              aspectRatio: "3/2",
+              width: "100%",
+              maxWidth: { xs: "100%" },
+              borderRadius: "1.5rem",
+              objectFit: "cover",
+              minHeight: { xs: 180, md: 320 },
+              opacity: imageLoaded ? 1 : 0,
+              transition: "opacity 0.2s ease-in-out",
+              display: imageLoaded ? "block" : "none",
+            }}
+          />
+
+          {/* Loading skeleton */}
+          {!imageLoaded && !imageError && (
+            <Skeleton
+              variant="rectangular"
+              animation="wave"
+              sx={{
+                aspectRatio: "3/2",
+                width: "100%",
+                borderRadius: "1.5rem",
+                minHeight: { xs: 180, md: 320 },
+                position: imageLoaded ? "absolute" : "static",
+                top: 0,
+                left: 0,
+              }}
+            />
+          )}
+
+          {/* Error fallback */}
+          {imageError && (
+            <Box
+              sx={{
+                aspectRatio: "3/2",
+                width: "100%",
+                borderRadius: "1.5rem",
+                minHeight: { xs: 180, md: 320 },
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                background: "var(--neutral-100)",
+                color: "var(--neutral-500)",
+              }}
+            >
+              <Typography>Image unavailable</Typography>
+            </Box>
+          )}
+        </MotionPaper>
+      </Stack>
+    </Box>
+  );
+};
 
 export default HeroSection;

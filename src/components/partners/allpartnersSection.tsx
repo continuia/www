@@ -83,12 +83,12 @@ const partnersData = [
 ];
 
 const cardVariants: Variants = {
-  hidden: { opacity: 0, y: 48, scale: 0.97 },
+  hidden: { opacity: 0, y: 20, scale: 0.97 },
   visible: (i: number) => ({
     opacity: 1,
     y: 0,
     scale: 1,
-    transition: { delay: i * 0.13, duration: 0.65, type: "spring", bounce: 0.28 },
+    transition: { delay: i * 0.05, duration: 0.3, type: "spring", bounce: 0.28 },
   }),
   hover: {
     boxShadow: "0 10px 40px 0 rgba(124,58,237,0.17), 0 2px 10px 0 rgba(67,56,202,0.13)",
@@ -155,7 +155,7 @@ export const PartnersSection: React.FC = () => {
           display: "flex",
           flexWrap: "wrap",
           gap: "var(--space-8)",
-          justifyContent: "flex-start",
+          justifyContent: "center",
           alignItems: "stretch",
           maxWidth: 1320,
           mx: "auto",

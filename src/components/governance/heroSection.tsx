@@ -1,22 +1,28 @@
-import { Box, Typography, Button, Stack, Paper } from "@mui/material";
+import { Box, Typography, Button, Stack, Paper, Skeleton } from "@mui/material";
 import { motion } from "framer-motion";
-import heroIllustration from "../../assets/governance/img1.webp"; // Replace with your actual doctor-page hero image if different
-import type { Variants } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import { useState, useEffect, useCallback } from "react";
+import type { Variants } from "framer-motion";
+
+// Preload the image
+import heroIllustration from "../../assets/governance/img1.webp";
+
 // Animation variants
 const fadeLeft: Variants = {
-  hidden: { opacity: 0, y: 32 },
+  hidden: { opacity: 0, y: 10 },
   visible: {
     opacity: 1,
     y: 0,
     transition: { duration: 0.2, type: "spring", stiffness: 60, damping: 18 },
   },
 };
+
 const fadeImage: Variants = {
-  hidden: { opacity: 0, scale: 0.96 },
+  hidden: { opacity: 0, scale: 0.95 },
   visible: {
     opacity: 1,
     scale: 1,
+    transition: { duration: 0.3, delay: 0.1 },
   },
 };
 
@@ -25,6 +31,39 @@ const MotionPaper = motion.create(Paper);
 
 const HeroSection = () => {
   const navigate = useNavigate();
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [imageError, setImageError] = useState(false);
+
+  // Optimized image loading with useCallback
+  const handleImageLoad = useCallback(() => {
+    setImageLoaded(true);
+  }, []);
+
+  const handleImageError = useCallback(() => {
+    setImageError(true);
+  }, []);
+
+  // Preload image immediately on component mount
+  useEffect(() => {
+    if (heroIllustration) {
+      const img = new Image();
+
+      // Set loading attributes for better performance
+      img.loading = "eager";
+      img.fetchPriority = "high";
+
+      img.onload = handleImageLoad;
+      img.onerror = handleImageError;
+      img.src = heroIllustration;
+
+      // Cleanup function
+      return () => {
+        img.onload = null;
+        img.onerror = null;
+      };
+    }
+  }, [handleImageLoad, handleImageError]);
+
   return (
     <Box
       sx={{
@@ -45,7 +84,7 @@ const HeroSection = () => {
     >
       <Stack direction={{ xs: "column", md: "row" }} alignItems="center" justifyContent="space-between" spacing={6} sx={{ width: "100%" }}>
         {/* Left: Text Content */}
-        <MotionBox initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.22 }} variants={fadeLeft} sx={{ flex: 1, maxWidth: 650 }}>
+        <MotionBox initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeLeft} sx={{ flex: 1, maxWidth: 650 }}>
           <Typography
             variant="h2"
             sx={{
@@ -74,7 +113,7 @@ const HeroSection = () => {
               maxWidth: 600,
             }}
           >
-            Healthcare leaders choose Continuia to transform their clinical governance, reduce medical errors, and ensure the highest standards of patient care. Our AI-powered platform integrates seamlessly with your existing workflows while providing real-time oversight and expert guidance.{" "}
+            Healthcare leaders choose Continuia to transform their clinical governance, reduce medical errors, and ensure the highest standards of patient care. Our AI-powered platform integrates seamlessly with your existing workflows while providing real-time oversight and expert guidance.
           </Typography>
           <Stack direction={{ xs: "column", sm: "row" }} spacing={2} mb={3}>
             <Button
@@ -98,27 +137,6 @@ const HeroSection = () => {
             >
               Explore Our Partners
             </Button>
-            {/* <Button
-            variant="outlined"
-            size="large"
-            sx={{
-              color: "var(--primary-700)",
-              borderColor: "var(--primary-300)",
-              fontWeight: 700,
-              px: 3,
-              py: 1.7,
-              fontSize: "1.15rem",
-              borderRadius: "14px",
-              background: "var(--bg-primary)",
-              textTransform: "none",
-              "&:hover": {
-                borderColor: "var(--primary-500)",
-                background: "var(--primary-50)",
-              },
-            }}
-          >
-            Learn How It Works
-          </Button> */}
           </Stack>
 
           <Stack direction="row" spacing={2.3} mt={2} flexWrap="wrap">
@@ -154,6 +172,7 @@ const HeroSection = () => {
             </Box>
           </Stack>
         </MotionBox>
+
         {/* Right: Illustration */}
         <MotionPaper
           initial="hidden"
@@ -173,20 +192,66 @@ const HeroSection = () => {
             width: "100%",
             height: "100%",
             minWidth: { xs: 0, md: 320 },
+            position: "relative",
           }}
         >
+          {/* Optimized image rendering */}
           <Box
             component="img"
             src={heroIllustration}
             alt="Medical consultation"
+            loading="eager"
+            fetchPriority="high"
+            onLoad={handleImageLoad}
+            onError={handleImageError}
             sx={{
+              aspectRatio: "3/2",
               width: "100%",
               maxWidth: { xs: "100%" },
               borderRadius: "1.5rem",
               objectFit: "cover",
               minHeight: { xs: 180, md: 320 },
+              opacity: imageLoaded ? 1 : 0,
+              transition: "opacity 0.2s ease-in-out",
+              display: imageLoaded ? "block" : "none",
             }}
           />
+
+          {/* Loading skeleton - only show when image is not loaded and no error */}
+          {!imageLoaded && !imageError && (
+            <Skeleton
+              variant="rectangular"
+              animation="wave"
+              sx={{
+                aspectRatio: "3/2",
+                width: "100%",
+                borderRadius: "1.5rem",
+                minHeight: { xs: 180, md: 320 },
+                position: imageLoaded ? "absolute" : "static",
+                top: 0,
+                left: 0,
+              }}
+            />
+          )}
+
+          {/* Error fallback */}
+          {imageError && (
+            <Box
+              sx={{
+                aspectRatio: "3/2",
+                width: "100%",
+                borderRadius: "1.5rem",
+                minHeight: { xs: 180, md: 320 },
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                background: "var(--neutral-100)",
+                color: "var(--neutral-500)",
+              }}
+            >
+              <Typography>Image unavailable</Typography>
+            </Box>
+          )}
         </MotionPaper>
       </Stack>
     </Box>
