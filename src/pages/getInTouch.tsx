@@ -1,8 +1,10 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Box, Paper, TextField, Button, Typography, Stack } from "@mui/material";
+import { Box, Paper, TextField, Button, Typography, Stack, Card, CardContent, Chip, Divider } from "@mui/material";
 import { useToast } from "../components/toastContext";
+import SEOHead from "../components/common/SEOHead";
+import { getPageSEO } from "../utils/seoConfig";
 
 // --- VALIDATION SCHEMA ---
 const schema = z.object({
@@ -28,6 +30,40 @@ const encode = (data: Record<string, string>) => {
  * Responsive full-page "Get in Touch" form, Netlify compatible.
  */
 export default function GetInTouchPage() {
+  const seoData = getPageSEO('contact');
+  
+  const contactStructuredData = {
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    "name": "Get in Touch - Continuia",
+    "description": "Contact Continuia for healthcare solutions and support",
+    "url": "https://continuia.ai/getInTouch",
+    "mainEntity": {
+      "@type": "MedicalOrganization",
+      "name": "Continuia",
+      "telephone": "+1-800-CONTINUIA",
+      "email": "contact@continuia.ai",
+      "contactPoint": [
+        {
+          "@type": "ContactPoint",
+          "contactType": "customer service",
+          "telephone": "+1-800-CONTINUIA",
+          "email": "support@continuia.ai",
+          "availableLanguage": ["English", "Hindi", "Arabic", "Spanish"],
+          "hoursAvailable": "24/7"
+        },
+        {
+          "@type": "ContactPoint",
+          "contactType": "sales",
+          "telephone": "+1-800-CONTINUIA",
+          "email": "sales@continuia.ai",
+          "availableLanguage": ["English", "Hindi", "Arabic"],
+          "hoursAvailable": "Mon-Fri 9AM-6PM"
+        }
+      ]
+    }
+  };
+
   const {
     register,
     handleSubmit,
@@ -72,18 +108,26 @@ export default function GetInTouchPage() {
   };
 
   return (
-    <Box
-      component="main"
-      sx={{
-        minHeight: "100vh",
-        background: "var(--bg-secondary)",
-        py: { xs: 6, md: 12 },
-        px: { xs: 2, sm: 4, md: 8 },
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
+    <>
+      <SEOHead
+        title={seoData.title}
+        description={seoData.description}
+        keywords={seoData.keywords}
+        structuredData={contactStructuredData}
+      />
+      
+      <Box
+        component="main"
+        sx={{
+          minHeight: "100vh",
+          background: "var(--bg-secondary)",
+          py: { xs: 6, md: 12 },
+          px: { xs: 2, sm: 4, md: 8 },
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
       {/* Netlify hidden static form for build-time detection */}
       <form
         {...({
@@ -237,7 +281,169 @@ export default function GetInTouchPage() {
             </Button>
           </form>
         </Paper>
+
+        {/* Additional Contact Information */}
+        <Stack spacing={3} sx={{ width: "100%", mt: 4 }}>
+          {/* Contact Methods */}
+          <Card sx={{ borderRadius: "var(--radius-2xl)", background: "var(--bg-primary)", boxShadow: "var(--shadow-lg)" }}>
+            <CardContent sx={{ p: { xs: 3, md: 4 } }}>
+              <Typography variant="h6" component="h2" gutterBottom sx={{ color: "var(--primary-700)", fontWeight: 700, mb: 3 }}>
+                💬 Additional Ways to Reach Us
+              </Typography>
+              <Stack spacing={3}>
+                <Box>
+                  <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 600, color: "var(--text-primary)" }}>
+                    📧 Email Support
+                  </Typography>
+                  <Typography variant="body2" color="var(--text-secondary)" sx={{ mb: 1 }}>
+                    <strong>General:</strong> contact@continuia.ai
+                  </Typography>
+                  <Typography variant="body2" color="var(--text-secondary)" sx={{ mb: 1 }}>
+                    <strong>Support:</strong> support@continuia.ai (24/7 Response)
+                  </Typography>
+                  <Typography variant="body2" color="var(--text-secondary)">
+                    <strong>Sales:</strong> sales@continuia.ai
+                  </Typography>
+                </Box>
+
+                <Divider sx={{ my: 2 }} />
+
+                <Box>
+                  <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 600, color: "var(--text-primary)" }}>
+                    📅 Schedule a Meeting
+                  </Typography>
+                  <Typography variant="body2" color="var(--text-secondary)" sx={{ mb: 2 }}>
+                    Book a consultation with our healthcare experts
+                  </Typography>
+                  <Chip
+                    label="Schedule Consultation"
+                    size="medium"
+                    sx={{
+                      background: "linear-gradient(90deg, var(--primary-500), var(--primary-700))",
+                      color: "var(--text-inverse)",
+                      fontWeight: 600,
+                      "&:hover": {
+                        background: "linear-gradient(90deg, var(--primary-600), var(--primary-800))",
+                      }
+                    }}
+                    component="a"
+                    href="https://calendly.com/continuia/consultation"
+                    target="_blank"
+                    clickable
+                  />
+                </Box>
+
+                <Divider sx={{ my: 2 }} />
+
+                <Box>
+                  <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 600, color: "var(--text-primary)" }}>
+                    🌐 Connect with Us
+                  </Typography>
+                  <Stack direction="row" spacing={1} sx={{ mt: 2, flexWrap: "wrap", gap: 1 }}>
+                    <Chip
+                      label="LinkedIn"
+                      size="medium"
+                      sx={{
+                        bgcolor: "#0077B5",
+                        color: "white",
+                        "&:hover": { bgcolor: "#005885" }
+                      }}
+                      component="a"
+                      href="https://linkedin.com/company/continuia"
+                      target="_blank"
+                      clickable
+                    />
+                    <Chip
+                      label="Instagram"
+                      size="medium"
+                      sx={{
+                        bgcolor: "#E4405F",
+                        color: "white",
+                        "&:hover": { bgcolor: "#C13584" }
+                      }}
+                      component="a"
+                      href="https://instagram.com/continuia"
+                      target="_blank"
+                      clickable
+                    />
+                    <Chip
+                      label="Website"
+                      size="medium"
+                      sx={{
+                        background: "linear-gradient(90deg, var(--primary-500), var(--primary-700))",
+                        color: "var(--text-inverse)",
+                        "&:hover": {
+                          background: "linear-gradient(90deg, var(--primary-600), var(--primary-800))",
+                        }
+                      }}
+                      component="a"
+                      href="https://continuia.ai"
+                      clickable
+                    />
+                  </Stack>
+                </Box>
+              </Stack>
+            </CardContent>
+          </Card>
+
+          {/* Services */}
+          <Card sx={{ borderRadius: "var(--radius-2xl)", background: "var(--bg-primary)", boxShadow: "var(--shadow-lg)" }}>
+            <CardContent sx={{ p: { xs: 3, md: 4 } }}>
+              <Typography variant="h6" component="h2" gutterBottom sx={{ color: "var(--primary-700)", fontWeight: 700, mb: 3 }}>
+                🏥 Our Services
+              </Typography>
+              <Stack spacing={3}>
+                <Box>
+                  <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 600, color: "var(--text-primary)" }}>
+                    Continuia Insights™
+                  </Typography>
+                  <Typography variant="body2" color="var(--text-secondary)">
+                    AI-powered second medical opinions for patients seeking expert analysis and treatment recommendations from board-certified specialists.
+                  </Typography>
+                </Box>
+                <Divider sx={{ my: 1 }} />
+                <Box>
+                  <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 600, color: "var(--text-primary)" }}>
+                    Continuia Governance™
+                  </Typography>
+                  <Typography variant="body2" color="var(--text-secondary)">
+                    Clinical governance platform for healthcare providers, offering real-time specialist consultations and quality improvement tools.
+                  </Typography>
+                </Box>
+              </Stack>
+            </CardContent>
+          </Card>
+
+          {/* Business Hours */}
+          <Card sx={{ borderRadius: "var(--radius-2xl)", background: "var(--bg-primary)", boxShadow: "var(--shadow-lg)" }}>
+            <CardContent sx={{ p: { xs: 3, md: 4 } }}>
+              <Typography variant="h6" component="h2" gutterBottom sx={{ color: "var(--primary-700)", fontWeight: 700, mb: 3 }}>
+                🕒 Business Hours
+              </Typography>
+              <Stack spacing={3}>
+                <Box>
+                  <Typography variant="subtitle2" gutterBottom sx={{ fontWeight: 600, color: "var(--text-primary)" }}>
+                    Customer Support
+                  </Typography>
+                  <Typography variant="body2" color="var(--text-secondary)">
+                    24/7 - Available around the clock in English, Hindi, Arabic, and Spanish
+                  </Typography>
+                </Box>
+                <Divider sx={{ my: 1 }} />
+                <Box>
+                  <Typography variant="subtitle2" gutterBottom sx={{ fontWeight: 600, color: "var(--text-primary)" }}>
+                    Sales & Business Development
+                  </Typography>
+                  <Typography variant="body2" color="var(--text-secondary)">
+                    Monday - Friday: 9:00 AM - 6:00 PM (Local Time)
+                  </Typography>
+                </Box>
+              </Stack>
+            </CardContent>
+          </Card>
+        </Stack>
       </Stack>
     </Box>
+    </>
   );
 }
