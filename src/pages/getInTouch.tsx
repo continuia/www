@@ -361,7 +361,7 @@ export default function GetInTouchPage() {
                   <AccordionDetails sx={{ p: 2 }}>
                     <div
                       className="calendly-inline-widget"
-                      data-url="https://calendly.com/shree-continuia"
+                      data-url="https://calendly.com/continuia/30min"
                       style={{
                         minWidth: "320px",
                         height: "700px"
