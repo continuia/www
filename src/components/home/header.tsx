@@ -41,7 +41,7 @@ const navLinks: NavLinkBase[] = [
   { label: "Home", href: "/", showOn: "all" },
   { label: "Insights", href: "/insights" },
   { label: "Governance", href: "/governance" },
-  { label: "Partners", href: "/partners" },
+  { label: "Partnership", href: "/partners" },
   { label: "About", href: "/about", showOn: ["large", "medium"] }, // example: hide on mobile
   {
     label: "Terms of Service",
