@@ -76,7 +76,7 @@ export const TermsOfService: React.FC = () => {
         Continuia Terms of Service
       </Typography>
       <Typography sx={{ color: "var(--text-tertiary)", fontSize: "var(--text-base)", mb: "var(--space-1)" }}>
-        Last Updated: <i>[Insert Date]</i>
+        Last Updated: <i>Aug 14th 2025</i>
       </Typography>
       <Typography sx={{ color: "var(--primary-700)", fontWeight: 600, fontSize: "var(--text-base)", mb: "var(--space-4)" }}>Applies to: Patients, Clinicians, Institutional Partners</Typography>
       {/* Sections */}
