@@ -8,17 +8,14 @@ const cards = [
   {
     title: "Clinical Guardrails",
     description: "We never replace your doctor; we supplement your options with additional clinical insight. Our AI works alongside healthcare professionals, not instead of them.",
-    linkText: "Learn more",
   },
   {
     title: "Built-in Governance",
     description: "Our platform includes comprehensive governance frameworks for consent, escalation, and compliance across multiple healthcare jurisdictions.",
-    linkText: "For institutions",
   },
   {
     title: "Agentic System",
     description: "Our architecture is powered by a network of AI agents, each with a specific role in patient safety, intake, escalation, formatting, and translation.",
-    linkText: "Our technology",
   },
   {
     title: "Cross-Border Infrastructure",
