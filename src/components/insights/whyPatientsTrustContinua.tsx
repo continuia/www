@@ -53,7 +53,7 @@ export default function WhyPatientsTrustContinua() {
           fontSize: "var(--text-3xl)",
         }}
       >
-        Why Patients Trust Continia
+        Why Patients Trust Continuia
       </Typography>
       <Box
         sx={{
