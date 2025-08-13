@@ -145,11 +145,8 @@ export default function GetInTouchPage() {
         sx={{
           minHeight: "100vh",
           background: "var(--bg-secondary)",
-          py: { xs: 6, md: 12 },
-          px: { xs: 2, sm: 4, md: 8 },
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
+          py: { xs: "var(--space-6)", md: "var(--space-12)" },
+          px: { xs: "var(--space-4)", sm: "var(--space-6)", md: "var(--space-8)" },
         }}
       >
       {/* Netlify hidden static form for build-time detection */}
@@ -166,53 +163,76 @@ export default function GetInTouchPage() {
         <textarea name="message"></textarea>
       </form>
 
-      {/* Actual Form Card */}
-      <Stack
-        spacing={4}
-        alignItems="center"
+      {/* Main Container */}
+      <Box
         sx={{
           width: "100%",
-          maxWidth: 560,
+          maxWidth: 1400,
+          mx: "auto",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
         }}
       >
-        {/* Page Title */}
-        <Typography
-          variant="h2"
-          align="center"
+        {/* Page Header */}
+        <Box
           sx={{
-            fontWeight: 900,
-            color: "var(--primary-700)",
-            mb: 0.5,
-            fontSize: { xs: "2.2rem", sm: "2.6rem", md: "2.9rem" },
-            letterSpacing: "-1.5px",
+            textAlign: "center",
+            mb: { xs: "var(--space-8)", md: "var(--space-12)" },
+            maxWidth: 800,
           }}
         >
-          Get in Touch
-        </Typography>
-        <Typography
-          variant="subtitle1"
-          align="center"
-          sx={{
-            color: "var(--text-secondary)",
-            fontWeight: 500,
-            fontSize: { xs: "1.07rem", md: "1.18rem" },
-            mb: { xs: 2, md: 3 },
-            maxWidth: 440,
-          }}
-        >
-          We’d love to hear from you. Fill out the form below and we’ll get back to you as soon as possible.
-        </Typography>
+          <Typography
+            variant="h1"
+            sx={{
+              fontWeight: 900,
+              background: "linear-gradient(90deg, var(--primary-700), var(--primary-900))",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundClip: "text",
+              color: "transparent",
+              mb: "var(--space-3)",
+              fontSize: { xs: "var(--text-4xl)", sm: "var(--text-5xl)", md: "var(--text-6xl)" },
+              letterSpacing: "-0.02em",
+              lineHeight: "var(--leading-tight)",
+            }}
+          >
+            Get in Touch
+          </Typography>
+          <Typography
+            variant="h5"
+            sx={{
+              color: "var(--text-secondary)",
+              fontWeight: 500,
+              fontSize: { xs: "var(--text-lg)", md: "var(--text-xl)" },
+              lineHeight: "var(--leading-relaxed)",
+              maxWidth: 600,
+              mx: "auto",
+            }}
+          >
+            We'd love to hear from you. Fill out the form below and we'll get back to you as soon as possible.
+          </Typography>
+        </Box>
 
-        <Paper
-          elevation={3}
-          sx={{
-            borderRadius: "var(--radius-2xl)",
-            background: "var(--bg-primary)",
-            boxShadow: "var(--shadow-lg)",
-            p: { xs: 3, md: 5 },
-            width: "100%",
-          }}
+        {/* Two Column Layout */}
+        <Stack
+          direction={{ xs: "column", lg: "row" }}
+          spacing={{ xs: "var(--space-8)", lg: "var(--space-12)" }}
+          alignItems="flex-start"
+          sx={{ width: "100%" }}
         >
+          {/* Left Column - Contact Form */}
+          <Box sx={{ flex: 1, width: "100%" }}>
+            <Paper
+              elevation={3}
+              sx={{
+                borderRadius: "var(--radius-2xl)",
+                background: "var(--bg-primary)",
+                boxShadow: "var(--shadow-lg)",
+                p: { xs: "var(--space-6)", md: "var(--space-8)" },
+                width: "100%",
+              }}
+            >
           <form onSubmit={handleSubmit(onSubmit)} name="get-in-touch" data-netlify="true" data-netlify-honeypot="bot-field" autoComplete="off" noValidate>
             {/* Hidden Netlify field for client-side submissions */}
             <input type="hidden" name="form-name" value="get-in-touch" />
@@ -304,16 +324,28 @@ export default function GetInTouchPage() {
               {isSubmitting ? "Sending..." : "Send Message"}
             </Button>
           </form>
-        </Paper>
+            </Paper>
+          </Box>
 
-        {/* Additional Contact Information */}
-        <Stack spacing={3} sx={{ width: "100%", mt: 4 }}>
-          {/* Contact Methods */}
-          <Card sx={{ borderRadius: "var(--radius-2xl)", background: "var(--bg-primary)", boxShadow: "var(--shadow-lg)" }}>
-            <CardContent sx={{ p: { xs: 3, md: 4 } }}>
-              <Typography variant="h6" component="h2" gutterBottom sx={{ color: "var(--primary-700)", fontWeight: 700, mb: 3 }}>
-                💬 Additional Ways to Reach Us
-              </Typography>
+          {/* Right Column - Contact Information */}
+          <Box sx={{ flex: 1, width: "100%" }}>
+            <Stack spacing={{ xs: "var(--space-6)", md: "var(--space-8)" }}>
+              {/* Contact Methods */}
+              <Card sx={{ borderRadius: "var(--radius-2xl)", background: "var(--bg-primary)", boxShadow: "var(--shadow-lg)" }}>
+                <CardContent sx={{ p: { xs: "var(--space-6)", md: "var(--space-8)" } }}>
+                  <Typography
+                    variant="h4"
+                    component="h2"
+                    gutterBottom
+                    sx={{
+                      color: "var(--primary-700)",
+                      fontWeight: 700,
+                      mb: "var(--space-6)",
+                      fontSize: { xs: "var(--text-xl)", md: "var(--text-2xl)" }
+                    }}
+                  >
+                    💬 Additional Ways to Reach Us
+                  </Typography>
               <Stack spacing={3}>
                 <Box>
                   <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 600, color: "var(--text-primary)" }}>
@@ -420,66 +452,88 @@ export default function GetInTouchPage() {
                   </Stack>
                 </Box>
               </Stack>
-            </CardContent>
-          </Card>
+                </CardContent>
+              </Card>
 
-          {/* Services */}
-          <Card sx={{ borderRadius: "var(--radius-2xl)", background: "var(--bg-primary)", boxShadow: "var(--shadow-lg)" }}>
-            <CardContent sx={{ p: { xs: 3, md: 4 } }}>
-              <Typography variant="h6" component="h2" gutterBottom sx={{ color: "var(--primary-700)", fontWeight: 700, mb: 3 }}>
-                🏥 Our Services
-              </Typography>
-              <Stack spacing={3}>
-                <Box>
-                  <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 600, color: "var(--text-primary)" }}>
-                    Continuia Insights™
+              {/* Services */}
+              <Card sx={{ borderRadius: "var(--radius-2xl)", background: "var(--bg-primary)", boxShadow: "var(--shadow-lg)" }}>
+                <CardContent sx={{ p: { xs: "var(--space-6)", md: "var(--space-8)" } }}>
+                  <Typography
+                    variant="h4"
+                    component="h2"
+                    gutterBottom
+                    sx={{
+                      color: "var(--primary-700)",
+                      fontWeight: 700,
+                      mb: "var(--space-6)",
+                      fontSize: { xs: "var(--text-xl)", md: "var(--text-2xl)" }
+                    }}
+                  >
+                    🏥 Our Services
                   </Typography>
-                  <Typography variant="body2" color="var(--text-secondary)">
-                    AI-powered second medical opinions for patients seeking expert analysis and treatment recommendations from board-certified specialists.
-                  </Typography>
-                </Box>
-                <Divider sx={{ my: 1 }} />
-                <Box>
-                  <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 600, color: "var(--text-primary)" }}>
-                    Continuia Governance™
-                  </Typography>
-                  <Typography variant="body2" color="var(--text-secondary)">
-                    Clinical governance platform for healthcare providers, offering real-time specialist consultations and quality improvement tools.
-                  </Typography>
-                </Box>
-              </Stack>
-            </CardContent>
-          </Card>
+                  <Stack spacing={3}>
+                    <Box>
+                      <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 600, color: "var(--text-primary)" }}>
+                        Continuia Insights™
+                      </Typography>
+                      <Typography variant="body2" color="var(--text-secondary)">
+                        AI-powered second medical opinions for patients seeking expert analysis and treatment recommendations from board-certified specialists.
+                      </Typography>
+                    </Box>
+                    <Divider sx={{ my: 1 }} />
+                    <Box>
+                      <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 600, color: "var(--text-primary)" }}>
+                        Continuia Governance™
+                      </Typography>
+                      <Typography variant="body2" color="var(--text-secondary)">
+                        Clinical governance platform for healthcare providers, offering real-time specialist consultations and quality improvement tools.
+                      </Typography>
+                    </Box>
+                  </Stack>
+                </CardContent>
+              </Card>
 
-          {/* Business Hours */}
-          <Card sx={{ borderRadius: "var(--radius-2xl)", background: "var(--bg-primary)", boxShadow: "var(--shadow-lg)" }}>
-            <CardContent sx={{ p: { xs: 3, md: 4 } }}>
-              <Typography variant="h6" component="h2" gutterBottom sx={{ color: "var(--primary-700)", fontWeight: 700, mb: 3 }}>
-                🕒 Business Hours
-              </Typography>
-              <Stack spacing={3}>
-                <Box>
-                  <Typography variant="subtitle2" gutterBottom sx={{ fontWeight: 600, color: "var(--text-primary)" }}>
-                    Customer Support
+              {/* Business Hours */}
+              <Card sx={{ borderRadius: "var(--radius-2xl)", background: "var(--bg-primary)", boxShadow: "var(--shadow-lg)" }}>
+                <CardContent sx={{ p: { xs: "var(--space-6)", md: "var(--space-8)" } }}>
+                  <Typography
+                    variant="h4"
+                    component="h2"
+                    gutterBottom
+                    sx={{
+                      color: "var(--primary-700)",
+                      fontWeight: 700,
+                      mb: "var(--space-6)",
+                      fontSize: { xs: "var(--text-xl)", md: "var(--text-2xl)" }
+                    }}
+                  >
+                    🕒 Business Hours
                   </Typography>
-                  <Typography variant="body2" color="var(--text-secondary)">
-                    24/7 - Available around the clock in English, Hindi, Arabic, and Spanish
-                  </Typography>
-                </Box>
-                <Divider sx={{ my: 1 }} />
-                <Box>
-                  <Typography variant="subtitle2" gutterBottom sx={{ fontWeight: 600, color: "var(--text-primary)" }}>
-                    Sales & Business Development
-                  </Typography>
-                  <Typography variant="body2" color="var(--text-secondary)">
-                    Monday - Friday: 9:00 AM - 6:00 PM (Local Time)
-                  </Typography>
-                </Box>
-              </Stack>
-            </CardContent>
-          </Card>
+                  <Stack spacing={3}>
+                    <Box>
+                      <Typography variant="subtitle2" gutterBottom sx={{ fontWeight: 600, color: "var(--text-primary)" }}>
+                        Customer Support
+                      </Typography>
+                      <Typography variant="body2" color="var(--text-secondary)">
+                        24/7 - Available around the clock in English, Hindi, Arabic, and Spanish
+                      </Typography>
+                    </Box>
+                    <Divider sx={{ my: 1 }} />
+                    <Box>
+                      <Typography variant="subtitle2" gutterBottom sx={{ fontWeight: 600, color: "var(--text-primary)" }}>
+                        Sales & Business Development
+                      </Typography>
+                      <Typography variant="body2" color="var(--text-secondary)">
+                        Monday - Friday: 9:00 AM - 6:00 PM (Local Time)
+                      </Typography>
+                    </Box>
+                  </Stack>
+                </CardContent>
+              </Card>
+            </Stack>
+          </Box>
         </Stack>
-      </Stack>
+      </Box>
     </Box>
     </>
   );
