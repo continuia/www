@@ -42,13 +42,13 @@ export default function GetInTouchPage() {
       "@type": "MedicalOrganization",
       "name": "Continuia",
       "telephone": "+1-800-CONTINUIA",
-      "email": "contact@continuia.ai",
+      "email": "mailto://contact@continuia.ai",
       "contactPoint": [
         {
           "@type": "ContactPoint",
           "contactType": "customer service",
           "telephone": "+1-800-CONTINUIA",
-          "email": "support@continuia.ai",
+          "email": "mailto://support@continuia.ai",
           "availableLanguage": ["English", "Hindi", "Arabic", "Spanish"],
           "hoursAvailable": "24/7"
         },
@@ -56,7 +56,7 @@ export default function GetInTouchPage() {
           "@type": "ContactPoint",
           "contactType": "sales",
           "telephone": "+1-800-CONTINUIA",
-          "email": "sales@continuia.ai",
+          "email": "mailto://sales@continuia.ai",
           "availableLanguage": ["English", "Hindi", "Arabic"],
           "hoursAvailable": "Mon-Fri 9AM-6PM"
         }
@@ -296,13 +296,13 @@ export default function GetInTouchPage() {
                     📧 Email Support
                   </Typography>
                   <Typography variant="body2" color="var(--text-secondary)" sx={{ mb: 1 }}>
-                    <strong>General:</strong> contact@continuia.ai
+                    <strong>General:</strong> <a href="mailto:contact@continuia.ai" style={{ color: 'var(--primary-600)', textDecoration: 'none' }}>contact@continuia.ai</a>
                   </Typography>
                   <Typography variant="body2" color="var(--text-secondary)" sx={{ mb: 1 }}>
-                    <strong>Support:</strong> support@continuia.ai (24/7 Response)
+                    <strong>Support:</strong> <a href="mailto:support@continuia.ai" style={{ color: 'var(--primary-600)', textDecoration: 'none' }}>support@continuia.ai</a> (24/7 Response)
                   </Typography>
                   <Typography variant="body2" color="var(--text-secondary)">
-                    <strong>Sales:</strong> sales@continuia.ai
+                    <strong>Sales:</strong> <a href="mailto:sales@continuia.ai" style={{ color: 'var(--primary-600)', textDecoration: 'none' }}>sales@continuia.ai</a>
                   </Typography>
                 </Box>
 
