@@ -17,12 +17,12 @@
   <meta name="robots" content="index, follow">
   <meta name="author" content="Continuia">
   <meta name="theme-color" content="#1976d2">
-  
+
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-KN5XZV4J82"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
+    function gtag() { dataLayer.push(arguments); }
     gtag('js', new Date());
 
     gtag('config', 'G-KN5XZV4J82');
@@ -176,9 +176,12 @@
   <!-- This goes in public/index.html -->
   <form name="campaign-initiative" netlify netlify-honeypot="bot-field" hidden>
     <input type="text" name="title" value="Campaign-form">
-    <input type="email" name="email">
-    <input type="tel" name="phone">
-    <textarea name="message"></textarea>
+    <input type="text" name="name" >
+    <input type="email" name="email" >
+    <input type="tel" name="phone" >
+    <input type="text" name="specialization" >
+    <input type="text" name="licensedRegion" >
+    <textarea name="additionalInfo"></textarea>
     <button type="submit" hidden>Submit</button>
   </form>
 
