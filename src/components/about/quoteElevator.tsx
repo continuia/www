@@ -13,7 +13,7 @@ export default function QuoteElevator() {
     },
     {
       quote: "Every medical opinion carries weight. My job is to make sure the second one carries confidence.",
-      person: "Dr. UnniKrishnan,",
+      person: "Dr. Unnikrishnan,",
       title: "Chief Medical Officer & COO, Continuia",
     },
   ];
