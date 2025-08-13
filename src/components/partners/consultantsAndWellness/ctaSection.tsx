@@ -1,6 +1,7 @@
 import { Box, Typography, Stack, Button } from "@mui/material";
 import { motion } from "framer-motion";
 import type { Variants } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 // Framer-motion animated Box
 const MotionBox = motion.create(Box);
@@ -15,7 +16,11 @@ const ctaFade: Variants = {
   },
 };
 
-const CTASection = () => (
+
+const CTASection = () =>{
+  const navigate = useNavigate();
+
+  return (
   <MotionBox
     initial="hidden"
     whileInView="visible"
@@ -60,6 +65,7 @@ const CTASection = () => (
 
     <Stack direction={{ xs: "column", sm: "row" }} spacing={2.5} alignItems="center" justifyContent="center" sx={{ mt: 2 }}>
       <Button
+        onClick={() => navigate("/getInTouch")}
         variant="contained"
         sx={{
           bgcolor: "white",
@@ -78,5 +84,6 @@ const CTASection = () => (
     </Stack>
   </MotionBox>
 );
+}
 
 export default CTASection;
