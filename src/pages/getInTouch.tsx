@@ -1,7 +1,9 @@
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Box, Paper, TextField, Button, Typography, Stack, Card, CardContent, Chip, Divider } from "@mui/material";
+import { Box, Paper, TextField, Button, Typography, Stack, Card, CardContent, Chip, Divider, Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useToast } from "../components/toastContext";
 import SEOHead from "../components/common/SEOHead";
 import { getPageSEO } from "../utils/seoConfig";
@@ -72,6 +74,28 @@ export default function GetInTouchPage() {
   } = useForm<FormValues>({ resolver: zodResolver(schema) });
 
   const { addToast } = useToast();
+
+  // Load Calendly script
+  useEffect(() => {
+    // Check if script is already loaded
+    if (document.querySelector('script[src="https://assets.calendly.com/assets/external/widget.js"]')) {
+      return;
+    }
+
+    const script = document.createElement('script');
+    script.src = 'https://assets.calendly.com/assets/external/widget.js';
+    script.async = true;
+    script.type = 'text/javascript';
+    document.head.appendChild(script);
+
+    return () => {
+      // Cleanup script on unmount
+      const existingScript = document.querySelector('script[src="https://assets.calendly.com/assets/external/widget.js"]');
+      if (existingScript && existingScript.parentNode) {
+        existingScript.parentNode.removeChild(existingScript);
+      }
+    };
+  }, []);
 
   // Handle actual POST
   const onSubmit = async (data: FormValues) => {
@@ -308,30 +332,43 @@ export default function GetInTouchPage() {
 
                 <Divider sx={{ my: 2 }} />
 
-                <Box>
-                  <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 600, color: "var(--text-primary)" }}>
-                    📅 Schedule a Meeting
-                  </Typography>
-                  <Typography variant="body2" color="var(--text-secondary)" sx={{ mb: 2 }}>
-                    Book a consultation with our healthcare experts
-                  </Typography>
-                  <Chip
-                    label="Schedule Consultation"
-                    size="medium"
+                <Accordion
+                  sx={{
+                    borderRadius: "var(--radius-lg)",
+                    background: "var(--bg-secondary)",
+                    boxShadow: "none",
+                    "&:before": { display: "none" }
+                  }}
+                >
+                  <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
                     sx={{
-                      background: "linear-gradient(90deg, var(--primary-500), var(--primary-700))",
-                      color: "var(--text-inverse)",
-                      fontWeight: 600,
+                      borderRadius: "var(--radius-lg)",
                       "&:hover": {
-                        background: "linear-gradient(90deg, var(--primary-600), var(--primary-800))",
+                        background: "var(--bg-tertiary)"
                       }
                     }}
-                    component="a"
-                    href="https://calendly.com/continuia/consultation"
-                    target="_blank"
-                    clickable
-                  />
-                </Box>
+                  >
+                    <Box>
+                      <Typography variant="subtitle1" sx={{ fontWeight: 600, color: "var(--text-primary)" }}>
+                        📅 Schedule a Meeting
+                      </Typography>
+                      <Typography variant="body2" color="var(--text-secondary)">
+                        Book a consultation with our healthcare experts
+                      </Typography>
+                    </Box>
+                  </AccordionSummary>
+                  <AccordionDetails sx={{ p: 2 }}>
+                    <div
+                      className="calendly-inline-widget"
+                      data-url="https://calendly.com/shree-continuia"
+                      style={{
+                        minWidth: "320px",
+                        height: "700px"
+                      }}
+                    ></div>
+                  </AccordionDetails>
+                </Accordion>
 
                 <Divider sx={{ my: 2 }} />
 
