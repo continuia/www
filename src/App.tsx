@@ -26,6 +26,8 @@ import DoctorProfile from "./components/doctors/doctorProfile";
 import { TermsOfService } from "./pages/privacy";
 import GetInTouchPage from "./pages/getInTouch";
 import ChatPage from "./pages/chat";
+import DevOnlyRoute from "./components/devOnlyRoute";
+
 function App() {
   const [showButton, setShowButton] = useState(false);
 
@@ -65,12 +67,21 @@ function App() {
             <Route path="doctors" element={<DoctorsPage />} />
             <Route path="getInTouch" element={<GetInTouchPage />} />
             <Route path="doctorProfile/:id" element={<DoctorProfile />} />
+            <Route
+              path="/chat"
+              element={
+                <DevOnlyRoute>
+                  {" "}
+                  <ChatPage />{" "}
+                </DevOnlyRoute>
+              }
+            />
 
             <Route path="about" element={<AboutPage />} />
             <Route path="cxa-globallaunch-c1a7e3d" element={<Campaign />} />
+            <Route path="launch" element={<Campaign />} />
             <Route path="*" element={<NotFound />} />
           </Route>
-          <Route path="/chat" element={<ChatPage />} />
           <Route path="/privacy" element={<TermsOfServiceLayout />}>
             <Route index element={<TermsOfService />} />
           </Route>
