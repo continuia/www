@@ -95,6 +95,18 @@ export const seoConfig: Record<string, PageSEO> = {
       "url": "https://continuia.ai/privacy"
     }
   },
+  contact: {
+    title: 'Contact Continuia | Global Healthcare Platform | Get in Touch',
+    description: 'Contact Continuia for expert medical second opinions and clinical governance solutions. 24/7 support available globally in multiple languages.',
+    keywords: 'contact continuia, healthcare support, medical consultation contact, global healthcare platform, customer service',
+    structuredData: {
+      "@context": "https://schema.org",
+      "@type": "ContactPage",
+      "name": "Contact Continuia",
+      "description": "Contact information for Continuia healthcare platform",
+      "url": "https://continuia.ai/getInTouch"
+    }
+  },
   // Partner-specific pages
   'partners/hospitals': {
     title: 'Hospital Partners | Healthcare Solutions for Hospitals | Continuia',

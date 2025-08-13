@@ -99,7 +99,7 @@ export default function HeroBanner() {
           <Stack direction={{ md: "row" }} gap={2} sx={{ mt: "var(--space-6)", flexWrap: "wrap" }}>
             <Button
               onClick={() => {
-                const form = document.getElementById("joinTheInitiativeForm");
+                const form = document.getElementById("joinTheFoundingCircleForm");
                 if (form) {
                   form.scrollIntoView({ behavior: "smooth" });
                 }
@@ -123,7 +123,7 @@ export default function HeroBanner() {
                 "&:hover": { background: "var(--primary-700)" },
               }}
             >
-              Join the Initiative
+              Join the Founding Circle
             </Button>
             <Button
               onClick={() => navigate("/")}

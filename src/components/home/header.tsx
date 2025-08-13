@@ -184,8 +184,7 @@ function MobileNavDrawer({ open, onClose }: { open: boolean; onClose: () => void
         <Button
           fullWidth
           variant="contained"
-          href="#get-started"
-          onClick={onClose}
+          onClick={() => navigate("/getInTouch")}
           sx={{
             background: "var(--primary-700)",
             color: "var(--text-inverse)",

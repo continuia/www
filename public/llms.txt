@@ -149,18 +149,22 @@ We believe that geography and economics shouldn't determine access to world-clas
 
 ### For Patients
 - **Website**: https://continuia.ai
-- **Support**: 24/7 patient support line
-- **Mobile App**: Available for convenient access
+- **Email**: support@continuia.ai (24/7 response)
+- **Schedule Consultation**: https://calendly.com/continuia/consultation
 
 ### For Healthcare Providers
-- **Provider Portal**: Schedule discovery calls and demonstrations
+- **Email**: sales@continuia.ai
+- **Schedule Demo**: https://calendly.com/continuia/consultation
 - **Webinars**: Monthly series for healthcare professionals
-- **Conferences**: Meet us at major medical conferences
 
 ### For Business Partnerships
-- **Business Development**: Contact through website
-- **Strategic Consultations**: Available for potential partners
-- **Integration Support**: Technical and commercial partnerships
+- **Email**: contact@continuia.ai
+- **LinkedIn**: https://linkedin.com/company/continuia
+- **Schedule Meeting**: https://calendly.com/continuia/consultation
+
+### Social Media
+- **LinkedIn**: https://linkedin.com/company/continuia
+- **Instagram**: https://instagram.com/continuia
 
 ## Vision & Future
 

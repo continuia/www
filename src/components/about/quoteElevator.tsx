@@ -1,8 +1,8 @@
 import { Paper, Typography, Stack, Box } from "@mui/material";
 import { motion } from "framer-motion";
 
-// Use motion(Box) for latest Framer Motion + MUI v7
-const MotionBox = motion(Box);
+// Use motion.create(Box) for latest Framer Motion + MUI v7
+const MotionBox = motion.create(Box);
 
 export default function QuoteElevator() {
   const QUOTES = [

@@ -22,7 +22,7 @@ const fadeLeft: Variants = {
 
 const features = ["Board-certified specialists", "AI-enhanced analysis", "Global expertise"];
 
-const MotionBox = motion(Box);
+const MotionBox = motion.create(Box);
 
 const HeroSection = () => {
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);

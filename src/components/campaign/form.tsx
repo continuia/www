@@ -9,17 +9,19 @@ import Typography from "@mui/material/Typography";
 import { useToast } from "../toastContext";
 
 const schema = z.object({
+  name: z.string().min(2, "Name is required").max(100, "Name must be less than 100 characters"),
   email: z.string().email({ message: "Enter a valid email address" }).min(1, "Email is required"),
   phone: z
     .string()
     .min(8, { message: "Phone is required" })
-    .regex(/^[0-9+\- ]+$/, { message: "Enter a valid phone number" }),
-  message: z.string().min(3, "Message is required"),
+    .regex(/^[0-9+\-\s()]+$/, { message: "Enter a valid phone number" }),
+  specialization: z.string().min(2, "Specialization is required").max(100, "Specialization must be less than 100 characters"),
+  licensedRegion: z.string().min(2, "Licensed region is required").max(100, "Licensed region must be less than 100 characters"),
+  additionalInfo: z.string().optional(),
 });
 
 type FormValues = z.infer<typeof schema>;
 
-// Utility function to encode form data for Netlify
 const encode = (data: Record<string, string>) => {
   return Object.keys(data)
     .map((key) => encodeURIComponent(key) + "=" + encodeURIComponent(data[key]))
@@ -40,16 +42,18 @@ export default function ContactForm() {
 
   const onSubmit = async (data: FormValues) => {
     try {
-      // Submit to Netlify forms
       const response = await fetch("/", {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: encode({
-          "form-name": "campaign-initiative", // Must match the name in your static form
-          title:"Campaign-Form",
+          "form-name": "campaign-initiative",
+          title: "Campaign-Form",
+          name: data.name,
           email: data.email,
           phone: data.phone,
-          message: data.message,
+          specialization: data.specialization,
+          licensedRegion: data.licensedRegion,
+          additionalInfo: data.additionalInfo || "",
         }),
       });
 
@@ -57,12 +61,11 @@ export default function ContactForm() {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      addToast("Thank you for joining the initiative! We'll be in touch soon.", "success");
-      reset(); // Clear form fields on success
+      addToast("Thank you for joining the founding circle! We'll be in touch soon.", "success");
+      reset();
     } catch (error: any) {
       console.error("Form submission error:", error);
 
-      // Handle different types of errors
       if (error.name === "TypeError" && error.message.includes("fetch")) {
         addToast("Network error. Please check your connection and try again.", "error");
       } else if (error.message.includes("HTTP error")) {
@@ -75,7 +78,6 @@ export default function ContactForm() {
 
   return (
     <>
-      {/* Hidden static form for Netlify detection - place this in your main HTML file or component */}
       <form
         {...({
           name: "campaign-initiative",
@@ -84,17 +86,20 @@ export default function ContactForm() {
           hidden: true,
         } as any)}
       >
+        <input type="text" name="name" />
         <input type="email" name="email" />
         <input type="tel" name="phone" />
-        <textarea name="message"></textarea>
+        <input type="text" name="specialization" />
+        <input type="text" name="licensedRegion" />
+        <textarea name="additionalInfo"></textarea>
       </form>
 
       <Box
-        id="joinTheInitiativeForm"
+        id="joinTheFoundingCircleForm"
         sx={{
           minWidth: "280px",
-          maxWidth: "600px",
-          width: { base: "100%", lg: "40%" },
+          maxWidth: "800px",
+          width: { xs: "100%", lg: "60%" },
           mb: 3,
           fontFamily: "roboto",
         }}
@@ -113,18 +118,16 @@ export default function ContactForm() {
             align="center"
             sx={{
               color: "var(--primary-600)",
-              mb: 2,
+              mb: 3,
               fontWeight: 700,
             }}
           >
-            Join the Initiative
+            Join the Founding Circle
           </Typography>
 
           <form onSubmit={handleSubmit(onSubmit)} noValidate autoComplete="off" name="campaign-initiative" data-netlify="true" data-netlify-honeypot="bot-field">
-            {/* Hidden fields for Netlify */}
             <input type="hidden" name="form-name" value="campaign-initiative" />
 
-            {/* Honeypot field for spam protection */}
             <div style={{ display: "none" }}>
               <label>
                 Don't fill this out if you're human:
@@ -132,81 +135,156 @@ export default function ContactForm() {
               </label>
             </div>
 
-            <TextField
-              label="Email"
-              type="email"
-              fullWidth
-              margin="normal"
-              {...register("email")}
-              error={!!errors.email}
-              helperText={errors.email?.message}
-              autoComplete="email"
-              InputProps={{
-                style: { borderRadius: "var(--radius-lg)" },
-              }}
+            <Box
               sx={{
-                bgcolor: "var(--bg-secondary)",
-                mb: 2,
-              }}
-            />
-
-            <TextField
-              label="Phone"
-              type="tel"
-              fullWidth
-              margin="normal"
-              {...register("phone")}
-              error={!!errors.phone}
-              helperText={errors.phone?.message}
-              autoComplete="tel"
-              InputProps={{
-                style: { borderRadius: "var(--radius-lg)" },
-              }}
-              sx={{
-                bgcolor: "var(--bg-secondary)",
-                mb: 2,
-              }}
-            />
-
-            <TextField
-              label="Message"
-              fullWidth
-              margin="normal"
-              multiline
-              rows={4}
-              {...register("message")}
-              error={!!errors.message}
-              helperText={errors.message?.message}
-              InputProps={{
-                style: { borderRadius: "var(--radius-lg)" },
-              }}
-              sx={{
-                bgcolor: "var(--bg-secondary)",
-                mb: 2,
-              }}
-            />
-
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              disabled={isSubmitting}
-              sx={{
-                mt: 2,
-                py: { xs: 2 },
-                background: "linear-gradient(90deg, var(--primary-500), var(--primary-700))",
-                color: "var(--text-inverse)",
-                borderRadius: "var(--radius-lg)",
-                fontWeight: 600,
-                textTransform: "none",
-                boxShadow: "var(--shadow-sm)",
-                "&:hover": {
-                  background: "linear-gradient(90deg, var(--primary-600), var(--primary-800))",
-                },
+                display: "flex",
+                flexDirection: "column",
+                gap: 2,
               }}
             >
-              {isSubmitting ? "Sending..." : "Send Message"}
-            </Button>
+              {/* First Row - Name and Email */}
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: { xs: "column", md: "row" },
+                  gap: 2,
+                }}
+              >
+                <TextField
+                  label="Full Name"
+                  type="text"
+                  fullWidth
+                  {...register("name")}
+                  error={!!errors.name}
+                  helperText={errors.name?.message}
+                  autoComplete="name"
+                  placeholder="Enter your full name"
+                  InputProps={{
+                    style: { borderRadius: "var(--radius-lg)" },
+                  }}
+                  sx={{
+                    bgcolor: "var(--bg-secondary)",
+                  }}
+                />
+
+                <TextField
+                  label="Email"
+                  type="email"
+                  fullWidth
+                  {...register("email")}
+                  error={!!errors.email}
+                  helperText={errors.email?.message}
+                  autoComplete="email"
+                  placeholder="Enter your email address"
+                  InputProps={{
+                    style: { borderRadius: "var(--radius-lg)" },
+                  }}
+                  sx={{
+                    bgcolor: "var(--bg-secondary)",
+                  }}
+                />
+              </Box>
+
+              {/* Second Row - Phone and Specialization */}
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: { xs: "column", md: "row" },
+                  gap: 2,
+                }}
+              >
+                <TextField
+                  label="Phone"
+                  type="tel"
+                  fullWidth
+                  {...register("phone")}
+                  error={!!errors.phone}
+                  helperText={errors.phone?.message}
+                  autoComplete="tel"
+                  placeholder="Enter your phone number"
+                  InputProps={{
+                    style: { borderRadius: "var(--radius-lg)" },
+                  }}
+                  sx={{
+                    bgcolor: "var(--bg-secondary)",
+                  }}
+                />
+
+                <TextField
+                  label="Specialization"
+                  type="text"
+                  fullWidth
+                  {...register("specialization")}
+                  error={!!errors.specialization}
+                  helperText={errors.specialization?.message}
+                  placeholder="e.g., Cardiology, Internal Medicine, Surgery"
+                  InputProps={{
+                    style: { borderRadius: "var(--radius-lg)" },
+                  }}
+                  sx={{
+                    bgcolor: "var(--bg-secondary)",
+                  }}
+                />
+              </Box>
+
+              {/* ✅ Third Row - Licensed Region (Full width on all screen sizes) */}
+              <TextField
+                label="Licensed Region"
+                type="text"
+                fullWidth
+                {...register("licensedRegion")}
+                error={!!errors.licensedRegion}
+                helperText={errors.licensedRegion?.message}
+                placeholder="e.g., New York, California, London, India"
+                InputProps={{
+                  style: { borderRadius: "var(--radius-lg)" },
+                }}
+                sx={{
+                  bgcolor: "var(--bg-secondary)",
+                }}
+              />
+
+              {/* Additional Info - Full width */}
+              <TextField
+                label="Additional Info"
+                fullWidth
+                multiline
+                rows={4}
+                {...register("additionalInfo")}
+                error={!!errors.additionalInfo}
+                helperText={errors.additionalInfo?.message || "Optional: Share any additional information about your background or interests"}
+                placeholder="Tell us more about your experience, interests, or how you'd like to contribute..."
+                InputProps={{
+                  style: { borderRadius: "var(--radius-lg)" },
+                }}
+                sx={{
+                  bgcolor: "var(--bg-secondary)",
+                }}
+              />
+
+              {/* Submit Button */}
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                disabled={isSubmitting}
+                sx={{
+                  mt: 2,
+                  py: { xs: 2 },
+                  background: "linear-gradient(90deg, var(--primary-500), var(--primary-700))",
+                  color: "var(--text-inverse)",
+                  borderRadius: "var(--radius-lg)",
+                  fontWeight: 600,
+                  textTransform: "none",
+                  boxShadow: "var(--shadow-sm)",
+                  "&:hover": {
+                    background: "linear-gradient(90deg, var(--primary-600), var(--primary-800))",
+                  },
+                }}
+              >
+                {isSubmitting ? "Sending..." : "Submit"}
+              </Button>
+            </Box>
           </form>
         </Paper>
       </Box>

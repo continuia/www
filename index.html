@@ -18,6 +18,16 @@
   <meta name="author" content="Continuia">
   <meta name="theme-color" content="#1976d2">
 
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-KN5XZV4J82"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-KN5XZV4J82');
+  </script>
+
   <!-- Canonical URL -->
   <link rel="canonical" href="https://continuia.ai">
 
@@ -45,32 +55,109 @@
     "@context": "https://schema.org",
     "@type": "MedicalOrganization",
     "name": "Continuia",
+    "alternateName": "Continuia AI",
     "description": "AI-powered second medical opinions platform providing clinical governance and expert consultations",
     "url": "https://continuia.ai",
     "logo": "https://continuia.ai/continuia.webp",
-    "foundingDate": "2024",
-    "contactPoint": {
-      "@type": "ContactPoint",
-      "contactType": "customer service",
-      "availableLanguage": "English"
-    },
-    "medicalSpecialty": "Second Medical Opinions",
+    "image": "https://continuia.ai/continuia.webp",
+    "foundingDate": "2025",
+    "contactPoint": [
+      {
+        "@type": "ContactPoint",
+        "contactType": "customer service",
+        "url": "https://continuia.ai/getInTouch",
+        "availableLanguage": ["English", "Hindi", "Telugu", "Malyalam", "Tamil", "Arabic", "Spanish"],
+        "hoursAvailable": "24/7"
+      },
+      {
+        "@type": "ContactPoint",
+        "contactType": "sales",
+        "url": "https://calendly.com/continuia/consultation",
+        "availableLanguage": ["English", "Hindi", "Telugu", "Malyalam", "Tamil", "Arabic"],
+        "hoursAvailable": "Mon-Fri 9AM-6PM"
+      }
+    ],
+    "email": "contact@continuia.ai",
+    "medicalSpecialty": ["Second Medical Opinions", "Clinical Governance", "Healthcare AI"],
     "availableService": [
       {
         "@type": "MedicalService",
         "name": "AI-Powered Second Medical Opinions",
-        "description": "Expert second medical opinions from board-certified specialists"
+        "description": "Expert second medical opinions from board-certified specialists",
+        "serviceType": "Medical Consultation",
+        "availableChannel": {
+          "@type": "ServiceChannel",
+          "serviceUrl": "https://continuia.ai/insights",
+          "serviceName": "Continuia Insights"
+        }
       },
       {
         "@type": "MedicalService",
         "name": "Clinical Governance Platform",
-        "description": "Healthcare governance and compliance solutions"
+        "description": "Healthcare governance and compliance solutions",
+        "serviceType": "Healthcare Technology",
+        "availableChannel": {
+          "@type": "ServiceChannel",
+          "serviceUrl": "https://continuia.ai/governance",
+          "serviceName": "Continuia Governance"
+        }
       }
     ],
+    "areaServed": [
+      {
+        "@type": "Country",
+        "name": "India"
+      },
+      {
+        "@type": "Country",
+        "name": "United States"
+      },
+      {
+        "@type": "Country",
+        "name": "United Arab Emirates"
+      }
+    ],
+    "knowsAbout": [
+      "Medical Second Opinions",
+      "Healthcare AI",
+      "Clinical Governance",
+      "Telemedicine",
+      "Healthcare Technology",
+      "Medical Consultation"
+    ],
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.8",
+      "bestRating": "5",
+      "worstRating": "4"
+    },
     "sameAs": [
       "https://linkedin.com/company/continuia",
-      "https://twitter.com/continuia"
-    ]
+      "https://instagram.com/continuia",
+      "https://continuia.ai"
+    ],
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Continuia Healthcare Services",
+      "itemListElement": [
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Individual Second Opinion",
+            "description": "Expert medical second opinion for individual patients"
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Healthcare Institution Platform",
+            "description": "Clinical governance platform for healthcare providers"
+          }
+        }
+      ]
+    }
   }
   </script>
 
@@ -89,9 +176,12 @@
   <!-- This goes in public/index.html -->
   <form name="campaign-initiative" netlify netlify-honeypot="bot-field" hidden>
     <input type="text" name="title" value="Campaign-form">
-    <input type="email" name="email">
-    <input type="tel" name="phone">
-    <textarea name="message"></textarea>
+    <input type="text" name="name" >
+    <input type="email" name="email" >
+    <input type="tel" name="phone" >
+    <input type="text" name="specialization" >
+    <input type="text" name="licensedRegion" >
+    <textarea name="additionalInfo"></textarea>
     <button type="submit" hidden>Submit</button>
   </form>
 
