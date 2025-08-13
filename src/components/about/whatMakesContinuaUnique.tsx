@@ -121,20 +121,6 @@ export default function WhatMakesContinuaUnique() {
               </Typography>
               <Typography sx={{ color: "var(--text-secondary)", fontSize: "var(--text-sm)", mb: 1 }}>{card.description}</Typography>
             </Box>
-            {card.linkText && (
-              <Link
-                href="#"
-                underline="hover"
-                sx={{
-                  color: "var(--primary-600)",
-                  fontWeight: 600,
-                  fontSize: "var(--text-sm)",
-                  alignSelf: "flex-start",
-                }}
-              >
-                {card.linkText} &rarr;
-              </Link>
-            )}
           </MotionBox>
         ))}
       </Box>
