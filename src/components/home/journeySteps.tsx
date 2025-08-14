@@ -181,7 +181,7 @@ const JourneySteps: React.FC = () => {
             fontSize: { xs: "var(--text-base)", sm: "var(--text-lg)", md: "var(--text-xl)" },
           }}
         >
-          Each step is designed for <b>clarity, comfort, and confidence</b>—no medical jargon or confusion.
+          Each step is designed for <b>clarity, comfort, and confidence</b> no medical jargon or confusion.
         </Typography>
       </Box>
 

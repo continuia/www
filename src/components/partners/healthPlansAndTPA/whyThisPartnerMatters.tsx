@@ -139,10 +139,10 @@ export const WhyThisPartnerMatters: React.FC = () => {
             Members Feel Lost
           </Typography>
           <Typography sx={{ color: "var(--text-secondary)", fontSize: "var(--text-base)", maxWidth: 480 }}>
-            Members often feel lost when facing major medical decisions — from elective surgeries to confusing imaging results. Without accessible clinical guidance, they may pursue unnecessary procedures, enter costly care loops, or disengage altogether.
+            Members often feel lost when facing major medical decisions   from elective surgeries to confusing imaging results. Without accessible clinical guidance, they may pursue unnecessary procedures, enter costly care loops, or disengage altogether.
             <br />
             <br />
-            Continuia helps bridge that gap — providing neutral, physician-led second opinions that empower smarter decisions and reduce waste.
+            Continuia helps bridge that gap   providing neutral, physician-led second opinions that empower smarter decisions and reduce waste.
           </Typography>
         </Box>
         {/* Right: 2x2 grid for other reasons */}

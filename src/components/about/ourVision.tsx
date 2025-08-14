@@ -132,7 +132,7 @@ const VisionSection = () => {
               maxWidth: 560,
             }}
           >
-            Continuia envisions a world where every patient has access to trustworthy, expert-reviewed medical guidance—independent of where they live or which doctor they saw first. We believe healthcare should be a bridge, not a barrier.
+            Continuia envisions a world where every patient has access to trustworthy, expert-reviewed medical guidance independent of where they live or which doctor they saw first. We believe healthcare should be a bridge, not a barrier.
           </Typography>
 
           {/* Soft card: "We don't replace doctors..." */}

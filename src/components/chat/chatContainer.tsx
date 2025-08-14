@@ -59,7 +59,7 @@ const ChatContainer: React.FC<ChatContainerProps> = ({ conversation, isLoading, 
       {/* Header */}
       <Box
         sx={{
-          padding: "0px 20px",
+          padding: "10px 20px",
           backgroundColor: "var(--bg-primary)",
           borderBottom: "1px solid var(--border-light)",
           flexShrink: 0,
@@ -70,28 +70,19 @@ const ChatContainer: React.FC<ChatContainerProps> = ({ conversation, isLoading, 
       >
         <Box>
           <Typography
-            variant="h6"
+            variant="h4"
             sx={{
-              fontSize: "var(--text-xl)",
-              fontWeight: 600,
-              color: "var(--text-primary)",
-              mb: 0.5,
+              fontSize: { xs: "var(--text-md)", md: "var(--text-2xl)" },
+              fontWeight: 800,
+              background: "linear-gradient(135deg, var(--primary-700), var(--primary-900))",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundClip: "text",
+              textAlign: "center",
             }}
           >
-            Arika
+            Healthcare Consultation
           </Typography>
-          {conversation?.sessionId && (
-            <Typography
-              variant="caption"
-              sx={{
-                fontSize: "var(--text-sm)",
-                color: "var(--text-tertiary)",
-                display: "block",
-              }}
-            >
-              Session: {conversation.sessionId.slice(0, 8)}...
-            </Typography>
-          )}
         </Box>
 
         <Button
@@ -124,12 +115,22 @@ const ChatContainer: React.FC<ChatContainerProps> = ({ conversation, isLoading, 
 
       {/* Messages Area */}
       <Box
-        flex={1}
+        ref={scrollableRef}
         sx={{
-          minHeight: 0,
-          overflow: "hidden",
-          display: "flex",
-          flexDirection: "column",
+          flex: 1,
+          overflow: "auto",
+          padding: "var(--space-4)",
+          paddingBottom: "calc(var(--space-4) + 80px)", // Add space for fixed input
+          "&::-webkit-scrollbar": {
+            width: 6,
+          },
+          "&::-webkit-scrollbar-thumb": {
+            backgroundColor: "var(--primary-400)",
+            borderRadius: "var(--radius-full)",
+          },
+          "&::-webkit-scrollbar-track": {
+            backgroundColor: "var(--neutral-200)",
+          },
         }}
       >
         <Box

@@ -74,7 +74,7 @@ export const HowContinuiaSupports: React.FC = () => {
           color: "var(--text-secondary)",
         }}
       >
-        We focus on interpreting what's already been done — not what should be done next.
+        We focus on interpreting what's already been done   not what should be done next.
       </Typography>
       <Box
         sx={{

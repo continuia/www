@@ -133,7 +133,7 @@ export const WhyThisPartnerMatters: React.FC = () => {
           >
             Supporting Teams with Confidence
           </Typography>
-          <Typography sx={{ color: "var(--text-secondary)", fontSize: "var(--text-base)", maxWidth: 480 }}>Today's employers are looking for meaningful ways to support their teams — not just with access to care, but with confidence in care. As a benefit consultant or wellness platform, you're tasked with recommending solutions that are cost-effective, simple to deploy, and genuinely useful to employees. </Typography>
+          <Typography sx={{ color: "var(--text-secondary)", fontSize: "var(--text-base)", maxWidth: 480 }}>Today's employers are looking for meaningful ways to support their teams   not just with access to care, but with confidence in care. As a benefit consultant or wellness platform, you're tasked with recommending solutions that are cost-effective, simple to deploy, and genuinely useful to employees. </Typography>
         </Box>
         {/* Right: 2x2 grid for other reasons */}
         <Box

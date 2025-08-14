@@ -141,7 +141,7 @@ export const WhyThisPartnerMatters: React.FC = () => {
               maxWidth: 480,
             }}
           >
-            Medical tourism and concierge health services cater to patients seeking care beyond borders—often for elective or specialized procedures. These patients face complex decisions involving travel logistics, cost, and clinical uncertainty.{" "}
+            Medical tourism and concierge health services cater to patients seeking care beyond borders often for elective or specialized procedures. These patients face complex decisions involving travel logistics, cost, and clinical uncertainty.{" "}
           </Typography>
         </Box>
         {/* Right: 2x2 grid of reasons */}

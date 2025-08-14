@@ -91,7 +91,7 @@ export default function HeroBanner() {
               maxWidth: 600,
             }}
           >
-            Continua — a global medical initiative redefining second opinions.
+            Continua a global medical initiative redefining second opinions.
           </Typography>
         </motion.div>
 

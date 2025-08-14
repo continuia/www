@@ -73,7 +73,7 @@ export default function PlatformPromo() {
               fontSize: { xs: "1rem", md: "1.07rem" },
             }}
           >
-            This isn’t a gig. This is your invitation to practice medicine the way it should work in 2025 — globally, ethically, and on your terms.
+            This isn’t a gig. This is your invitation to practice medicine the way it should work in 2025 globally, ethically, and on your terms.
           </Typography>
         </Box>
         <motion.div

@@ -24,7 +24,7 @@ const ScopeOfServicesSection: React.FC = () => {
           Scope of Services
         </Typography>
         <Typography sx={{ color: "var(--text-primary)", fontSize: "var(--text-base)", mb: "var(--space-2)" }}>
-          Continuia offers access to remote, asynchronous second opinions from licensed physicians across various specialties. These opinions are purely educational and designed to provide you with an additional expert perspective to support—not replace—your ongoing care.
+          Continuia offers access to remote, asynchronous second opinions from licensed physicians across various specialties. These opinions are purely educational and designed to provide you with an additional expert perspective to support not replace your ongoing care.
           <br />
           <br />
           When a case is submitted, it undergoes a triage process that uses secure AI agents to match your submission with the most relevant and appropriately licensed clinician. That physician then reviews your case, analyzes the clinical data, and provides a written second opinion. The turnaround time for most opinions ranges from 24 to 72 hours, although this may vary based on the complexity of the case and availability of the clinician.

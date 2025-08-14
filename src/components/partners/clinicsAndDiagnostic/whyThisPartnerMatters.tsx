@@ -141,9 +141,9 @@ export const WhyThisPartnerMatters: React.FC = () => {
               maxWidth: 480,
             }}
           >
-            Outpatient clinics and diagnostic centers generate the foundational data that guides patient care — lab results, imaging, pathology. But for many patients, the next step after receiving a report is confusion, anxiety, or inaction. <br />
+            Outpatient clinics and diagnostic centers generate the foundational data that guides patient care   lab results, imaging, pathology. But for many patients, the next step after receiving a report is confusion, anxiety, or inaction. <br />
             <br />
-            Without interpretation or reassurance, your clinical contribution risks being undervalued — and your patient relationships cut short.
+            Without interpretation or reassurance, your clinical contribution risks being undervalued   and your patient relationships cut short.
           </Typography>
         </Box>
         {/* Right: 1x3 grid of reasons */}

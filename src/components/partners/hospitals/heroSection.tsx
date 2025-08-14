@@ -114,7 +114,7 @@ const HeroSection = () => {
             Hospitals face growing pressure to ensure safe discharges, reduce 30-day readmissions, and maintain a strong reputation. Continuia offers structured second opinions that complement your clinical workflow without requiring EHR integration or extra staff training.
             <br />
             <br />
-            Our licensed physicians review patient records and provide a concise summary of findings—no diagnosis, no treatment recommendations, just a thoughtful second look. You can trigger a Continuia review at any point: during discharge, care transitions, or in ethically complex cases.
+            Our licensed physicians review patient records and provide a concise summary of findings no diagnosis, no treatment recommendations, just a thoughtful second look. You can trigger a Continuia review at any point: during discharge, care transitions, or in ethically complex cases.
             <br />
             <br />
             Your patients get peace of mind, and your team gets legal and clinical assurance. Our governance-ready stack includes BAAs, audit trails, and turnaround commitments.
