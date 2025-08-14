@@ -240,23 +240,160 @@ export default function GetInTouchPage() {
               >
                 🏥 Our Services
               </Typography>
-              <Stack spacing={3}>
+              <Stack spacing={4}>
                 <Box>
-                  <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 600, color: "var(--text-primary)" }}>
+                  <Typography
+                    variant="h5"
+                    gutterBottom
+                    sx={{
+                      fontWeight: 700,
+                      color: "var(--text-primary)",
+                      fontSize: { xs: "var(--text-lg)", md: "var(--text-xl)" },
+                      mb: 2
+                    }}
+                  >
                     Continuia Insights™
                   </Typography>
-                  <Typography variant="body2" color="var(--text-secondary)">
+                  <Typography
+                    variant="body1"
+                    color="var(--text-secondary)"
+                    sx={{
+                      fontSize: { xs: "var(--text-base)", md: "var(--text-lg)" },
+                      lineHeight: "var(--leading-relaxed)",
+                      mb: 2
+                    }}
+                  >
                     AI-powered second medical opinions for patients seeking expert analysis and treatment recommendations from board-certified specialists.
                   </Typography>
+                  <Stack direction="row" spacing={1} sx={{ flexWrap: "wrap", gap: 1 }}>
+                    <Chip
+                      label="Expert Analysis"
+                      size="small"
+                      sx={{
+                        bgcolor: "var(--primary-100)",
+                        color: "var(--primary-800)",
+                        fontWeight: 600
+                      }}
+                    />
+                    <Chip
+                      label="24/7 Available"
+                      size="small"
+                      sx={{
+                        bgcolor: "var(--success-100)",
+                        color: "var(--success-800)",
+                        fontWeight: 600
+                      }}
+                    />
+                    <Chip
+                      label="Global Specialists"
+                      size="small"
+                      sx={{
+                        bgcolor: "var(--secondary-100)",
+                        color: "var(--secondary-800)",
+                        fontWeight: 600
+                      }}
+                    />
+                  </Stack>
                 </Box>
-                <Divider sx={{ my: 1 }} />
+                
+                <Divider sx={{ my: 2 }} />
+                
                 <Box>
-                  <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 600, color: "var(--text-primary)" }}>
+                  <Typography
+                    variant="h5"
+                    gutterBottom
+                    sx={{
+                      fontWeight: 700,
+                      color: "var(--text-primary)",
+                      fontSize: { xs: "var(--text-lg)", md: "var(--text-xl)" },
+                      mb: 2
+                    }}
+                  >
                     Continuia Governance™
                   </Typography>
-                  <Typography variant="body2" color="var(--text-secondary)">
+                  <Typography
+                    variant="body1"
+                    color="var(--text-secondary)"
+                    sx={{
+                      fontSize: { xs: "var(--text-base)", md: "var(--text-lg)" },
+                      lineHeight: "var(--leading-relaxed)",
+                      mb: 2
+                    }}
+                  >
                     Clinical governance platform for healthcare providers, offering real-time specialist consultations and quality improvement tools.
                   </Typography>
+                  <Stack direction="row" spacing={1} sx={{ flexWrap: "wrap", gap: 1 }}>
+                    <Chip
+                      label="Real-time Reviews"
+                      size="small"
+                      sx={{
+                        bgcolor: "var(--primary-100)",
+                        color: "var(--primary-800)",
+                        fontWeight: 600
+                      }}
+                    />
+                    <Chip
+                      label="Quality Metrics"
+                      size="small"
+                      sx={{
+                        bgcolor: "var(--warning-100)",
+                        color: "var(--warning-800)",
+                        fontWeight: 600
+                      }}
+                    />
+                    <Chip
+                      label="Compliance Tools"
+                      size="small"
+                      sx={{
+                        bgcolor: "var(--info-100)",
+                        color: "var(--info-800)",
+                        fontWeight: 600
+                      }}
+                    />
+                  </Stack>
+                </Box>
+
+                <Divider sx={{ my: 2 }} />
+
+                <Box>
+                  <Typography
+                    variant="h6"
+                    gutterBottom
+                    sx={{
+                      fontWeight: 600,
+                      color: "var(--primary-700)",
+                      fontSize: { xs: "var(--text-base)", md: "var(--text-lg)" },
+                      mb: 2
+                    }}
+                  >
+                    🌟 Why Choose Continuia?
+                  </Typography>
+                  <Stack spacing={1.5}>
+                    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                      <Box sx={{ width: 6, height: 6, borderRadius: "50%", bgcolor: "var(--primary-600)" }} />
+                      <Typography variant="body2" sx={{ fontSize: "var(--text-sm)", color: "var(--text-secondary)" }}>
+                        Board-certified specialists from top medical institutions
+                      </Typography>
+                    </Box>
+                    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                      <Box sx={{ width: 6, height: 6, borderRadius: "50%", bgcolor: "var(--primary-600)" }} />
+                      <Typography variant="body2" sx={{ fontSize: "var(--text-sm)", color: "var(--text-secondary)" }}>
+                        AI-enhanced analysis for comprehensive insights
+                      </Typography>
+                    </Box>
+                    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                      <Box sx={{ width: 6, height: 6, borderRadius: "50%", bgcolor: "var(--primary-600)" }} />
+                      <Typography variant="body2" sx={{ fontSize: "var(--text-sm)", color: "var(--text-secondary)" }}>
+                        HIPAA-compliant and secure platform
+                      </Typography>
+                    </Box>
+                    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                      <Box sx={{ width: 6, height: 6, borderRadius: "50%", bgcolor: "var(--primary-600)" }} />
+                      <Typography variant="body2" sx={{ fontSize: "var(--text-sm)", color: "var(--text-secondary)" }}>
+                        Multilingual support in 15+ languages
+                      </Typography>
+                    </Box>
+                  </Stack>
                 </Box>
               </Stack>
             </CardContent>
