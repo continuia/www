@@ -1,5 +1,5 @@
 // WhatMakesContinuaUnique.tsx
-import { Box, Typography, Link } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { motion } from "framer-motion";
 import type { Variants } from "framer-motion";
 const MotionBox = motion.create(Box);
@@ -8,17 +8,14 @@ const cards = [
   {
     title: "Clinical Guardrails",
     description: "We never replace your doctor; we supplement your options with additional clinical insight. Our AI works alongside healthcare professionals, not instead of them.",
-    linkText: "Learn more",
   },
   {
     title: "Built-in Governance",
     description: "Our platform includes comprehensive governance frameworks for consent, escalation, and compliance across multiple healthcare jurisdictions.",
-    linkText: "For institutions",
   },
   {
     title: "Agentic System",
     description: "Our architecture is powered by a network of AI agents, each with a specific role in patient safety, intake, escalation, formatting, and translation.",
-    linkText: "Our technology",
   },
   {
     title: "Cross-Border Infrastructure",
@@ -124,20 +121,6 @@ export default function WhatMakesContinuaUnique() {
               </Typography>
               <Typography sx={{ color: "var(--text-secondary)", fontSize: "var(--text-sm)", mb: 1 }}>{card.description}</Typography>
             </Box>
-            {card.linkText && (
-              <Link
-                href="#"
-                underline="hover"
-                sx={{
-                  color: "var(--primary-600)",
-                  fontWeight: 600,
-                  fontSize: "var(--text-sm)",
-                  alignSelf: "flex-start",
-                }}
-              >
-                {card.linkText} &rarr;
-              </Link>
-            )}
           </MotionBox>
         ))}
       </Box>

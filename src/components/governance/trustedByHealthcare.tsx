@@ -55,7 +55,7 @@ export default function TrustedByHealthcare() {
           fontSize: "var(--text-lg)",
         }}
       >
-        Join forward-thinking hospitals that have transformed their clinical outcomes with Continia's ethical AI governance
+        Join forward-thinking hospitals that have transformed their clinical outcomes with Continuia's ethical AI governance
       </Typography>
       <Box
         sx={{

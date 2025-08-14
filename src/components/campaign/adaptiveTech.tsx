@@ -76,7 +76,7 @@ export default function AdaptiveTech2025() {
               mb: "var(--space-1)", // tighter margin-bottom
             }}
           >
-            Continia was built for medical minds that still believe clarity matters.
+            Continuia was built for medical minds that still believe clarity matters.
           </Typography>
           <List sx={{ p: 0, mb: 0 }}>
             {["You review.", "You decide.", "You lead."].map((feature, idx) => {

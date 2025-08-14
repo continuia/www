@@ -14,36 +14,64 @@ const ChatContainer: React.FC<ChatContainerProps> = ({ conversation, isLoading, 
   const scrollRef = useChatScroll(conversation?.messages);
 
   return (
-    <Box display="flex" justifyContent={"center"} flexDirection="column" height="100vh" sx={{ backgroundColor: "var(--bg-primary)" }}>
+    <Box
+      sx={{
+        height: "100%",
+        backgroundColor: "var(--bg-primary)",
+        display: "flex",
+        flexDirection: "column",
+        position: "relative"
+      }}
+    >
       {/* Header */}
       <Paper
         sx={{
-          padding: "var(--space-4)",
-          backgroundColor: "var(--bg-secondary)",
+          padding: "var(--space-6)",
+          backgroundColor: "var(--bg-primary)",
           borderRadius: 0,
-          boxShadow: "var(--shadow-sm)",
-          borderBottom: "1px solid var(--border-light)",
+          boxShadow: "none",
+          borderBottom: "1px solid var(--primary-100)",
+          position: "sticky",
+          top: 0,
+          zIndex: 10,
         }}
       >
         <Typography
-          variant="h6"
+          variant="h4"
           sx={{
-            fontSize: "var(--text-lg)",
-            fontWeight: 600,
-            color: "var(--text-primary)",
+            fontSize: { xs: "var(--text-xl)", md: "var(--text-2xl)" },
+            fontWeight: 800,
+            background: "linear-gradient(135deg, var(--primary-700), var(--primary-900))",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            backgroundClip: "text",
+            textAlign: "center",
           }}
         >
-          {conversation?.title || "New Chat"}
+          💬 Healthcare Consultation
+        </Typography>
+        <Typography
+          variant="body2"
+          sx={{
+            fontSize: "var(--text-sm)",
+            color: "var(--text-secondary)",
+            textAlign: "center",
+            mt: "var(--space-1)",
+            fontWeight: 500,
+          }}
+        >
+          Share your health concerns with our AI assistant
         </Typography>
       </Paper>
 
       {/* Messages Area */}
       <Box
         ref={scrollRef}
-        flex={1}
-        overflow="auto"
-        padding="var(--space-4)"
         sx={{
+          flex: 1,
+          overflow: "auto",
+          padding: "var(--space-4)",
+          paddingBottom: "calc(var(--space-4) + 80px)", // Add space for fixed input
           "&::-webkit-scrollbar": {
             width: 6,
           },
@@ -84,8 +112,22 @@ const ChatContainer: React.FC<ChatContainerProps> = ({ conversation, isLoading, 
         )}
       </Box>
 
-      {/* Input Area */}
-      <Box display={"flex"} justifyContent={"center"} padding="var(--space-4)" sx={{ backgroundColor: "var(--bg-secondary)" }}>
+      {/* Fixed Input Area */}
+      <Box
+        sx={{
+          position: "fixed",
+          bottom: 0,
+          left: { xs: 0, lg: "38%" }, // Full width on mobile, start from sidebar on desktop
+          right: 0,
+          display: "flex",
+          justifyContent: "center",
+          padding: "var(--space-6)",
+          backgroundColor: "var(--bg-primary)",
+          borderTop: "1px solid var(--primary-100)",
+          boxShadow: "0 -4px 16px rgba(0, 0, 0, 0.08)",
+          zIndex: 20,
+        }}
+      >
         <ChatInput onSendMessage={onSendMessage} isLoading={isLoading} />
       </Box>
     </Box>

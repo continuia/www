@@ -34,7 +34,7 @@ const ContactSection: React.FC = () => {
             https://continuia.ai
           </Link>
           <br />
-          Compliance & Data Protection Officer: [Insert Contact]
+          Compliance & Data Protection Officer: dpo@continuia.ai
           <br />
           <br />
           This document is version-controlled and subject to legal audit and jurisdictional review. A printed or notarized copy is available upon request. For inquiries, contact{" "}

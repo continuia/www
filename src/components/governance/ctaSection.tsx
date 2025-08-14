@@ -57,7 +57,7 @@ const CTASection = () => {
           lineHeight: 1.44,
         }}
       >
-        Join leading healthcare institutions that have already elevated their standards of care with Continia's clinical governance platform.
+        Join leading healthcare institutions that have already elevated their standards of care with Continuia's clinical governance platform.
       </Typography>
 
       <Stack direction={{ xs: "column", sm: "row" }} spacing={2.5} alignItems="center" justifyContent="center" sx={{ mt: 2, mb: 3 }}>
