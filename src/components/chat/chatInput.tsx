@@ -33,11 +33,13 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, isLoading }) => {
         display: "flex",
         alignItems: "flex-end",
         padding: "var(--space-3)",
-        backgroundColor: "var(--bg-secondary)",
+        backgroundColor: "var(--bg-primary)",
         borderRadius: "var(--radius-xl)",
-        boxShadow: "var(--shadow-md)",
+        boxShadow: "var(--shadow-lg)",
         gap: 1,
-        width:"90vw"
+        width: "100%",
+        maxWidth: { xs: "100%", sm: "600px", md: "800px" },
+        border: "1px solid var(--border-light)",
       }}
     >
       <TextField

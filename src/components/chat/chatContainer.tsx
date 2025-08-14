@@ -14,7 +14,15 @@ const ChatContainer: React.FC<ChatContainerProps> = ({ conversation, isLoading, 
   const scrollRef = useChatScroll(conversation?.messages);
 
   return (
-    <Box display="flex" justifyContent={"center"} flexDirection="column" height="100vh" sx={{ backgroundColor: "var(--bg-primary)" }}>
+    <Box
+      sx={{
+        height: "100vh",
+        backgroundColor: "var(--bg-primary)",
+        display: "flex",
+        flexDirection: "column",
+        position: "relative"
+      }}
+    >
       {/* Header */}
       <Paper
         sx={{
@@ -23,6 +31,9 @@ const ChatContainer: React.FC<ChatContainerProps> = ({ conversation, isLoading, 
           borderRadius: 0,
           boxShadow: "var(--shadow-sm)",
           borderBottom: "1px solid var(--border-light)",
+          position: "sticky",
+          top: 0,
+          zIndex: 10,
         }}
       >
         <Typography
@@ -40,10 +51,11 @@ const ChatContainer: React.FC<ChatContainerProps> = ({ conversation, isLoading, 
       {/* Messages Area */}
       <Box
         ref={scrollRef}
-        flex={1}
-        overflow="auto"
-        padding="var(--space-4)"
         sx={{
+          flex: 1,
+          overflow: "auto",
+          padding: "var(--space-4)",
+          paddingBottom: "calc(var(--space-4) + 80px)", // Add space for fixed input
           "&::-webkit-scrollbar": {
             width: 6,
           },
@@ -84,8 +96,22 @@ const ChatContainer: React.FC<ChatContainerProps> = ({ conversation, isLoading, 
         )}
       </Box>
 
-      {/* Input Area */}
-      <Box display={"flex"} justifyContent={"center"} padding="var(--space-4)" sx={{ backgroundColor: "var(--bg-secondary)" }}>
+      {/* Fixed Input Area */}
+      <Box
+        sx={{
+          position: "fixed",
+          bottom: 0,
+          left: 0,
+          right: 0,
+          display: "flex",
+          justifyContent: "center",
+          padding: "var(--space-4)",
+          backgroundColor: "var(--bg-secondary)",
+          borderTop: "1px solid var(--border-light)",
+          boxShadow: "0 -2px 8px rgba(0, 0, 0, 0.1)",
+          zIndex: 20,
+        }}
+      >
         <ChatInput onSendMessage={onSendMessage} isLoading={isLoading} />
       </Box>
     </Box>
