@@ -26,25 +26,41 @@ const ChatContainer: React.FC<ChatContainerProps> = ({ conversation, isLoading, 
       {/* Header */}
       <Paper
         sx={{
-          padding: "var(--space-4)",
-          backgroundColor: "var(--bg-secondary)",
+          padding: "var(--space-6)",
+          backgroundColor: "var(--bg-primary)",
           borderRadius: 0,
-          boxShadow: "var(--shadow-sm)",
-          borderBottom: "1px solid var(--border-light)",
+          boxShadow: "none",
+          borderBottom: "1px solid var(--primary-100)",
           position: "sticky",
           top: 0,
           zIndex: 10,
         }}
       >
         <Typography
-          variant="h6"
+          variant="h4"
           sx={{
-            fontSize: "var(--text-lg)",
-            fontWeight: 600,
-            color: "var(--text-primary)",
+            fontSize: { xs: "var(--text-xl)", md: "var(--text-2xl)" },
+            fontWeight: 800,
+            background: "linear-gradient(135deg, var(--primary-700), var(--primary-900))",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            backgroundClip: "text",
+            textAlign: "center",
           }}
         >
-          {conversation?.title || "New Chat"}
+          💬 Healthcare Consultation
+        </Typography>
+        <Typography
+          variant="body2"
+          sx={{
+            fontSize: "var(--text-sm)",
+            color: "var(--text-secondary)",
+            textAlign: "center",
+            mt: "var(--space-1)",
+            fontWeight: 500,
+          }}
+        >
+          Share your health concerns with our AI assistant
         </Typography>
       </Paper>
 
@@ -101,14 +117,14 @@ const ChatContainer: React.FC<ChatContainerProps> = ({ conversation, isLoading, 
         sx={{
           position: "fixed",
           bottom: 0,
-          left: 0,
+          left: "38%", // Start from where the sidebar ends
           right: 0,
           display: "flex",
           justifyContent: "center",
-          padding: "var(--space-4)",
-          backgroundColor: "var(--bg-secondary)",
-          borderTop: "1px solid var(--border-light)",
-          boxShadow: "0 -2px 8px rgba(0, 0, 0, 0.1)",
+          padding: "var(--space-6)",
+          backgroundColor: "var(--bg-primary)",
+          borderTop: "1px solid var(--primary-100)",
+          boxShadow: "0 -4px 16px rgba(0, 0, 0, 0.08)",
           zIndex: 20,
         }}
       >
