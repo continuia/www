@@ -42,7 +42,7 @@ export const useChat = () => {
   const isCreatingNewSession = useRef<boolean>(false);
   const reconnectAttempts = useRef<number>(0);
   const maxReconnectAttempts = 3;
-  const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const reconnectTimeoutRef = useRef<number | null>(null);
   const currentSessionIdRef = useRef<string | null>(null);
   const isInitializedRef = useRef<boolean>(false); // Prevent double initialization
 
@@ -77,6 +77,13 @@ export const useChat = () => {
   const restoreSession = async (sessionData: any) => {
     try {
       console.log('🔄 Restoring session:', sessionData.sessionId);
+      
+      // Prevent duplicate restoration
+      if (currentSessionIdRef.current === sessionData.sessionId && currentConversation) {
+        console.log('⏸️ Session already restored, skipping...');
+        return;
+      }
+      
       setIsConnecting(true);
       setConnectionError(null);
       setIsWebSocketConnected(false);
@@ -170,13 +177,19 @@ export const useChat = () => {
 
   // Initialize WebSocket connection - IMPROVED
   const initializeWebSocket = useCallback((sessionId: string) => {
-    // ADD THIS CHECK at the very beginning
-    if (wsRef.current && wsRef.current.readyState === WebSocket.CONNECTING) {
-      console.log('⏸️ WebSocket already connecting, skipping...');
+    // Enhanced checks to prevent duplicate connections
+    if (wsRef.current && (wsRef.current.readyState === WebSocket.CONNECTING || wsRef.current.readyState === WebSocket.OPEN)) {
+      console.log('⏸️ WebSocket already connecting/connected, skipping...');
       return;
     }
 
-    console.log('🔌 Initializing WebSocket connection...');
+    // Prevent multiple simultaneous connection attempts
+    if (currentSessionIdRef.current === sessionId && wsRef.current && wsRef.current.readyState !== WebSocket.CLOSED) {
+      console.log('⏸️ WebSocket for this session already exists, skipping...');
+      return;
+    }
+
+    console.log('🔌 Initializing WebSocket connection for session:', sessionId);
 
     // Clear any existing reconnection timeout
     if (reconnectTimeoutRef.current) {
@@ -184,7 +197,8 @@ export const useChat = () => {
       reconnectTimeoutRef.current = null;
     }
 
-    if (wsRef.current) {
+    // Only close if we have a different session or closed connection
+    if (wsRef.current && (currentSessionIdRef.current !== sessionId || wsRef.current.readyState === WebSocket.CLOSED)) {
       console.log('🔌 Closing existing WebSocket connection');
       wsRef.current.close();
       setIsWebSocketConnected(false);
@@ -322,6 +336,12 @@ export const useChat = () => {
       return;
     }
 
+    // Prevent duplicate creation if we already have a valid conversation
+    if (currentConversation && currentSessionIdRef.current) {
+      console.log('⏸️ Valid conversation already exists, skipping creation');
+      return;
+    }
+
     console.log('🆕 Creating new conversation...');
 
     // Clear any existing reconnection timeouts
@@ -362,7 +382,7 @@ export const useChat = () => {
     currentSessionIdRef.current = sessionData.sessionId;
     storeSession(sessionData, []);
     initializeWebSocket(sessionData.sessionId);
-  }, [createSession, initializeWebSocket]);
+  }, [createSession, initializeWebSocket, currentConversation]);
 
   // Force create new session (for "Start New Session" button)
   const forceCreateNewConversation = useCallback(async () => {

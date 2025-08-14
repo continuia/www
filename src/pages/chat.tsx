@@ -32,24 +32,24 @@ const ChatPage: React.FC = () => {
   const [consentGiven, setConsentGiven] = useState(false);
   const [showConsentModal, setShowConsentModal] = useState(false);
 
+  // Check consent on mount - separate from conversation logic
   useEffect(() => {
-    if (!currentConversation && !isConnecting && !isRestoringSession && !hasTriedConnection.current) {
-      hasTriedConnection.current = true;
-      console.log("Creating new conversation - one time only");
-      createNewConversation();
-    }
-    // Check if consent has been given (you might want to store this in localStorage or user profile)
     const storedConsent = localStorage.getItem("continuia-healthcare-consent");
     if (storedConsent === "granted") {
       setConsentGiven(true);
-      // Create initial conversation if none exists
-      if (!currentConversation) {
-        createNewConversation();
-      }
     } else {
       setShowConsentModal(true);
     }
-  }, [currentConversation, isConnecting, isRestoringSession, createNewConversation]);
+  }, []); // Run only once on mount
+
+  // Handle conversation creation only after consent is given and session restoration is complete
+  useEffect(() => {
+    if (consentGiven && !currentConversation && !isConnecting && !isRestoringSession && !hasTriedConnection.current) {
+      hasTriedConnection.current = true;
+      console.log("Creating new conversation - one time only after consent");
+      createNewConversation();
+    }
+  }, [consentGiven, currentConversation, isConnecting, isRestoringSession, createNewConversation]);
 
   useEffect(() => {
     if (currentConversation) {
@@ -91,10 +91,7 @@ const ChatPage: React.FC = () => {
     setShowConsentModal(false);
     localStorage.setItem("continuia-healthcare-consent", "granted");
     localStorage.setItem("continuia-consent-timestamp", new Date().toISOString());
-    // Create conversation after consent
-    if (!currentConversation) {
-      createNewConversation();
-    }
+    // Don't create conversation here - let the useEffect handle it to avoid duplicates
   };
 
   const handleConsentDeclined = () => {
