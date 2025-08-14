@@ -1,8 +1,9 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Box, Paper, Typography, Stack, Chip, useMediaQuery, useTheme } from "@mui/material";
 import { motion } from "framer-motion";
 import { useChat } from "../components/chat/hooks/useChat";
 import ChatContainer from "../components/chat/chatContainer";
+import ConsentModal from "../components/chat/consentModal";
 
 const MotionBox = motion.create(Box);
 const MotionPaper = motion.create(Paper);
@@ -25,13 +26,39 @@ const ChatPage: React.FC = () => {
   const { currentConversation, isLoading, createNewConversation, sendMessage } = useChat();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
+  const [consentGiven, setConsentGiven] = useState(false);
+  const [showConsentModal, setShowConsentModal] = useState(false);
 
   useEffect(() => {
-    // Create initial conversation if none exists
+    // Check if consent has been given (you might want to store this in localStorage or user profile)
+    const storedConsent = localStorage.getItem('continuia-healthcare-consent');
+    if (storedConsent === 'granted') {
+      setConsentGiven(true);
+      // Create initial conversation if none exists
+      if (!currentConversation) {
+        createNewConversation();
+      }
+    } else {
+      setShowConsentModal(true);
+    }
+  }, [currentConversation, createNewConversation]);
+
+  const handleConsentGiven = () => {
+    setConsentGiven(true);
+    setShowConsentModal(false);
+    localStorage.setItem('continuia-healthcare-consent', 'granted');
+    localStorage.setItem('continuia-consent-timestamp', new Date().toISOString());
+    // Create conversation after consent
     if (!currentConversation) {
       createNewConversation();
     }
-  }, [currentConversation, createNewConversation]);
+  };
+
+  const handleConsentDeclined = () => {
+    setShowConsentModal(false);
+    // Redirect to home page or show alternative content
+    window.location.href = '/';
+  };
 
   if (isMobile) {
     // Mobile: Full-screen chat
@@ -39,6 +66,59 @@ const ChatPage: React.FC = () => {
       <Box sx={{ height: "100vh", backgroundColor: "var(--bg-primary)" }}>
         <ChatContainer conversation={currentConversation} isLoading={isLoading} onSendMessage={sendMessage} />
       </Box>
+    );
+  }
+
+  // Show consent modal if consent not given
+  if (!consentGiven) {
+    return (
+      <>
+        <ConsentModal
+          open={showConsentModal}
+          onConsent={handleConsentGiven}
+          onDecline={handleConsentDeclined}
+        />
+        {/* Show a loading/waiting state while consent modal is open */}
+        <Box
+          sx={{
+            height: "100vh",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            background: "linear-gradient(135deg, var(--primary-50) 0%, var(--bg-secondary) 50%, var(--primary-25) 100%)",
+          }}
+        >
+          <Paper
+            elevation={4}
+            sx={{
+              p: 6,
+              borderRadius: "var(--radius-2xl)",
+              textAlign: "center",
+              maxWidth: 400,
+            }}
+          >
+            <Typography
+              variant="h5"
+              sx={{
+                color: "var(--primary-800)",
+                fontWeight: 700,
+                mb: 2,
+              }}
+            >
+              🏥 Healthcare Consultation
+            </Typography>
+            <Typography
+              variant="body1"
+              sx={{
+                color: "var(--text-secondary)",
+                lineHeight: "var(--leading-relaxed)",
+              }}
+            >
+              Please review and provide your consent to begin your healthcare consultation.
+            </Typography>
+          </Paper>
+        </Box>
+      </>
     );
   }
 
@@ -164,172 +244,202 @@ const ChatPage: React.FC = () => {
               </Stack>
             </Box>
 
-            {/* Process Steps - Flex Content */}
-            <Box sx={{ flex: 1, display: "flex", flexDirection: "column", gap: "var(--space-6)" }}>
-              {/* What's Happening Now */}
-              <Box sx={{ mb: "var(--space-6)" }}>
-              <Typography
-                variant="h6"
-                sx={{
-                  color: "var(--success-800)",
-                  fontWeight: 700,
-                  mb: "var(--space-3)",
-                  fontSize: "var(--text-lg)",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "var(--space-2)",
-                }}
-              >
-                🌟 Right Now
-              </Typography>
-              <Stack spacing="var(--space-2)">
-                <Typography sx={{ fontSize: "var(--text-sm)", color: "var(--success-700)", lineHeight: "var(--leading-relaxed)" }}>
-                  • Share your symptoms, concerns, or questions freely
-                </Typography>
-                <Typography sx={{ fontSize: "var(--text-sm)", color: "var(--success-700)", lineHeight: "var(--leading-relaxed)" }}>
-                  • Our AI is analyzing and organizing your information
-                </Typography>
-                <Typography sx={{ fontSize: "var(--text-sm)", color: "var(--success-700)", lineHeight: "var(--leading-relaxed)" }}>
-                  • Everything is completely confidential and HIPAA-secure
-                </Typography>
-              </Stack>
-            </Box>
-
-            {/* What Happens Next */}
-            <Box sx={{ mb: "var(--space-6)" }}>
-              <Typography
-                variant="h6"
-                sx={{
-                  color: "var(--primary-800)",
-                  fontWeight: 700,
-                  mb: "var(--space-3)",
-                  fontSize: "var(--text-lg)",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "var(--space-2)",
-                }}
-              >
-                🔮 What Happens Next
-              </Typography>
-              <Stack spacing="var(--space-3)">
-                <Box sx={{ display: "flex", alignItems: "flex-start", gap: "var(--space-3)" }}>
-                  <Box sx={{
-                    width: 8,
-                    height: 8,
-                    borderRadius: "50%",
-                    bgcolor: "var(--primary-600)",
-                    mt: "var(--space-1)",
-                    flexShrink: 0
-                  }} />
-                  <Typography sx={{ fontSize: "var(--text-sm)", color: "var(--primary-700)", lineHeight: "var(--leading-relaxed)" }}>
-                    <strong>Within 24 hours:</strong> Your case is matched with board-certified specialists in your condition area
-                  </Typography>
-                </Box>
-                <Box sx={{ display: "flex", alignItems: "flex-start", gap: "var(--space-3)" }}>
-                  <Box sx={{
-                    width: 8,
-                    height: 8,
-                    borderRadius: "50%",
-                    bgcolor: "var(--primary-600)",
-                    mt: "var(--space-1)",
-                    flexShrink: 0
-                  }} />
-                  <Typography sx={{ fontSize: "var(--text-sm)", color: "var(--primary-700)", lineHeight: "var(--leading-relaxed)" }}>
-                    <strong>Within 72 hours:</strong> You receive a comprehensive, easy-to-understand second opinion report
-                  </Typography>
-                </Box>
-                <Box sx={{ display: "flex", alignItems: "flex-start", gap: "var(--space-3)" }}>
-                  <Box sx={{
-                    width: 8,
-                    height: 8,
-                    borderRadius: "50%",
-                    bgcolor: "var(--primary-600)",
-                    mt: "var(--space-1)",
-                    flexShrink: 0
-                  }} />
-                  <Typography sx={{ fontSize: "var(--text-sm)", color: "var(--primary-700)", lineHeight: "var(--leading-relaxed)" }}>
-                    <strong>Always available:</strong> Follow-up questions and ongoing support from our care team
-                  </Typography>
-                </Box>
-              </Stack>
-            </Box>
-
-            {/* Reassurance Quote */}
+            {/* Scrollable Content Area */}
             <Box
               sx={{
-                bgcolor: "var(--warning-50)",
-                borderRadius: "var(--radius-lg)",
-                p: "var(--space-4)",
-                border: "1px solid var(--warning-200)",
+                flex: 1,
+                display: "flex",
+                flexDirection: "column",
+                minHeight: 0, // Important for flex scrolling
+                overflow: "hidden"
               }}
             >
-              <Typography
-                variant="subtitle2"
+              {/* Scrollable Process Steps */}
+              <Box
                 sx={{
-                  color: "var(--warning-800)",
-                  fontWeight: 700,
-                  mb: "var(--space-2)",
-                  fontSize: "var(--text-sm)",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "var(--space-2)",
+                  flex: 1,
+                  overflowY: "auto",
+                  pr: "var(--space-2)",
+                  "&::-webkit-scrollbar": {
+                    width: 4,
+                  },
+                  "&::-webkit-scrollbar-thumb": {
+                    backgroundColor: "var(--primary-300)",
+                    borderRadius: "var(--radius-full)",
+                  },
+                  "&::-webkit-scrollbar-track": {
+                    backgroundColor: "var(--primary-50)",
+                  },
                 }}
               >
-                🤗 Remember
-              </Typography>
-              <Typography
-                sx={{
-                  color: "var(--warning-700)",
-                  fontSize: "var(--text-xs)",
-                  lineHeight: "var(--leading-relaxed)",
-                  fontStyle: "italic",
-                }}
-              >
-                "There are no silly questions when it comes to your health. Share as much or as little as you're comfortable with."
-              </Typography>
+                <Stack spacing="var(--space-6)">
+                  {/* What's Happening Now */}
+                  <Box>
+                    <Typography
+                      variant="h6"
+                      sx={{
+                        color: "var(--success-800)",
+                        fontWeight: 700,
+                        mb: "var(--space-3)",
+                        fontSize: "var(--text-lg)",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "var(--space-2)",
+                      }}
+                    >
+                      🌟 Right Now
+                    </Typography>
+                    <Stack spacing="var(--space-2)">
+                      <Typography sx={{ fontSize: "var(--text-sm)", color: "var(--success-700)", lineHeight: "var(--leading-relaxed)" }}>
+                        • Share your symptoms, concerns, or questions freely
+                      </Typography>
+                      <Typography sx={{ fontSize: "var(--text-sm)", color: "var(--success-700)", lineHeight: "var(--leading-relaxed)" }}>
+                        • Our AI is analyzing and organizing your information
+                      </Typography>
+                      <Typography sx={{ fontSize: "var(--text-sm)", color: "var(--success-700)", lineHeight: "var(--leading-relaxed)" }}>
+                        • Everything is completely confidential and HIPAA-secure
+                      </Typography>
+                    </Stack>
+                  </Box>
+
+                  {/* What Happens Next */}
+                  <Box>
+                    <Typography
+                      variant="h6"
+                      sx={{
+                        color: "var(--primary-800)",
+                        fontWeight: 700,
+                        mb: "var(--space-3)",
+                        fontSize: "var(--text-lg)",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "var(--space-2)",
+                      }}
+                    >
+                      🔮 What Happens Next
+                    </Typography>
+                    <Stack spacing="var(--space-3)">
+                      <Box sx={{ display: "flex", alignItems: "flex-start", gap: "var(--space-3)" }}>
+                        <Box sx={{
+                          width: 8,
+                          height: 8,
+                          borderRadius: "50%",
+                          bgcolor: "var(--primary-600)",
+                          mt: "var(--space-1)",
+                          flexShrink: 0
+                        }} />
+                        <Typography sx={{ fontSize: "var(--text-sm)", color: "var(--primary-700)", lineHeight: "var(--leading-relaxed)" }}>
+                          <strong>Within 24 hours:</strong> Your case is matched with board-certified specialists in your condition area
+                        </Typography>
+                      </Box>
+                      <Box sx={{ display: "flex", alignItems: "flex-start", gap: "var(--space-3)" }}>
+                        <Box sx={{
+                          width: 8,
+                          height: 8,
+                          borderRadius: "50%",
+                          bgcolor: "var(--primary-600)",
+                          mt: "var(--space-1)",
+                          flexShrink: 0
+                        }} />
+                        <Typography sx={{ fontSize: "var(--text-sm)", color: "var(--primary-700)", lineHeight: "var(--leading-relaxed)" }}>
+                          <strong>Within 72 hours:</strong> You receive a comprehensive, easy-to-understand second opinion report
+                        </Typography>
+                      </Box>
+                      <Box sx={{ display: "flex", alignItems: "flex-start", gap: "var(--space-3)" }}>
+                        <Box sx={{
+                          width: 8,
+                          height: 8,
+                          borderRadius: "50%",
+                          bgcolor: "var(--primary-600)",
+                          mt: "var(--space-1)",
+                          flexShrink: 0
+                        }} />
+                        <Typography sx={{ fontSize: "var(--text-sm)", color: "var(--primary-700)", lineHeight: "var(--leading-relaxed)" }}>
+                          <strong>Always available:</strong> Follow-up questions and ongoing support from our care team
+                        </Typography>
+                      </Box>
+                    </Stack>
+                  </Box>
+
+                  {/* Reassurance Quote */}
+                  <Box
+                    sx={{
+                      bgcolor: "var(--warning-50)",
+                      borderRadius: "var(--radius-lg)",
+                      p: "var(--space-4)",
+                      border: "1px solid var(--warning-200)",
+                    }}
+                  >
+                    <Typography
+                      variant="subtitle2"
+                      sx={{
+                        color: "var(--warning-800)",
+                        fontWeight: 700,
+                        mb: "var(--space-2)",
+                        fontSize: "var(--text-sm)",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "var(--space-2)",
+                      }}
+                    >
+                      🤗 Remember
+                    </Typography>
+                    <Typography
+                      sx={{
+                        color: "var(--warning-700)",
+                        fontSize: "var(--text-xs)",
+                        lineHeight: "var(--leading-relaxed)",
+                        fontStyle: "italic",
+                      }}
+                    >
+                      "There are no silly questions when it comes to your health. Share as much or as little as you're comfortable with."
+                    </Typography>
+                  </Box>
+                </Stack>
               </Box>
-            </Box>
 
-            {/* Additional Support Section */}
-            <Box
-              sx={{
-                mt: "auto",
-                pt: "var(--space-6)",
-                borderTop: "1px solid var(--primary-100)",
-              }}
-            >
-              <Typography
-                variant="h6"
+              {/* Fixed Bottom Support Section */}
+              <Box
                 sx={{
-                  color: "var(--primary-800)",
-                  fontWeight: 700,
-                  mb: "var(--space-3)",
-                  fontSize: "var(--text-base)",
-                  textAlign: "center",
+                  mt: "var(--space-4)",
+                  pt: "var(--space-4)",
+                  borderTop: "1px solid var(--primary-100)",
+                  flexShrink: 0, // Prevent shrinking
                 }}
               >
-                🤝 We're Here to Help
-              </Typography>
-              <Stack spacing="var(--space-2)">
-                <Box sx={{ display: "flex", alignItems: "center", gap: "var(--space-2)" }}>
-                  <Box sx={{ width: 6, height: 6, borderRadius: "50%", bgcolor: "var(--primary-600)" }} />
-                  <Typography sx={{ fontSize: "var(--text-sm)", color: "var(--text-secondary)" }}>
-                    Available in 15+ languages
-                  </Typography>
-                </Box>
-                <Box sx={{ display: "flex", alignItems: "center", gap: "var(--space-2)" }}>
-                  <Box sx={{ width: 6, height: 6, borderRadius: "50%", bgcolor: "var(--primary-600)" }} />
-                  <Typography sx={{ fontSize: "var(--text-sm)", color: "var(--text-secondary)" }}>
-                    24/7 technical support
-                  </Typography>
-                </Box>
-                <Box sx={{ display: "flex", alignItems: "center", gap: "var(--space-2)" }}>
-                  <Box sx={{ width: 6, height: 6, borderRadius: "50%", bgcolor: "var(--primary-600)" }} />
-                  <Typography sx={{ fontSize: "var(--text-sm)", color: "var(--text-secondary)" }}>
-                    Secure & confidential platform
-                  </Typography>
-                </Box>
-              </Stack>
+                <Typography
+                  variant="h6"
+                  sx={{
+                    color: "var(--primary-800)",
+                    fontWeight: 700,
+                    mb: "var(--space-3)",
+                    fontSize: "var(--text-base)",
+                    textAlign: "center",
+                  }}
+                >
+                  🤝 We're Here to Help
+                </Typography>
+                <Stack spacing="var(--space-2)">
+                  <Box sx={{ display: "flex", alignItems: "center", gap: "var(--space-2)" }}>
+                    <Box sx={{ width: 6, height: 6, borderRadius: "50%", bgcolor: "var(--primary-600)" }} />
+                    <Typography sx={{ fontSize: "var(--text-sm)", color: "var(--text-secondary)" }}>
+                      Available in 15+ languages
+                    </Typography>
+                  </Box>
+                  <Box sx={{ display: "flex", alignItems: "center", gap: "var(--space-2)" }}>
+                    <Box sx={{ width: 6, height: 6, borderRadius: "50%", bgcolor: "var(--primary-600)" }} />
+                    <Typography sx={{ fontSize: "var(--text-sm)", color: "var(--text-secondary)" }}>
+                      24/7 technical support
+                    </Typography>
+                  </Box>
+                  <Box sx={{ display: "flex", alignItems: "center", gap: "var(--space-2)" }}>
+                    <Box sx={{ width: 6, height: 6, borderRadius: "50%", bgcolor: "var(--primary-600)" }} />
+                    <Typography sx={{ fontSize: "var(--text-sm)", color: "var(--text-secondary)" }}>
+                      Secure & confidential platform
+                    </Typography>
+                  </Box>
+                </Stack>
+              </Box>
             </Box>
           </MotionPaper>
         </MotionBox>
