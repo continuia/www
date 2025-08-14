@@ -1,12 +1,8 @@
 import { useEffect } from "react";
 import { Box, Paper, Typography, Stack, Chip, useMediaQuery, useTheme } from "@mui/material";
 import { motion } from "framer-motion";
-import VerifiedUserIcon from "@mui/icons-material/VerifiedUser";
-import MedicalServicesIcon from "@mui/icons-material/MedicalServices";
-import InsightsIcon from "@mui/icons-material/Insights";
 import { useChat } from "../components/chat/hooks/useChat";
 import ChatContainer from "../components/chat/chatContainer";
-import Image1 from "../assets/home/img1.webp";
 
 const MotionBox = motion.create(Box);
 const MotionPaper = motion.create(Paper);
