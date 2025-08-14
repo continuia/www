@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { TextField, IconButton, Paper } from "@mui/material";
+import { TextField, IconButton, Box } from "@mui/material";
 import { Send } from "@mui/icons-material";
 
 interface ChatInputProps {
   onSendMessage: (message: string) => void;
   isLoading: boolean;
+  disabled?: boolean;
 }
 
 const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, isLoading }) => {
@@ -26,40 +27,60 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, isLoading }) => {
   };
 
   return (
-    <Paper
+    <Box
       component="form"
       onSubmit={handleSubmit}
       sx={{
         display: "flex",
         alignItems: "flex-end",
-        padding: "var(--space-3)",
-        backgroundColor: "var(--bg-secondary)",
-        borderRadius: "var(--radius-xl)",
-        boxShadow: "var(--shadow-md)",
-        gap: 1,
-        width:"90vw"
+        gap: "var(--space-3)",
+        maxWidth: "800px",
+        margin: "0 auto",
+        width: "100%",
       }}
     >
-      <TextField
-        multiline
-        maxRows={4}
-        fullWidth
-        value={message}
-        onChange={(e) => setMessage(e.target.value)}
-        onKeyPress={handleKeyPress}
-        placeholder="Type your message..."
-        disabled={isLoading}
-        variant="standard"
-        InputProps={{
-          disableUnderline: true,
-        }}
+      <Box
         sx={{
-          "& .MuiInputBase-input": {
-            fontSize: "var(--text-sm)",
-            padding: "var(--space-2)",
+          flex: 1,
+          backgroundColor: "var(--bg-secondary)",
+          borderRadius: "var(--radius-2xl)",
+          border: "1px solid var(--border-light)",
+          padding: "var(--space-1)",
+          display: "flex",
+          alignItems: "flex-end",
+          transition: "border-color var(--transition-fast)",
+          "&:focus-within": {
+            borderColor: "var(--primary-500)",
+            boxShadow: "0 0 0 3px var(--primary-100)",
           },
         }}
-      />
+      >
+        <TextField
+          multiline
+          maxRows={4}
+          fullWidth
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          onKeyPress={handleKeyPress}
+          placeholder="Type your message..."
+          variant="standard"
+          InputProps={{
+            disableUnderline: true,
+            sx: {
+              fontSize: "var(--text-base)",
+              lineHeight: "var(--leading-normal)",
+              padding: "var(--space-3) var(--space-4)",
+              "& .MuiInputBase-input": {
+                padding: 0,
+                "&::placeholder": {
+                  color: "var(--text-muted)",
+                  opacity: 1,
+                },
+              },
+            },
+          }}
+        />
+      </Box>
 
       <IconButton
         type="submit"
@@ -67,20 +88,27 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, isLoading }) => {
         sx={{
           backgroundColor: "var(--primary-600)",
           color: "var(--text-inverse)",
-          width: 40,
-          height: 40,
+          width: 48,
+          height: 48,
+          borderRadius: "var(--radius-xl)",
+          boxShadow: "var(--shadow-md)",
+          transition: "all var(--transition-fast)",
           "&:hover": {
             backgroundColor: "var(--primary-700)",
+            boxShadow: "var(--shadow-lg)",
+            transform: "translateY(-1px)",
           },
           "&:disabled": {
             backgroundColor: "var(--neutral-300)",
             color: "var(--neutral-500)",
+            boxShadow: "none",
+            transform: "none",
           },
         }}
       >
         <Send fontSize="small" />
       </IconButton>
-    </Paper>
+    </Box>
   );
 };
 

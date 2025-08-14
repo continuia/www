@@ -1,91 +1,304 @@
-import { Box, Paper, Typography, CircularProgress } from "@mui/material";
-import { useChatScroll } from "./hooks/useChatScroll";
+import { Box, Typography, CircularProgress, Button } from "@mui/material";
+import { Refresh, Wifi, WifiOff } from "@mui/icons-material";
+import { useRef, useEffect } from "react";
 import ChatMessage from "./chatMessage";
 import ChatInput from "./chatInput";
+import TypingIndicator from "./typingIndicator";
 import type { ChatConversation } from "./chat.types";
 
 interface ChatContainerProps {
   conversation: ChatConversation | undefined;
   isLoading: boolean;
+  isAgentTyping?: boolean;
   onSendMessage: (message: string) => void;
+  onClearSession: () => void;
+  onCreateNewConversation: () => void;
+  connectionError?: string | null;
+  isWebSocketConnected?: boolean;
 }
 
-const ChatContainer: React.FC<ChatContainerProps> = ({ conversation, isLoading, onSendMessage }) => {
-  const scrollRef = useChatScroll(conversation?.messages);
+const ChatContainer: React.FC<ChatContainerProps> = ({ conversation, isLoading, isAgentTyping = false, onSendMessage, onClearSession, onCreateNewConversation, connectionError, isWebSocketConnected = false }) => {
+  const scrollableRef = useRef<HTMLDivElement>(null);
+
+  // Custom scroll effect for messages
+  useEffect(() => {
+    if (scrollableRef.current) {
+      const element = scrollableRef.current;
+      requestAnimationFrame(() => {
+        element.scrollTop = element.scrollHeight;
+      });
+    }
+  }, [conversation?.messages, isAgentTyping]);
+
+  const handleStartNewSession = () => {
+    setTimeout(() => {
+      onCreateNewConversation();
+    }, 100);
+  };
+
+  const handleRetryConnection = () => {
+    onClearSession();
+    onCreateNewConversation();
+  };
+
+  // Determine connection status
+  const hasConnectionError = connectionError && (connectionError.includes("WebSocket") || connectionError.includes("connection") || connectionError.includes("Connection") || connectionError.includes("real-time") || connectionError.includes("establish"));
 
   return (
-    <Box display="flex" justifyContent={"center"} flexDirection="column" height="100vh" sx={{ backgroundColor: "var(--bg-primary)" }}>
+    <Box
+      display="flex"
+      flexDirection="column"
+      flex={1}
+      sx={{
+        backgroundColor: "var(--bg-primary)",
+        height: "100%",
+        minHeight: 0,
+        overflow: "hidden",
+      }}
+    >
       {/* Header */}
-      <Paper
+      <Box
         sx={{
-          padding: "var(--space-4)",
-          backgroundColor: "var(--bg-secondary)",
-          borderRadius: 0,
-          boxShadow: "var(--shadow-sm)",
+          padding: "0px 20px",
+          backgroundColor: "var(--bg-primary)",
           borderBottom: "1px solid var(--border-light)",
+          flexShrink: 0,
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
         }}
       >
-        <Typography
-          variant="h6"
+        <Box>
+          <Typography
+            variant="h6"
+            sx={{
+              fontSize: "var(--text-xl)",
+              fontWeight: 600,
+              color: "var(--text-primary)",
+              mb: 0.5,
+            }}
+          >
+            Arika
+          </Typography>
+          {conversation?.sessionId && (
+            <Typography
+              variant="caption"
+              sx={{
+                fontSize: "var(--text-sm)",
+                color: "var(--text-tertiary)",
+                display: "block",
+              }}
+            >
+              Session: {conversation.sessionId.slice(0, 8)}...
+            </Typography>
+          )}
+        </Box>
+
+        <Button
+          variant="outlined"
+          size="small"
+          startIcon={<Refresh />}
+          onClick={handleStartNewSession}
+          disabled={isLoading}
           sx={{
-            fontSize: "var(--text-lg)",
-            fontWeight: 600,
-            color: "var(--text-primary)",
+            borderColor: "var(--primary-500)",
+            color: "var(--primary-600)",
+            fontSize: "var(--text-sm)",
+            padding: "var(--space-2) var(--space-4)",
+            borderRadius: "var(--radius-lg)",
+            textTransform: "none",
+            fontWeight: 500,
+            "&:hover": {
+              borderColor: "var(--primary-600)",
+              backgroundColor: "var(--primary-50)",
+            },
+            "&:disabled": {
+              borderColor: "var(--neutral-300)",
+              color: "var(--neutral-400)",
+            },
           }}
         >
-          {conversation?.title || "New Chat"}
-        </Typography>
-      </Paper>
+          New Chat
+        </Button>
+      </Box>
 
       {/* Messages Area */}
       <Box
-        ref={scrollRef}
         flex={1}
-        overflow="auto"
-        padding="var(--space-4)"
         sx={{
-          "&::-webkit-scrollbar": {
-            width: 6,
-          },
-          "&::-webkit-scrollbar-thumb": {
-            backgroundColor: "var(--primary-400)",
-            borderRadius: "var(--radius-full)",
-          },
-          "&::-webkit-scrollbar-track": {
-            backgroundColor: "var(--neutral-200)",
-          },
+          minHeight: 0,
+          overflow: "hidden",
+          display: "flex",
+          flexDirection: "column",
         }}
       >
-        {!conversation?.messages.length ? (
-          <Box display="flex" alignItems="center" justifyContent="center" height="100%" flexDirection="column">
-            <Typography
-              variant="h5"
+        <Box
+          ref={scrollableRef}
+          sx={{
+            flex: 1,
+            padding: "var(--space-4) var(--space-6)",
+            overflowY: "auto",
+            overflowX: "hidden",
+            "&::-webkit-scrollbar": {
+              width: 4,
+            },
+            "&::-webkit-scrollbar-thumb": {
+              backgroundColor: "var(--primary-400)",
+              borderRadius: "var(--radius-full)",
+            },
+            "&::-webkit-scrollbar-track": {
+              backgroundColor: "transparent",
+            },
+          }}
+        >
+          {!conversation?.messages.length && !isAgentTyping ? (
+            <Box display="flex" alignItems="center" justifyContent="center" height="100%" flexDirection="column" sx={{ minHeight: "300px" }}>
+              {isLoading ? (
+                <>
+                  <CircularProgress sx={{ color: "var(--primary-600)", mb: 3 }} />
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      color: "var(--text-secondary)",
+                      fontSize: "var(--text-lg)",
+                      mb: 1,
+                      textAlign: "center",
+                    }}
+                  >
+                    Connecting to Arika...
+                  </Typography>
+                  <Typography
+                    sx={{
+                      color: "var(--text-muted)",
+                      fontSize: "var(--text-sm)",
+                      textAlign: "center",
+                    }}
+                  >
+                    Setting up your consultation
+                  </Typography>
+                </>
+              ) : hasConnectionError || !isWebSocketConnected ? (
+                <>
+                  <WifiOff
+                    sx={{
+                      fontSize: "4rem",
+                      color: "var(--error)",
+                      mb: 3,
+                    }}
+                  />
+                  <Typography
+                    variant="h5"
+                    sx={{
+                      color: "var(--text-primary)",
+                      fontSize: "var(--text-xl)",
+                      mb: 2,
+                      textAlign: "center",
+                      fontWeight: 600,
+                    }}
+                  >
+                    Connection Failed
+                  </Typography>
+                  <Typography
+                    sx={{
+                      color: "var(--text-muted)",
+                      fontSize: "var(--text-sm)",
+                      textAlign: "center",
+                      mb: 4,
+                      maxWidth: "400px",
+                      lineHeight: "var(--leading-relaxed)",
+                    }}
+                  >
+                    Unable to connect to Arika. Please check your internet connection and try again.
+                  </Typography>
+                  <Button
+                    variant="contained"
+                    startIcon={<Refresh />}
+                    onClick={handleRetryConnection}
+                    sx={{
+                      backgroundColor: "var(--primary-600)",
+                      color: "var(--text-inverse)",
+                      padding: "var(--space-3) var(--space-6)",
+                      fontSize: "var(--text-sm)",
+                      fontWeight: 600,
+                      borderRadius: "var(--radius-lg)",
+                      textTransform: "none",
+                      boxShadow: "var(--shadow-md)",
+                      "&:hover": {
+                        backgroundColor: "var(--primary-700)",
+                        boxShadow: "var(--shadow-lg)",
+                      },
+                    }}
+                  >
+                    Retry Connection
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Wifi
+                    sx={{
+                      fontSize: "3rem",
+                      color: "var(--success)",
+                      mb: 3,
+                    }}
+                  />
+                  <Typography
+                    variant="h5"
+                    sx={{
+                      color: "var(--text-primary)",
+                      fontSize: "var(--text-xl)",
+                      mb: 2,
+                      fontWeight: 600,
+                      textAlign: "center",
+                    }}
+                  >
+                    Connected to Arika
+                  </Typography>
+                  <Typography
+                    sx={{
+                      color: "var(--text-muted)",
+                      fontSize: "var(--text-sm)",
+                      textAlign: "center",
+                      lineHeight: "var(--leading-relaxed)",
+                    }}
+                  >
+                    Hello! I'm ready to help with your consultation. How can I assist you today?
+                  </Typography>
+                </>
+              )}
+            </Box>
+          ) : (
+            <Box
               sx={{
-                color: "var(--text-tertiary)",
-                fontSize: "var(--text-xl)",
-                mb: 1,
+                display: "flex",
+                flexDirection: "column",
+                gap: "var(--space-4)",
               }}
             >
-              Start a conversation
-            </Typography>
-            <Typography sx={{ color: "var(--text-muted)", fontSize: "var(--text-sm)" }}>Type a message to get started</Typography>
-          </Box>
-        ) : (
-          <>
-            {conversation.messages.map((message) => (
-              <ChatMessage key={message.id} message={message} />
-            ))}
-            {isLoading && (
-              <Box display="flex" justifyContent="center" mt={2}>
-                <CircularProgress size={20} sx={{ color: "var(--primary-600)" }} />
-              </Box>
-            )}
-          </>
-        )}
+              {conversation?.messages.map((message) => (
+                <ChatMessage key={message.id} message={message} />
+              ))}
+
+              {isAgentTyping && <TypingIndicator agentName={conversation?.agentName || "Arika"} />}
+
+              {isLoading && !isAgentTyping && (
+                <Box display="flex" justifyContent="center" mt={2}>
+                  <CircularProgress size={20} sx={{ color: "var(--primary-600)" }} />
+                </Box>
+              )}
+            </Box>
+          )}
+        </Box>
       </Box>
 
       {/* Input Area */}
-      <Box display={"flex"} justifyContent={"center"} padding="var(--space-4)" sx={{ backgroundColor: "var(--bg-secondary)" }}>
+      <Box
+        sx={{
+          padding: "var(--space-4) var(--space-6)",
+          backgroundColor: "var(--bg-primary)",
+          borderTop: "1px solid var(--border-light)",
+          flexShrink: 0,
+        }}
+      >
         <ChatInput onSendMessage={onSendMessage} isLoading={isLoading} />
       </Box>
     </Box>
