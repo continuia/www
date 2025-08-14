@@ -16,7 +16,7 @@ const ChatContainer: React.FC<ChatContainerProps> = ({ conversation, isLoading, 
   return (
     <Box
       sx={{
-        height: "100vh",
+        height: "100%",
         backgroundColor: "var(--bg-primary)",
         display: "flex",
         flexDirection: "column",
