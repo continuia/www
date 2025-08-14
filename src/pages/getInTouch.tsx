@@ -214,138 +214,186 @@ export default function GetInTouchPage() {
           </Typography>
         </Box>
 
-        {/* Two Column Layout */}
-        <Stack
-          direction={{ xs: "column", lg: "row" }}
-          spacing={{ xs: "var(--space-8)", lg: "var(--space-12)" }}
-          alignItems="flex-start"
-          sx={{ width: "100%" }}
+        {/* 2x2 Grid Layout */}
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" },
+            gridTemplateRows: { xs: "auto", md: "auto auto" },
+            gap: { xs: "var(--space-6)", md: "var(--space-8)" },
+            width: "100%",
+          }}
         >
-          {/* Left Column - Contact Form */}
-          <Box sx={{ flex: 1, width: "100%" }}>
-            <Paper
-              elevation={3}
-              sx={{
-                borderRadius: "var(--radius-2xl)",
-                background: "var(--bg-primary)",
-                boxShadow: "var(--shadow-lg)",
-                p: { xs: "var(--space-6)", md: "var(--space-8)" },
-                width: "100%",
-              }}
-            >
-          <form onSubmit={handleSubmit(onSubmit)} name="get-in-touch" data-netlify="true" data-netlify-honeypot="bot-field" autoComplete="off" noValidate>
-            {/* Hidden Netlify field for client-side submissions */}
-            <input type="hidden" name="form-name" value="get-in-touch" />
-
-            {/* Honeypot anti-spam field */}
-            <div style={{ display: "none" }}>
-              <label>
-                Don’t fill this out if you’re human:
-                <input name="bot-field" tabIndex={-1} autoComplete="off" />
-              </label>
-            </div>
-
-            <TextField
-              label="Email"
-              type="email"
-              fullWidth
-              margin="normal"
-              required
-              {...register("email")}
-              error={!!errors.email}
-              helperText={errors.email?.message}
-              autoComplete="email"
-              InputProps={{
-                style: { borderRadius: "var(--radius-lg)" },
-              }}
-              sx={{
-                bgcolor: "var(--bg-secondary)",
-                mb: 2,
-              }}
-            />
-
-            <TextField
-              label="Phone"
-              type="tel"
-              fullWidth
-              margin="normal"
-              required
-              {...register("phone")}
-              error={!!errors.phone}
-              helperText={errors.phone?.message}
-              autoComplete="tel"
-              InputProps={{
-                style: { borderRadius: "var(--radius-lg)" },
-              }}
-              sx={{
-                bgcolor: "var(--bg-secondary)",
-                mb: 2,
-              }}
-            />
-
-            <TextField
-              label="Your Message"
-              fullWidth
-              margin="normal"
-              required
-              multiline
-              minRows={4}
-              {...register("message")}
-              error={!!errors.message}
-              helperText={errors.message?.message}
-              InputProps={{
-                style: { borderRadius: "var(--radius-lg)" },
-              }}
-              sx={{
-                bgcolor: "var(--bg-secondary)",
-                mb: 2,
-              }}
-            />
-
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              disabled={isSubmitting}
-              sx={{
-                mt: 2,
-                py: { xs: 2 },
-                background: "linear-gradient(90deg, var(--primary-500), var(--primary-700))",
-                color: "var(--text-inverse)",
-                borderRadius: "var(--radius-lg)",
-                fontWeight: 600,
-                textTransform: "none",
-                boxShadow: "var(--shadow-sm)",
-                "&:hover": {
-                  background: "linear-gradient(90deg, var(--primary-600), var(--primary-800))",
-                },
-              }}
-            >
-              {isSubmitting ? "Sending..." : "Send Message"}
-            </Button>
-          </form>
-            </Paper>
-          </Box>
-
-          {/* Right Column - Contact Information */}
-          <Box sx={{ flex: 1, width: "100%" }}>
-            <Stack spacing={{ xs: "var(--space-6)", md: "var(--space-8)" }}>
-              {/* Contact Methods */}
-              <Card sx={{ borderRadius: "var(--radius-2xl)", background: "var(--bg-primary)", boxShadow: "var(--shadow-lg)" }}>
-                <CardContent sx={{ p: { xs: "var(--space-6)", md: "var(--space-8)" } }}>
-                  <Typography
-                    variant="h4"
-                    component="h2"
-                    gutterBottom
-                    sx={{
-                      color: "var(--primary-700)",
-                      fontWeight: 700,
-                      mb: "var(--space-6)",
-                      fontSize: { xs: "var(--text-xl)", md: "var(--text-2xl)" }
-                    }}
-                  >
-                    💬 Additional Ways to Reach Us
+          {/* Top Left - Our Services */}
+          <Card sx={{ borderRadius: "var(--radius-2xl)", background: "var(--bg-primary)", boxShadow: "var(--shadow-lg)" }}>
+            <CardContent sx={{ p: { xs: "var(--space-6)", md: "var(--space-8)" } }}>
+              <Typography
+                variant="h4"
+                component="h2"
+                gutterBottom
+                sx={{
+                  color: "var(--primary-700)",
+                  fontWeight: 700,
+                  mb: "var(--space-6)",
+                  fontSize: { xs: "var(--text-xl)", md: "var(--text-2xl)" }
+                }}
+              >
+                🏥 Our Services
+              </Typography>
+              <Stack spacing={3}>
+                <Box>
+                  <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 600, color: "var(--text-primary)" }}>
+                    Continuia Insights™
                   </Typography>
+                  <Typography variant="body2" color="var(--text-secondary)">
+                    AI-powered second medical opinions for patients seeking expert analysis and treatment recommendations from board-certified specialists.
+                  </Typography>
+                </Box>
+                <Divider sx={{ my: 1 }} />
+                <Box>
+                  <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 600, color: "var(--text-primary)" }}>
+                    Continuia Governance™
+                  </Typography>
+                  <Typography variant="body2" color="var(--text-secondary)">
+                    Clinical governance platform for healthcare providers, offering real-time specialist consultations and quality improvement tools.
+                  </Typography>
+                </Box>
+              </Stack>
+            </CardContent>
+          </Card>
+
+          {/* Top Right - Contact Form */}
+          <Paper
+            elevation={3}
+            sx={{
+              borderRadius: "var(--radius-2xl)",
+              background: "var(--bg-primary)",
+              boxShadow: "var(--shadow-lg)",
+              p: { xs: "var(--space-6)", md: "var(--space-8)" },
+            }}
+          >
+            <Typography
+              variant="h4"
+              component="h2"
+              gutterBottom
+              sx={{
+                color: "var(--primary-700)",
+                fontWeight: 700,
+                mb: "var(--space-6)",
+                fontSize: { xs: "var(--text-xl)", md: "var(--text-2xl)" }
+              }}
+            >
+              📝 Contact Form
+            </Typography>
+            <form onSubmit={handleSubmit(onSubmit)} name="get-in-touch" data-netlify="true" data-netlify-honeypot="bot-field" autoComplete="off" noValidate>
+              {/* Hidden Netlify field for client-side submissions */}
+              <input type="hidden" name="form-name" value="get-in-touch" />
+
+              {/* Honeypot anti-spam field */}
+              <div style={{ display: "none" }}>
+                <label>
+                  Don't fill this out if you're human:
+                  <input name="bot-field" tabIndex={-1} autoComplete="off" />
+                </label>
+              </div>
+
+              <TextField
+                label="Email"
+                type="email"
+                fullWidth
+                margin="normal"
+                required
+                {...register("email")}
+                error={!!errors.email}
+                helperText={errors.email?.message}
+                autoComplete="email"
+                InputProps={{
+                  style: { borderRadius: "var(--radius-lg)" },
+                }}
+                sx={{
+                  bgcolor: "var(--bg-secondary)",
+                  mb: 2,
+                }}
+              />
+
+              <TextField
+                label="Phone"
+                type="tel"
+                fullWidth
+                margin="normal"
+                required
+                {...register("phone")}
+                error={!!errors.phone}
+                helperText={errors.phone?.message}
+                autoComplete="tel"
+                InputProps={{
+                  style: { borderRadius: "var(--radius-lg)" },
+                }}
+                sx={{
+                  bgcolor: "var(--bg-secondary)",
+                  mb: 2,
+                }}
+              />
+
+              <TextField
+                label="Your Message"
+                fullWidth
+                margin="normal"
+                required
+                multiline
+                minRows={3}
+                {...register("message")}
+                error={!!errors.message}
+                helperText={errors.message?.message}
+                InputProps={{
+                  style: { borderRadius: "var(--radius-lg)" },
+                }}
+                sx={{
+                  bgcolor: "var(--bg-secondary)",
+                  mb: 2,
+                }}
+              />
+
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                disabled={isSubmitting}
+                sx={{
+                  mt: 2,
+                  py: { xs: 2 },
+                  background: "linear-gradient(90deg, var(--primary-500), var(--primary-700))",
+                  color: "var(--text-inverse)",
+                  borderRadius: "var(--radius-lg)",
+                  fontWeight: 600,
+                  textTransform: "none",
+                  boxShadow: "var(--shadow-sm)",
+                  "&:hover": {
+                    background: "linear-gradient(90deg, var(--primary-600), var(--primary-800))",
+                  },
+                }}
+              >
+                {isSubmitting ? "Sending..." : "Send Message"}
+              </Button>
+            </form>
+          </Paper>
+
+          {/* Bottom Left - Additional Ways to Reach Us */}
+          <Card sx={{ borderRadius: "var(--radius-2xl)", background: "var(--bg-primary)", boxShadow: "var(--shadow-lg)" }}>
+            <CardContent sx={{ p: { xs: "var(--space-6)", md: "var(--space-8)" } }}>
+              <Typography
+                variant="h4"
+                component="h2"
+                gutterBottom
+                sx={{
+                  color: "var(--primary-700)",
+                  fontWeight: 700,
+                  mb: "var(--space-6)",
+                  fontSize: { xs: "var(--text-xl)", md: "var(--text-2xl)" }
+                }}
+              >
+                💬 Additional Ways to Reach Us
+              </Typography>
               <Stack spacing={3}>
                 <Box>
                   <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 600, color: "var(--text-primary)" }}>
@@ -396,7 +444,7 @@ export default function GetInTouchPage() {
                       data-url="https://calendly.com/continuia/30min"
                       style={{
                         minWidth: "320px",
-                        height: "700px"
+                        height: "400px"
                       }}
                     ></div>
                   </AccordionDetails>
@@ -452,87 +500,47 @@ export default function GetInTouchPage() {
                   </Stack>
                 </Box>
               </Stack>
-                </CardContent>
-              </Card>
+            </CardContent>
+          </Card>
 
-              {/* Services */}
-              <Card sx={{ borderRadius: "var(--radius-2xl)", background: "var(--bg-primary)", boxShadow: "var(--shadow-lg)" }}>
-                <CardContent sx={{ p: { xs: "var(--space-6)", md: "var(--space-8)" } }}>
-                  <Typography
-                    variant="h4"
-                    component="h2"
-                    gutterBottom
-                    sx={{
-                      color: "var(--primary-700)",
-                      fontWeight: 700,
-                      mb: "var(--space-6)",
-                      fontSize: { xs: "var(--text-xl)", md: "var(--text-2xl)" }
-                    }}
-                  >
-                    🏥 Our Services
+          {/* Bottom Right - Business Hours */}
+          <Card sx={{ borderRadius: "var(--radius-2xl)", background: "var(--bg-primary)", boxShadow: "var(--shadow-lg)" }}>
+            <CardContent sx={{ p: { xs: "var(--space-6)", md: "var(--space-8)" } }}>
+              <Typography
+                variant="h4"
+                component="h2"
+                gutterBottom
+                sx={{
+                  color: "var(--primary-700)",
+                  fontWeight: 700,
+                  mb: "var(--space-6)",
+                  fontSize: { xs: "var(--text-xl)", md: "var(--text-2xl)" }
+                }}
+              >
+                🕒 Business Hours
+              </Typography>
+              <Stack spacing={3}>
+                <Box>
+                  <Typography variant="subtitle2" gutterBottom sx={{ fontWeight: 600, color: "var(--text-primary)" }}>
+                    Customer Support
                   </Typography>
-                  <Stack spacing={3}>
-                    <Box>
-                      <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 600, color: "var(--text-primary)" }}>
-                        Continuia Insights™
-                      </Typography>
-                      <Typography variant="body2" color="var(--text-secondary)">
-                        AI-powered second medical opinions for patients seeking expert analysis and treatment recommendations from board-certified specialists.
-                      </Typography>
-                    </Box>
-                    <Divider sx={{ my: 1 }} />
-                    <Box>
-                      <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 600, color: "var(--text-primary)" }}>
-                        Continuia Governance™
-                      </Typography>
-                      <Typography variant="body2" color="var(--text-secondary)">
-                        Clinical governance platform for healthcare providers, offering real-time specialist consultations and quality improvement tools.
-                      </Typography>
-                    </Box>
-                  </Stack>
-                </CardContent>
-              </Card>
-
-              {/* Business Hours */}
-              <Card sx={{ borderRadius: "var(--radius-2xl)", background: "var(--bg-primary)", boxShadow: "var(--shadow-lg)" }}>
-                <CardContent sx={{ p: { xs: "var(--space-6)", md: "var(--space-8)" } }}>
-                  <Typography
-                    variant="h4"
-                    component="h2"
-                    gutterBottom
-                    sx={{
-                      color: "var(--primary-700)",
-                      fontWeight: 700,
-                      mb: "var(--space-6)",
-                      fontSize: { xs: "var(--text-xl)", md: "var(--text-2xl)" }
-                    }}
-                  >
-                    🕒 Business Hours
+                  <Typography variant="body2" color="var(--text-secondary)">
+                    24/7 - Available around the clock in English, Hindi, Arabic, and Spanish
                   </Typography>
-                  <Stack spacing={3}>
-                    <Box>
-                      <Typography variant="subtitle2" gutterBottom sx={{ fontWeight: 600, color: "var(--text-primary)" }}>
-                        Customer Support
-                      </Typography>
-                      <Typography variant="body2" color="var(--text-secondary)">
-                        24/7 - Available around the clock in English, Hindi, Arabic, and Spanish
-                      </Typography>
-                    </Box>
-                    <Divider sx={{ my: 1 }} />
-                    <Box>
-                      <Typography variant="subtitle2" gutterBottom sx={{ fontWeight: 600, color: "var(--text-primary)" }}>
-                        Sales & Business Development
-                      </Typography>
-                      <Typography variant="body2" color="var(--text-secondary)">
-                        Monday - Friday: 9:00 AM - 6:00 PM (Local Time)
-                      </Typography>
-                    </Box>
-                  </Stack>
-                </CardContent>
-              </Card>
-            </Stack>
-          </Box>
-        </Stack>
+                </Box>
+                <Divider sx={{ my: 1 }} />
+                <Box>
+                  <Typography variant="subtitle2" gutterBottom sx={{ fontWeight: 600, color: "var(--text-primary)" }}>
+                    Sales & Business Development
+                  </Typography>
+                  <Typography variant="body2" color="var(--text-secondary)">
+                    Monday - Friday: 9:00 AM - 6:00 PM (Local Time)
+                  </Typography>
+                </Box>
+              </Stack>
+            </CardContent>
+          </Card>
+        </Box>
       </Box>
     </Box>
     </>
