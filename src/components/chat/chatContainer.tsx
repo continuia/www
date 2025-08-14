@@ -117,7 +117,7 @@ const ChatContainer: React.FC<ChatContainerProps> = ({ conversation, isLoading, 
         sx={{
           position: "fixed",
           bottom: 0,
-          left: "38%", // Start from where the sidebar ends
+          left: { xs: 0, lg: "38%" }, // Full width on mobile, start from sidebar on desktop
           right: 0,
           display: "flex",
           justifyContent: "center",
