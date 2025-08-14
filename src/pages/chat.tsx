@@ -174,31 +174,32 @@ const ChatPage: React.FC = () => {
           variants={fadeInVariants}
           sx={{
             width: "38%",
+            height: "100vh",
             display: "flex",
             flexDirection: "column",
             position: "relative",
             zIndex: 2,
           }}
         >
-          {/* Main Content Card */}
+          {/* Main Content Card - Full Height with Internal Layout */}
           <MotionPaper
             elevation={6}
             sx={{
-              height: "calc(100vh - 140px)", // Leave space for fixed bottom section
+              height: "100vh",
               borderRadius: 0,
               bgcolor: "var(--bg-primary)",
               boxShadow: "0 8px 32px rgba(0, 0, 0, 0.08)",
               border: "1px solid var(--primary-100)",
               borderLeft: "none",
-              borderBottom: "none",
               display: "flex",
               flexDirection: "column",
-              p: "var(--space-8)",
               overflow: "hidden",
             }}
           >
-            {/* Welcome Header */}
-            <Box sx={{ textAlign: "center", mb: "var(--space-6)", flexShrink: 0 }}>
+            {/* Top Content Section */}
+            <Box sx={{ p: "var(--space-8)", display: "flex", flexDirection: "column", flex: 1, minHeight: 0 }}>
+              {/* Welcome Header */}
+              <Box sx={{ textAlign: "center", mb: "var(--space-6)", flexShrink: 0 }}>
               <Typography
                 variant="h3"
                 sx={{
@@ -244,26 +245,27 @@ const ChatPage: React.FC = () => {
                   sx={{ bgcolor: "var(--warning-100)", color: "var(--warning-800)", fontWeight: 600 }}
                 />
               </Stack>
-            </Box>
+              </Box>
 
-            {/* Scrollable Process Steps */}
-            <Box
-              sx={{
-                flex: 1,
-                overflowY: "auto",
-                pr: "var(--space-2)",
-                "&::-webkit-scrollbar": {
-                  width: 4,
-                },
-                "&::-webkit-scrollbar-thumb": {
-                  backgroundColor: "var(--primary-300)",
-                  borderRadius: "var(--radius-full)",
-                },
-                "&::-webkit-scrollbar-track": {
-                  backgroundColor: "var(--primary-50)",
-                },
-              }}
-            >
+              {/* Scrollable Process Steps */}
+              <Box
+                sx={{
+                  flex: 1,
+                  overflowY: "auto",
+                  pr: "var(--space-2)",
+                  minHeight: 0,
+                  "&::-webkit-scrollbar": {
+                    width: 4,
+                  },
+                  "&::-webkit-scrollbar-thumb": {
+                    backgroundColor: "var(--primary-300)",
+                    borderRadius: "var(--radius-full)",
+                  },
+                  "&::-webkit-scrollbar-track": {
+                    backgroundColor: "var(--primary-50)",
+                  },
+                }}
+              >
               <Stack spacing="var(--space-6)">
                 {/* What's Happening Now */}
                 <Box>
@@ -387,58 +389,54 @@ const ChatPage: React.FC = () => {
                     "There are no silly questions when it comes to your health. Share as much or as little as you're comfortable with."
                   </Typography>
                 </Box>
+                </Stack>
+              </Box>
+            </Box>
+
+            {/* Bottom Support Section - Always at Bottom */}
+            <Box
+              sx={{
+                borderTop: "1px solid var(--primary-100)",
+                p: "var(--space-6)",
+                flexShrink: 0,
+                bgcolor: "var(--bg-primary)",
+                boxShadow: "0 -4px 16px rgba(0, 0, 0, 0.08)",
+              }}
+            >
+              <Typography
+                variant="h6"
+                sx={{
+                  color: "var(--primary-800)",
+                  fontWeight: 700,
+                  mb: "var(--space-3)",
+                  fontSize: "var(--text-base)",
+                  textAlign: "center",
+                }}
+              >
+                🤝 We're Here to Help
+              </Typography>
+              <Stack spacing="var(--space-2)">
+                <Box sx={{ display: "flex", alignItems: "center", gap: "var(--space-2)" }}>
+                  <Box sx={{ width: 6, height: 6, borderRadius: "50%", bgcolor: "var(--primary-600)" }} />
+                  <Typography sx={{ fontSize: "var(--text-sm)", color: "var(--text-secondary)" }}>
+                    Available in 15+ languages
+                  </Typography>
+                </Box>
+                <Box sx={{ display: "flex", alignItems: "center", gap: "var(--space-2)" }}>
+                  <Box sx={{ width: 6, height: 6, borderRadius: "50%", bgcolor: "var(--primary-600)" }} />
+                  <Typography sx={{ fontSize: "var(--text-sm)", color: "var(--text-secondary)" }}>
+                    24/7 technical support
+                  </Typography>
+                </Box>
+                <Box sx={{ display: "flex", alignItems: "center", gap: "var(--space-2)" }}>
+                  <Box sx={{ width: 6, height: 6, borderRadius: "50%", bgcolor: "var(--primary-600)" }} />
+                  <Typography sx={{ fontSize: "var(--text-sm)", color: "var(--text-secondary)" }}>
+                    Secure & confidential platform
+                  </Typography>
+                </Box>
               </Stack>
             </Box>
           </MotionPaper>
-
-          {/* Fixed Bottom Support Section */}
-          <Box
-            sx={{
-              position: "fixed",
-              bottom: 0,
-              left: 0,
-              width: "38%",
-              bgcolor: "var(--bg-primary)",
-              borderTop: "1px solid var(--primary-100)",
-              borderRight: "1px solid var(--primary-100)",
-              p: "var(--space-6)",
-              zIndex: 10,
-              boxShadow: "0 -4px 16px rgba(0, 0, 0, 0.08)",
-            }}
-          >
-            <Typography
-              variant="h6"
-              sx={{
-                color: "var(--primary-800)",
-                fontWeight: 700,
-                mb: "var(--space-3)",
-                fontSize: "var(--text-base)",
-                textAlign: "center",
-              }}
-            >
-              🤝 We're Here to Help
-            </Typography>
-            <Stack spacing="var(--space-2)">
-              <Box sx={{ display: "flex", alignItems: "center", gap: "var(--space-2)" }}>
-                <Box sx={{ width: 6, height: 6, borderRadius: "50%", bgcolor: "var(--primary-600)" }} />
-                <Typography sx={{ fontSize: "var(--text-sm)", color: "var(--text-secondary)" }}>
-                  Available in 15+ languages
-                </Typography>
-              </Box>
-              <Box sx={{ display: "flex", alignItems: "center", gap: "var(--space-2)" }}>
-                <Box sx={{ width: 6, height: 6, borderRadius: "50%", bgcolor: "var(--primary-600)" }} />
-                <Typography sx={{ fontSize: "var(--text-sm)", color: "var(--text-secondary)" }}>
-                  24/7 technical support
-                </Typography>
-              </Box>
-              <Box sx={{ display: "flex", alignItems: "center", gap: "var(--space-2)" }}>
-                <Box sx={{ width: 6, height: 6, borderRadius: "50%", bgcolor: "var(--primary-600)" }} />
-                <Typography sx={{ fontSize: "var(--text-sm)", color: "var(--text-secondary)" }}>
-                  Secure & confidential platform
-                </Typography>
-              </Box>
-            </Stack>
-          </Box>
         </MotionBox>
 
         {/* Right Side - Enhanced Chat Interface */}
