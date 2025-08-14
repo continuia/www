@@ -122,7 +122,7 @@ export default function AdaptiveTech2025() {
           >
             No bots in the loop. No filters on your insight.
             <br />
-            This is the system doctors always asked for — now live.
+            This is the system doctors always asked for now live.
           </Typography>
         </Box>
       </Box>

@@ -99,7 +99,7 @@ const HeroSection = () => {
               display: "inline-block",
             }}
           >
-            Empower Your Members with Expert Reviews—Delivered with Empathy
+            Empower Your Members with Expert Reviews Delivered with Empathy
           </Typography>
           <Typography
             variant="h6"
@@ -114,7 +114,7 @@ const HeroSection = () => {
             Many patients in your community face medical complexity, delayed diagnoses, or emotional exhaustion. Continuia provides non-judgmental, structured second opinions to help them move forward.
             <br />
             <br />
-            Our physicians listen through the chart. We summarize, clarify, and document—not dictate. And we do it in plain language your members can use with their own care teams.
+            Our physicians listen through the chart. We summarize, clarify, and document not dictate. And we do it in plain language your members can use with their own care teams.
             <br />
             <br />
             Ideal for rare disease groups, chronic illness orgs, or advocacy networks that want clarity without cost burden.

@@ -99,7 +99,7 @@ const HeroSection = () => {
               display: "inline-block",
             }}
           >
-            Add Value to Every Report—Extend Patient Engagement
+            Add Value to Every Report Extend Patient Engagement
           </Typography>
           <Typography
             variant="h6"
@@ -111,7 +111,7 @@ const HeroSection = () => {
               maxWidth: 600,
             }}
           >
-            Diagnostic centers and outpatient clinics often produce the most critical data in a patient's care journey—but interpretation gaps lead to patient anxiety and care drop-offs.
+            Diagnostic centers and outpatient clinics often produce the most critical data in a patient's care journey but interpretation gaps lead to patient anxiety and care drop-offs.
             <br />
             <br />
             <br />

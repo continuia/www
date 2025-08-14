@@ -74,7 +74,7 @@ export const HowContinuiaSupports: React.FC = () => {
           color: "var(--text-secondary)",
         }}
       >
-        Designed to guide members before high-cost interventions — not after
+        Designed to guide members before high-cost interventions   not after
       </Typography>
       <Box
         sx={{

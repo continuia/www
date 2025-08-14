@@ -12,13 +12,13 @@ const featureList = [
   {
     icon: <CloudUploadOutlined fontSize="inherit" sx={{ color: "var(--text-inverse)" }} />,
     title: "Secure Upload Process",
-    description: "Employees or caregivers securely upload records and receive plain-language summaries from licensed physicians — helping them better understand diagnoses, test results, or next steps.",
+    description: "Employees or caregivers securely upload records and receive plain-language summaries from licensed physicians   helping them better understand diagnoses, test results, or next steps.",
   },
   {
     icon: <WorkspacePremiumOutlined fontSize="inherit" sx={{ color: "var(--text-inverse)" }} />,
     // Or <StarOutline fontSize="inherit" ... /> for "standout"
     title: "Differentiate Offerings",
-    description: "It's a frictionless way to boost trust, improve decision-making, and differentiate your benefits offering — without adding clinical liability or complexity to your stack.",
+    description: "It's a frictionless way to boost trust, improve decision-making, and differentiate your benefits offering   without adding clinical liability or complexity to your stack.",
   },
 ];
 
