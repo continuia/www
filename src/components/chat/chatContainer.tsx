@@ -1,6 +1,7 @@
-import { Box, Typography, CircularProgress, Button } from "@mui/material";
-import { Refresh, Wifi, WifiOff } from "@mui/icons-material";
+import { Box, Typography, CircularProgress, Button, Chip } from "@mui/material";
+import { Refresh, Wifi, WifiOff, Person, Login } from "@mui/icons-material";
 import { useRef, useEffect } from "react";
+import { useAuth } from "../auth/AuthContext";
 import ChatMessage from "./chatMessage";
 import ChatInput from "./chatInput";
 import TypingIndicator from "./typingIndicator";
@@ -15,9 +16,11 @@ interface ChatContainerProps {
   onCreateNewConversation: () => void;
   connectionError?: string | null;
   isWebSocketConnected?: boolean;
+  onShowAuthModal?: () => void;
 }
 
-const ChatContainer: React.FC<ChatContainerProps> = ({ conversation, isLoading, isAgentTyping = false, onSendMessage, onClearSession, onCreateNewConversation, connectionError, isWebSocketConnected = false }) => {
+const ChatContainer: React.FC<ChatContainerProps> = ({ conversation, isLoading, isAgentTyping = false, onSendMessage, onClearSession, onCreateNewConversation, connectionError, isWebSocketConnected = false, onShowAuthModal }) => {
+  const { user, isAuthenticated } = useAuth();
   const scrollableRef = useRef<HTMLDivElement>(null);
 
   // Custom scroll effect for messages
@@ -68,7 +71,7 @@ const ChatContainer: React.FC<ChatContainerProps> = ({ conversation, isLoading, 
           alignItems: "center",
         }}
       >
-        <Box>
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
           <Typography
             variant="h4"
             sx={{
@@ -78,39 +81,103 @@ const ChatContainer: React.FC<ChatContainerProps> = ({ conversation, isLoading, 
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
               backgroundClip: "text",
-              textAlign: "center",
             }}
           >
             Healthcare Consultation
           </Typography>
+          
+          {/* Authentication Status */}
+          {isAuthenticated ? (
+            <Chip
+              icon={<Person />}
+              label={`Authenticated as: ${user?.email}`}
+              size="small"
+              sx={{
+                mt: 1,
+                bgcolor: 'var(--success-100)',
+                color: 'var(--success-800)',
+                fontSize: 'var(--text-xs)',
+                '& .MuiChip-icon': {
+                  color: 'var(--success-600)',
+                },
+              }}
+            />
+          ) : (
+            <Chip
+              icon={<Login />}
+              label="Anonymous Session"
+              size="small"
+              clickable
+              onClick={onShowAuthModal}
+              sx={{
+                mt: 1,
+                bgcolor: 'var(--warning-100)',
+                color: 'var(--warning-800)',
+                fontSize: 'var(--text-xs)',
+                cursor: 'pointer',
+                '& .MuiChip-icon': {
+                  color: 'var(--warning-600)',
+                },
+                '&:hover': {
+                  bgcolor: 'var(--warning-200)',
+                },
+              }}
+            />
+          )}
         </Box>
 
-        <Button
-          variant="outlined"
-          size="small"
-          startIcon={<Refresh />}
-          onClick={handleStartNewSession}
-          disabled={isLoading}
-          sx={{
-            borderColor: "var(--primary-500)",
-            color: "var(--primary-600)",
-            fontSize: "var(--text-sm)",
-            padding: "var(--space-2) var(--space-4)",
-            borderRadius: "var(--radius-lg)",
-            textTransform: "none",
-            fontWeight: 500,
-            "&:hover": {
-              borderColor: "var(--primary-600)",
-              backgroundColor: "var(--primary-50)",
-            },
-            "&:disabled": {
-              borderColor: "var(--neutral-300)",
-              color: "var(--neutral-400)",
-            },
-          }}
-        >
-          New Chat
-        </Button>
+        <Box sx={{ display: 'flex', gap: 1 }}>
+          {!isAuthenticated && (
+            <Button
+              variant="contained"
+              size="small"
+              startIcon={<Login />}
+              onClick={onShowAuthModal}
+              sx={{
+                backgroundColor: "var(--primary-600)",
+                color: "white",
+                fontSize: "var(--text-sm)",
+                padding: "var(--space-2) var(--space-4)",
+                borderRadius: "var(--radius-lg)",
+                textTransform: "none",
+                fontWeight: 600,
+                boxShadow: "var(--shadow-sm)",
+                "&:hover": {
+                  backgroundColor: "var(--primary-700)",
+                  boxShadow: "var(--shadow-md)",
+                },
+              }}
+            >
+              Sign In
+            </Button>
+          )}
+          <Button
+            variant="outlined"
+            size="small"
+            startIcon={<Refresh />}
+            onClick={handleStartNewSession}
+            disabled={isLoading}
+            sx={{
+              borderColor: "var(--primary-500)",
+              color: "var(--primary-600)",
+              fontSize: "var(--text-sm)",
+              padding: "var(--space-2) var(--space-4)",
+              borderRadius: "var(--radius-lg)",
+              textTransform: "none",
+              fontWeight: 500,
+              "&:hover": {
+                borderColor: "var(--primary-600)",
+                backgroundColor: "var(--primary-50)",
+              },
+              "&:disabled": {
+                borderColor: "var(--neutral-300)",
+                color: "var(--neutral-400)",
+              },
+            }}
+          >
+            New Chat
+          </Button>
+        </Box>
       </Box>
 
       {/* Messages Area */}
@@ -298,9 +365,57 @@ const ChatContainer: React.FC<ChatContainerProps> = ({ conversation, isLoading, 
           backgroundColor: "var(--bg-primary)",
           borderTop: "1px solid var(--border-light)",
           flexShrink: 0,
+          position: "relative",
         }}
       >
         <ChatInput onSendMessage={onSendMessage} isLoading={isLoading} />
+        
+        {/* Floating Sign In Button for unauthenticated users */}
+        {!isAuthenticated && (
+          <Box
+            sx={{
+              position: "absolute",
+              top: "-60px",
+              right: "20px",
+              zIndex: 1000,
+            }}
+          >
+            <Button
+              variant="contained"
+              size="small"
+              startIcon={<Login />}
+              onClick={onShowAuthModal}
+              sx={{
+                backgroundColor: "var(--primary-600)",
+                color: "white",
+                fontSize: "var(--text-sm)",
+                padding: "var(--space-2) var(--space-4)",
+                borderRadius: "var(--radius-full)",
+                textTransform: "none",
+                fontWeight: 600,
+                boxShadow: "var(--shadow-lg)",
+                "&:hover": {
+                  backgroundColor: "var(--primary-700)",
+                  boxShadow: "var(--shadow-xl)",
+                },
+                animation: "pulse 2s infinite",
+                "@keyframes pulse": {
+                  "0%": {
+                    boxShadow: "0 0 0 0 rgba(99, 102, 241, 0.7)",
+                  },
+                  "70%": {
+                    boxShadow: "0 0 0 10px rgba(99, 102, 241, 0)",
+                  },
+                  "100%": {
+                    boxShadow: "0 0 0 0 rgba(99, 102, 241, 0)",
+                  },
+                },
+              }}
+            >
+              Sign In
+            </Button>
+          </Box>
+        )}
       </Box>
     </Box>
   );

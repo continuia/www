@@ -137,7 +137,8 @@ export const useChat = () => {
       reconnectAttempts.current = 0;
 
       console.log('🚀 Making API call to create session...');
-      const response = await fetch('http://64.227.190.197:3000/api/auto-session', {
+      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'https://api.continuia.health';
+      const response = await fetch(`${apiBaseUrl}/api/auto-session`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -204,7 +205,9 @@ export const useChat = () => {
       setIsWebSocketConnected(false);
     }
 
-    const wsUrl = `ws://64.227.190.197:3000/agents/ws/${sessionId}`;
+    const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'https://api.continuia.health';
+    const wsBaseUrl = apiBaseUrl.replace('https://', 'wss://').replace('http://', 'ws://');
+    const wsUrl = `${wsBaseUrl}/agents/ws/${sessionId}`;
     console.log(`🔗 Connecting to WebSocket (attempt ${reconnectAttempts.current + 1}):`, wsUrl);
     const ws = new WebSocket(wsUrl);
 

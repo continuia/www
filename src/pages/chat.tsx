@@ -1,10 +1,12 @@
 import { useEffect, useState, useRef } from "react";
-import { Alert, Box, CircularProgress, Typography, Snackbar } from "@mui/material";
+import { Alert, Box, CircularProgress, Typography, Snackbar, Button } from "@mui/material";
 import { Paper, Stack, Chip, useMediaQuery, useTheme } from "@mui/material";
 import { motion } from "framer-motion";
 import { useChat } from "../components/chat/hooks/useChat";
+import { useAuth } from "../components/auth/AuthContext";
 import ChatContainer from "../components/chat/chatContainer";
 import ConsentModal from "../components/chat/consentModal";
+import AuthModal from "../components/auth/AuthModal";
 
 const MotionBox = motion.create(Box);
 const MotionPaper = motion.create(Paper);
@@ -25,24 +27,29 @@ const fadeInVariants = {
 
 const ChatPage: React.FC = () => {
   const { currentConversation, isLoading, isConnecting, isRestoringSession, isAgentTyping, connectionError, isWebSocketConnected, createNewConversation, forceCreateNewConversation, sendMessage, clearSession } = useChat();
+  const { user, isAuthenticated, isLoading: authLoading, logout } = useAuth();
   const [showError, setShowError] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
   const hasTriedConnection = useRef(false);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
   const [consentGiven, setConsentGiven] = useState(false);
   const [showConsentModal, setShowConsentModal] = useState(false);
 
-  // Check consent on mount - separate from conversation logic
+  // Check consent on mount - authentication is now optional
   useEffect(() => {
-    const storedConsent = localStorage.getItem("continuia-healthcare-consent");
-    if (storedConsent === "granted") {
-      setConsentGiven(true);
-    } else {
-      setShowConsentModal(true);
+    if (!authLoading) {
+      // Check consent regardless of authentication status
+      const storedConsent = localStorage.getItem("continuia-healthcare-consent");
+      if (storedConsent === "granted") {
+        setConsentGiven(true);
+      } else {
+        setShowConsentModal(true);
+      }
     }
-  }, []); // Run only once on mount
+  }, [authLoading]); // Run when auth loading is complete
 
-  // Handle conversation creation only after consent is given and session restoration is complete
+  // Handle conversation creation after consent (authentication is optional)
   useEffect(() => {
     if (consentGiven && !currentConversation && !isConnecting && !isRestoringSession && !hasTriedConnection.current) {
       hasTriedConnection.current = true;
@@ -68,7 +75,15 @@ const ChatPage: React.FC = () => {
     setShowError(false);
   };
 
-  if (isRestoringSession) {
+  // Authentication success handler
+  const handleAuthSuccess = (userData: any) => {
+    console.log('Authentication successful:', userData);
+    setShowAuthModal(false);
+    // The useAuth hook will handle the login state
+  };
+
+  // Show loading state for auth or session restoration
+  if (authLoading || isRestoringSession) {
     return (
       <Box
         sx={{
@@ -81,10 +96,14 @@ const ChatPage: React.FC = () => {
         }}
       >
         <CircularProgress sx={{ color: "var(--primary-600)", mb: 2 }} />
-        <Typography sx={{ color: "var(--text-muted)" }}>Restoring your session with Arika...</Typography>
+        <Typography sx={{ color: "var(--text-muted)" }}>
+          {authLoading ? "Checking authentication..." : "Restoring your session with Arika..."}
+        </Typography>
       </Box>
     );
   }
+
+  // Authentication is now optional - no blocking screen
 
   const handleConsentGiven = () => {
     setConsentGiven(true);
@@ -104,7 +123,17 @@ const ChatPage: React.FC = () => {
     // Mobile: Full-screen chat
     return (
       <Box sx={{ height: "100vh", backgroundColor: "var(--bg-primary)" }}>
-        <ChatContainer conversation={currentConversation} isLoading={isLoading || isConnecting} isAgentTyping={isAgentTyping} onSendMessage={sendMessage} onClearSession={clearSession} onCreateNewConversation={forceCreateNewConversation} connectionError={connectionError} isWebSocketConnected={isWebSocketConnected} />{" "}
+        <ChatContainer
+          conversation={currentConversation}
+          isLoading={isLoading || isConnecting}
+          isAgentTyping={isAgentTyping}
+          onSendMessage={sendMessage}
+          onClearSession={clearSession}
+          onCreateNewConversation={forceCreateNewConversation}
+          connectionError={connectionError}
+          isWebSocketConnected={isWebSocketConnected}
+          onShowAuthModal={() => setShowAuthModal(true)}
+        />
       </Box>
     );
   }
@@ -114,6 +143,11 @@ const ChatPage: React.FC = () => {
     return (
       <>
         <ConsentModal open={showConsentModal} onConsent={handleConsentGiven} onDecline={handleConsentDeclined} />
+        <AuthModal
+          open={showAuthModal}
+          onClose={() => setShowAuthModal(false)}
+          onSuccess={handleAuthSuccess}
+        />
         {/* Show a loading/waiting state while consent modal is open */}
         <Box
           sx={{
@@ -148,10 +182,84 @@ const ChatPage: React.FC = () => {
               sx={{
                 color: "var(--text-secondary)",
                 lineHeight: "var(--leading-relaxed)",
+                mb: 3,
               }}
             >
-              Please review and provide your consent to begin your healthcare consultation.
+              {isAuthenticated
+                ? `Welcome, ${user?.firstName}! Please review and provide your consent to begin your healthcare consultation.`
+                : "Please review and provide your consent to begin your healthcare consultation."
+              }
             </Typography>
+            
+            {/* User info display or sign-in option */}
+            {isAuthenticated ? (
+              <Box sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: 2,
+                mb: 2,
+                p: 2,
+                bgcolor: 'var(--primary-50)',
+                borderRadius: 'var(--radius-lg)'
+              }}>
+                {user?.profilePictureUrl && (
+                  <Box
+                    component="img"
+                    src={user.profilePictureUrl}
+                    alt={`${user.firstName} ${user.lastName}`}
+                    sx={{
+                      width: 40,
+                      height: 40,
+                      borderRadius: '50%',
+                    }}
+                  />
+                )}
+                <Box>
+                  <Typography variant="body2" sx={{ fontWeight: 600, color: 'var(--primary-800)' }}>
+                    {user?.firstName} {user?.lastName}
+                  </Typography>
+                  <Typography variant="caption" sx={{ color: 'var(--text-secondary)' }}>
+                    {user?.email}
+                  </Typography>
+                </Box>
+                <Button
+                  size="small"
+                  variant="text"
+                  onClick={logout}
+                  sx={{ color: 'var(--text-secondary)', fontSize: '0.75rem' }}
+                >
+                  Switch Account
+                </Button>
+              </Box>
+            ) : (
+              <Box sx={{
+                mb: 2,
+                p: 2,
+                bgcolor: 'var(--warning-50)',
+                borderRadius: 'var(--radius-lg)',
+                border: '1px solid var(--warning-200)'
+              }}>
+                <Typography variant="body2" sx={{ color: 'var(--warning-800)', mb: 2, textAlign: 'center' }}>
+                  💡 Sign in for a personalized experience and to save your consultation history
+                </Typography>
+                <Button
+                  variant="outlined"
+                  onClick={() => setShowAuthModal(true)}
+                  sx={{
+                    width: '100%',
+                    color: 'var(--primary-600)',
+                    borderColor: 'var(--primary-600)',
+                    '&:hover': {
+                      bgcolor: 'var(--primary-50)',
+                      borderColor: 'var(--primary-700)'
+                    },
+                  }}
+                >
+                  Sign In (Optional)
+                </Button>
+              </Box>
+            )}
           </Paper>
         </Box>
       </>
@@ -159,15 +267,21 @@ const ChatPage: React.FC = () => {
   }
 
   return (
-    <Box
-      sx={{
-        flex: 1,
-        backgroundColor: "var(--bg-primary)",
-        display: "flex",
-        flexDirection: "column",
-        minHeight: 0,
-      }}
-    >
+    <>
+      <AuthModal
+        open={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+        onSuccess={handleAuthSuccess}
+      />
+      <Box
+        sx={{
+          flex: 1,
+          backgroundColor: "var(--bg-primary)",
+          display: "flex",
+          flexDirection: "column",
+          minHeight: 0,
+        }}
+      >
       <Snackbar
         open={showError && !!connectionError}
         autoHideDuration={8000}
@@ -497,10 +611,22 @@ const ChatPage: React.FC = () => {
             zIndex: 2,
           }}
         >
-          <ChatContainer conversation={currentConversation} isLoading={isLoading || isConnecting} isAgentTyping={isAgentTyping} onSendMessage={sendMessage} onClearSession={clearSession} onCreateNewConversation={forceCreateNewConversation} connectionError={connectionError} isWebSocketConnected={isWebSocketConnected} />{" "}
+          <ChatContainer
+            conversation={currentConversation}
+            isLoading={isLoading || isConnecting}
+            isAgentTyping={isAgentTyping}
+            onSendMessage={sendMessage}
+            onClearSession={clearSession}
+            onCreateNewConversation={forceCreateNewConversation}
+            connectionError={connectionError}
+            isWebSocketConnected={isWebSocketConnected}
+            onShowAuthModal={() => setShowAuthModal(true)}
+          />
         </Box>
       </Box>
     </Box>
+  );
+    </>
   );
 };
 

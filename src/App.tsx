@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useState, useEffect } from "react";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { Fab, Zoom } from "@mui/material";
-import PasswordProtection from "./components/PasswordProtection";
+import { AuthProvider } from "./components/auth/AuthContext";
 import HomeLayout from "./layout/landingPage";
 import TermsOfServiceLayout from "./layout/termsOfService";
 import NotFound from "./pages/notFound";
@@ -25,7 +25,6 @@ import DoctorsPage from "./pages/doctors";
 import DoctorProfile from "./components/doctors/doctorProfile";
 import { TermsOfService } from "./pages/privacy";
 import GetInTouchPage from "./pages/getInTouch";
-import DevOnlyRoute from "./components/devOnlyRoute";
 import ChatLayout from "./layout/chat";
 
 function App() {
@@ -44,74 +43,71 @@ function App() {
   };
 
   return (
-    <PasswordProtection password="Continuia123">
+    <AuthProvider>
       <Router>
         <ScrollToTop />
         <Routes>
-          {/* Public Routes */}
-          <Route path="/" element={<HomeLayout />}>
-            <Route index element={<Homepage />} />
-            <Route path="insights" element={<Insights />} />
-            <Route path="governance" element={<Governance />} />
-            <Route path="/partners">
-              <Route index element={<Partners />} />
-              <Route path="hospitals" element={<HospitalPartner />} />
-              <Route path="nursing-and-living" element={<NursingAndLivingPartner />} />
-              <Route path="doctors-and-specialists" element={<DoctorsAndSpecialists />} />
-              <Route path="clinics-diagnostics" element={<ClinicsAndDiagnostic />} />
-              <Route path="health-plans-tpas" element={<HealthPlansAndTPA />} />
-              <Route path="benefit-consultants" element={<ConsultantsAndWellness />} />
-              <Route path="advocacy-ngos" element={<AdvocacyAndNGOs />} />
-              <Route path="medical-tourism" element={<MedicalTourism />} />
-            </Route>
-            <Route path="doctors" element={<DoctorsPage />} />
-            <Route path="getInTouch" element={<GetInTouchPage />} />
-            <Route path="doctorProfile/:id" element={<DoctorProfile />} />
-
-            <Route path="about" element={<AboutPage />} />
-            <Route path="cxa-globallaunch-c1a7e3d" element={<Campaign />} />
-            <Route path="launch" element={<Campaign />} />
-            <Route path="*" element={<NotFound />} />
+        {/* Chat Route - Standalone layout */}
+        <Route path="/chat" element={<ChatLayout />} />
+        
+        {/* Privacy Routes */}
+        <Route path="privacy" element={<TermsOfServiceLayout />}>
+          <Route index element={<TermsOfService />} />
+        </Route>
+        
+        {/* Public Routes */}
+        <Route path="/" element={<HomeLayout />}>
+          <Route index element={<Homepage />} />
+          <Route path="insights" element={<Insights />} />
+          <Route path="governance" element={<Governance />} />
+          <Route path="partners">
+            <Route index element={<Partners />} />
+            <Route path="hospitals" element={<HospitalPartner />} />
+            <Route path="nursing-and-living" element={<NursingAndLivingPartner />} />
+            <Route path="doctors-and-specialists" element={<DoctorsAndSpecialists />} />
+            <Route path="clinics-diagnostics" element={<ClinicsAndDiagnostic />} />
+            <Route path="health-plans-tpas" element={<HealthPlansAndTPA />} />
+            <Route path="benefit-consultants" element={<ConsultantsAndWellness />} />
+            <Route path="advocacy-ngos" element={<AdvocacyAndNGOs />} />
+            <Route path="medical-tourism" element={<MedicalTourism />} />
           </Route>
-          <Route path="/privacy" element={<TermsOfServiceLayout />}>
-            <Route index element={<TermsOfService />} />
-          </Route>
-          <Route
-            path="/chat"
-            element={
-              <DevOnlyRoute>
-                {" "}
-                <ChatLayout />{" "}
-              </DevOnlyRoute>
-            }
-          />
-          {/* Unknown routes nagivated to not-found */}
-        </Routes>
+          <Route path="doctors" element={<DoctorsPage />} />
+          <Route path="getInTouch" element={<GetInTouchPage />} />
+          <Route path="doctorProfile/:id" element={<DoctorProfile />} />
 
-        {/* Floating Scroll-to-Top Button */}
-        <Zoom in={showButton}>
-          <Fab
-            color="primary"
-            size="medium"
-            onClick={scrollToTop}
-            aria-label="scroll back to top"
-            sx={{
-              position: "fixed",
-              bottom: { xs: 28, sm: 100 },
-              right: { xs: 20, sm: 30 },
-              zIndex: 1700,
-              boxShadow: "var(--shadow-lg)",
-              bgcolor: "var(--primary-600)",
-              color: "var(--text-inverse)",
-              "&:hover": { bgcolor: "var(--primary-700)" },
-              transition: "background 0.2s",
-            }}
-          >
-            <KeyboardArrowUpIcon fontSize="large" />
-          </Fab>
-        </Zoom>
+          <Route path="about" element={<AboutPage />} />
+          <Route path="cxa-globallaunch-c1a7e3d" element={<Campaign />} />
+          <Route path="launch" element={<Campaign />} />
+        </Route>
+        
+        {/* Catch-all route - Must be last */}
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+
+      {/* Floating Scroll-to-Top Button */}
+      <Zoom in={showButton}>
+        <Fab
+          color="primary"
+          size="medium"
+          onClick={scrollToTop}
+          aria-label="scroll back to top"
+          sx={{
+            position: "fixed",
+            bottom: { xs: 28, sm: 100 },
+            right: { xs: 20, sm: 30 },
+            zIndex: 1700,
+            boxShadow: "var(--shadow-lg)",
+            bgcolor: "var(--primary-600)",
+            color: "var(--text-inverse)",
+            "&:hover": { bgcolor: "var(--primary-700)" },
+            transition: "background 0.2s",
+          }}
+        >
+          <KeyboardArrowUpIcon fontSize="large" />
+        </Fab>
+      </Zoom>
       </Router>
-    </PasswordProtection>
+    </AuthProvider>
   );
 }
 
