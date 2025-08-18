@@ -31,7 +31,7 @@ const ensureDate = (timestamp: any): Date => {
 const waitForSessionReady = async (sessionId: string): Promise<void> => {
   console.log(`⏳ Waiting for session ${sessionId} to be ready on server...`);
   // Simple delay to allow server to fully initialize the session
-  await new Promise(resolve => setTimeout(resolve, 1000));
+  await new Promise(resolve => setTimeout(resolve, 3000));
   console.log(`✅ Session wait period complete, proceeding with WebSocket connection`);
 };
 
@@ -53,14 +53,27 @@ export const useChat = () => {
   const currentSessionIdRef = useRef<string | null>(null);
   const isInitializedRef = useRef<boolean>(false);
 
-  // NEW: Track connection state more precisely
+  // Track connection state more precisely
   const connectionStateRef = useRef<'idle' | 'connecting' | 'connected' | 'failed'>('idle');
   const initialConnectionAttemptRef = useRef<boolean>(false);
+
+  // FIX: Check actual WebSocket state
+  const isRealWebSocketActive = () => {
+    return (
+      wsRef.current &&
+      (wsRef.current.readyState === WebSocket.CONNECTING ||
+        wsRef.current.readyState === WebSocket.OPEN)
+    );
+  };
 
   // Improved session restoration with better timing
   const restoreSession = useCallback(async (sessionData: any) => {
     try {
       console.log('🔄 Restoring session:', sessionData.sessionId);
+
+      // FIX: Always reset connection state on restore
+      connectionStateRef.current = 'idle';
+      setIsWebSocketConnected(false);
 
       if (currentSessionIdRef.current === sessionData.sessionId && currentConversation) {
         console.log('⏸️ Session already restored, skipping...');
@@ -91,7 +104,7 @@ export const useChat = () => {
       setCurrentConversation(conversation);
       currentSessionIdRef.current = sessionData.sessionId;
 
-      // IMPROVED: Wait a bit for session to be ready, then connect
+      // Wait for session to be ready, then connect
       console.log('⏳ Waiting for session to be ready before WebSocket connection...');
       await waitForSessionReady(sessionData.sessionId);
 
@@ -111,13 +124,19 @@ export const useChat = () => {
 
   // Improved WebSocket initialization with better error handling
   const initializeWebSocket = useCallback((sessionId: string) => {
-    // Prevent duplicate connections more strictly
+    // FIX: Check actual WebSocket state before skipping
     if (connectionStateRef.current === 'connecting' || connectionStateRef.current === 'connected') {
-      console.log('⏸️ WebSocket already connecting/connected, skipping...');
-      return;
+      if (isRealWebSocketActive()) {
+        console.log('⏸️ WebSocket already connecting/connected, skipping...');
+        return;
+      } else {
+        // If state says connected but socket isn't active - reset state
+        console.log('🔄 State says connected but WebSocket not active, resetting...');
+        connectionStateRef.current = 'idle';
+      }
     }
 
-    if (wsRef.current && (wsRef.current.readyState === WebSocket.CONNECTING || wsRef.current.readyState === WebSocket.OPEN)) {
+    if (isRealWebSocketActive()) {
       console.log('⏸️ WebSocket already active, skipping...');
       return;
     }
@@ -147,7 +166,7 @@ export const useChat = () => {
     try {
       const ws = new WebSocket(wsUrl);
 
-      // IMPROVED: Set a connection timeout
+      // Set a connection timeout
       const connectionTimeout = setTimeout(() => {
         if (ws.readyState === WebSocket.CONNECTING) {
           console.log('⏰ WebSocket connection timeout, closing...');
@@ -221,7 +240,6 @@ export const useChat = () => {
         setIsLoading(false);
         connectionStateRef.current = 'failed';
 
-        // IMPROVED: Different error messages based on attempt count
         if (reconnectAttempts.current === 0 && !initialConnectionAttemptRef.current) {
           setConnectionError('Initial connection failed. This is common on first load - retrying...');
         } else if (reconnectAttempts.current >= maxReconnectAttempts) {
@@ -239,16 +257,14 @@ export const useChat = () => {
         setIsLoading(false);
         connectionStateRef.current = 'failed';
 
-        // IMPROVED: More aggressive retry for initial connection failures
         const shouldRetry = event.code !== 1000 && event.code !== 1001 && reconnectAttempts.current < maxReconnectAttempts;
 
         if (shouldRetry) {
           reconnectAttempts.current += 1;
 
-          // IMPROVED: Faster retry for first few attempts, especially initial load
           let delay;
           if (!initialConnectionAttemptRef.current && reconnectAttempts.current <= 2) {
-            delay = 1000; // Quick retry for initial connection issues
+            delay = 1000;
           } else {
             delay = Math.min(1000 * reconnectAttempts.current, 3000);
           }
@@ -263,7 +279,7 @@ export const useChat = () => {
 
           reconnectTimeoutRef.current = setTimeout(() => {
             console.log('🔄 Executing reconnection attempt...');
-            connectionStateRef.current = 'idle'; // Reset state for retry
+            connectionStateRef.current = 'idle';
             initializeWebSocket(sessionId);
           }, delay);
         } else {
@@ -283,7 +299,6 @@ export const useChat = () => {
       connectionStateRef.current = 'failed';
       setConnectionError('Failed to initialize connection. Retrying...');
 
-      // Retry after a delay
       setTimeout(() => {
         if (reconnectAttempts.current < maxReconnectAttempts) {
           reconnectAttempts.current += 1;
@@ -293,7 +308,7 @@ export const useChat = () => {
     }
   }, []);
 
-  // IMPROVED: Better session creation with timing
+  // Create session
   const createSession = useCallback(async (): Promise<SessionResponse | null> => {
     if (sessionCreationRef.current) {
       console.log('⏳ Session creation already in progress, skipping...');
@@ -311,9 +326,8 @@ export const useChat = () => {
       console.log('🚀 Making API call to create session...');
       const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'https://api.continuia.health';
 
-      // IMPROVED: Add timeout to session creation
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout
+      const timeoutId = setTimeout(() => controller.abort(), 15000);
 
       const response = await fetch(`${apiBaseUrl}/api/auto-session`, {
         method: 'GET',
@@ -338,9 +352,8 @@ export const useChat = () => {
       const sessionData: SessionResponse = await response.json();
       console.log('✅ Session created successfully:', sessionData.sessionId);
 
-      // IMPROVED: Give server more time to fully initialize session
       console.log('⏳ Allowing server time to initialize session...');
-      await new Promise(resolve => setTimeout(resolve, 1500)); // Increased delay
+      await new Promise(resolve => setTimeout(resolve, 1500));
 
       return sessionData;
     } catch (error) {
@@ -372,7 +385,18 @@ export const useChat = () => {
     const checkExistingSession = async () => {
       console.log('🔍 Checking for existing session...');
 
-      // IMPROVED: Add small delay to ensure page is fully loaded
+      // FIX: Always reset all connection states on page load
+      connectionStateRef.current = 'idle';
+      setIsWebSocketConnected(false);
+      setConnectionError(null);
+      reconnectAttempts.current = 0;
+
+      // Close any existing WebSocket
+      if (wsRef.current) {
+        wsRef.current.close();
+        wsRef.current = null;
+      }
+
       await new Promise(resolve => setTimeout(resolve, 100));
 
       const storedSession = getStoredSession();
@@ -419,14 +443,13 @@ export const useChat = () => {
     }, 2000);
   }, [initializeWebSocket]);
 
-  // Create new conversation - IMPROVED
+  // Create new conversation
   const createNewConversation = useCallback(async () => {
     if (sessionCreationRef.current || isCreatingNewSession.current) {
       console.log('⏳ Conversation creation already in progress');
       return;
     }
 
-    // Prevent duplicate creation if we already have a valid conversation
     if (currentConversation && currentSessionIdRef.current) {
       console.log('⏸️ Valid conversation already exists, skipping creation');
       return;
@@ -434,7 +457,6 @@ export const useChat = () => {
 
     console.log('🆕 Creating new conversation...');
 
-    // Clear any existing reconnection timeouts
     if (reconnectTimeoutRef.current) {
       clearTimeout(reconnectTimeoutRef.current);
       reconnectTimeoutRef.current = null;
@@ -474,7 +496,7 @@ export const useChat = () => {
     initializeWebSocket(sessionData.sessionId);
   }, [createSession, initializeWebSocket, currentConversation, restoreSession]);
 
-  // Force create new session (for "Start New Session" button)
+  // Force create new session
   const forceCreateNewConversation = useCallback(async () => {
     if (isCreatingNewSession.current || sessionCreationRef.current) {
       console.log('⏳ New session creation already in progress, please wait...');
@@ -486,7 +508,6 @@ export const useChat = () => {
       isCreatingNewSession.current = true;
       console.log('🆕 Force creating new session...');
 
-      // Clear reconnection attempts and timeouts
       if (reconnectTimeoutRef.current) {
         clearTimeout(reconnectTimeoutRef.current);
         reconnectTimeoutRef.current = null;
@@ -546,7 +567,7 @@ export const useChat = () => {
       id: crypto.randomUUID(),
       content: messageContent,
       role: 'user',
-      timestamp: new Date(), // Always create with proper Date object
+      timestamp: new Date(),
     };
 
     setCurrentConversation(prev => {
@@ -585,7 +606,6 @@ export const useChat = () => {
   const clearSession = useCallback(() => {
     console.log('🧹 Clearing session manually...');
 
-    // Clear reconnection timeouts
     if (reconnectTimeoutRef.current) {
       clearTimeout(reconnectTimeoutRef.current);
       reconnectTimeoutRef.current = null;
