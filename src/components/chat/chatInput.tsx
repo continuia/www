@@ -32,7 +32,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, isLoading }) => {
       onSubmit={handleSubmit}
       sx={{
         display: "flex",
-        alignItems: "flex-end",
+        alignItems: "center",
         gap: "var(--space-3)",
         maxWidth: "800px",
         margin: "0 auto",
