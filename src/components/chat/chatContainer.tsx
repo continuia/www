@@ -1,5 +1,5 @@
 import { Box, Typography, CircularProgress, Button, Chip } from "@mui/material";
-import { Refresh, Wifi, WifiOff, Person, Login } from "@mui/icons-material";
+import { Refresh, Wifi, Person, Login } from "@mui/icons-material";
 import { useRef, useEffect } from "react";
 import { useAuth } from "../auth/AuthContext";
 import ChatMessage from "./chatMessage";
@@ -71,7 +71,7 @@ const ChatContainer: React.FC<ChatContainerProps> = ({ conversation, isLoading, 
           alignItems: "center",
         }}
       >
-        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+        <Box sx={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
           <Typography
             variant="h4"
             sx={{
@@ -85,7 +85,7 @@ const ChatContainer: React.FC<ChatContainerProps> = ({ conversation, isLoading, 
           >
             Healthcare Consultation
           </Typography>
-          
+
           {/* Authentication Status */}
           {isAuthenticated ? (
             <Chip
@@ -94,11 +94,11 @@ const ChatContainer: React.FC<ChatContainerProps> = ({ conversation, isLoading, 
               size="small"
               sx={{
                 mt: 1,
-                bgcolor: 'var(--success-100)',
-                color: 'var(--success-800)',
-                fontSize: 'var(--text-xs)',
-                '& .MuiChip-icon': {
-                  color: 'var(--success-600)',
+                bgcolor: "var(--success-100)",
+                color: "var(--success-800)",
+                fontSize: "var(--text-xs)",
+                "& .MuiChip-icon": {
+                  color: "var(--success-600)",
                 },
               }}
             />
@@ -111,22 +111,22 @@ const ChatContainer: React.FC<ChatContainerProps> = ({ conversation, isLoading, 
               onClick={onShowAuthModal}
               sx={{
                 mt: 1,
-                bgcolor: 'var(--warning-100)',
-                color: 'var(--warning-800)',
-                fontSize: 'var(--text-xs)',
-                cursor: 'pointer',
-                '& .MuiChip-icon': {
-                  color: 'var(--warning-600)',
+                bgcolor: "var(--warning-100)",
+                color: "var(--warning-800)",
+                fontSize: "var(--text-xs)",
+                cursor: "pointer",
+                "& .MuiChip-icon": {
+                  color: "var(--warning-600)",
                 },
-                '&:hover': {
-                  bgcolor: 'var(--warning-200)',
+                "&:hover": {
+                  bgcolor: "var(--warning-200)",
                 },
               }}
             />
           )}
         </Box>
 
-        <Box sx={{ display: 'flex', gap: 1 }}>
+        <Box sx={{ display: "flex", gap: 1 }}>
           {!isAuthenticated && (
             <Button
               variant="contained"
@@ -247,13 +247,6 @@ const ChatContainer: React.FC<ChatContainerProps> = ({ conversation, isLoading, 
                 </>
               ) : hasConnectionError || !isWebSocketConnected ? (
                 <>
-                  <WifiOff
-                    sx={{
-                      fontSize: "4rem",
-                      color: "var(--error)",
-                      mb: 3,
-                    }}
-                  />
                   <Typography
                     variant="h5"
                     sx={{
@@ -369,7 +362,7 @@ const ChatContainer: React.FC<ChatContainerProps> = ({ conversation, isLoading, 
         }}
       >
         <ChatInput onSendMessage={onSendMessage} isLoading={isLoading} />
-        
+
         {/* Floating Sign In Button for unauthenticated users */}
         {!isAuthenticated && (
           <Box

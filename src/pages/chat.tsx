@@ -68,12 +68,13 @@ const ChatPage: React.FC = () => {
     if (connectionError) {
       setShowError(true);
       hasTriedConnection.current = false;
+      console.error(connectionError);
     }
   }, [connectionError]);
 
-  const handleCloseError = () => {
-    setShowError(false);
-  };
+  // const handleCloseError = () => {
+  //   setShowError(false);
+  // };
 
   // Authentication success handler
   const handleAuthSuccess = (userData: any) => {
@@ -282,7 +283,7 @@ const ChatPage: React.FC = () => {
           minHeight: 0,
         }}
       >
-      <Snackbar
+      {/* <Snackbar
         open={showError && !!connectionError}
         autoHideDuration={8000}
         onClose={handleCloseError}
@@ -309,7 +310,7 @@ const ChatPage: React.FC = () => {
         >
           {connectionError}
         </Alert>
-      </Snackbar>
+      </Snackbar> */}
 
       {/* Main Content Area */}
       <Box
