@@ -20,13 +20,19 @@ const ensureDate = (timestamp: any): Date => {
   if (timestamp instanceof Date) {
     return timestamp;
   }
-
   if (typeof timestamp === 'string' || typeof timestamp === 'number') {
     const date = new Date(timestamp);
     return isNaN(date.getTime()) ? new Date() : date;
   }
+  return new Date();
+};
 
-  return new Date(); // Fallback to current date
+// Helper function to wait for session to be ready - just a simple delay
+const waitForSessionReady = async (sessionId: string): Promise<void> => {
+  console.log(`⏳ Waiting for session ${sessionId} to be ready on server...`);
+  // Simple delay to allow server to fully initialize the session
+  await new Promise(resolve => setTimeout(resolve, 1000));
+  console.log(`✅ Session wait period complete, proceeding with WebSocket connection`);
 };
 
 export const useChat = () => {
@@ -37,59 +43,36 @@ export const useChat = () => {
   const [connectionError, setConnectionError] = useState<string | null>(null);
   const [isAgentTyping, setIsAgentTyping] = useState(false);
   const [isWebSocketConnected, setIsWebSocketConnected] = useState(false);
+
   const wsRef = useRef<WebSocket | null>(null);
   const sessionCreationRef = useRef<boolean>(false);
   const isCreatingNewSession = useRef<boolean>(false);
   const reconnectAttempts = useRef<number>(0);
   const maxReconnectAttempts = 3;
-  const reconnectTimeoutRef = useRef<number | null>(null);
+  const reconnectTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const currentSessionIdRef = useRef<string | null>(null);
-  const isInitializedRef = useRef<boolean>(false); // Prevent double initialization
+  const isInitializedRef = useRef<boolean>(false);
 
-  // Check for existing session on component mount - FIXED
-  useEffect(() => {
-    // Prevent double execution in React StrictMode
-    if (isInitializedRef.current) return;
-    isInitializedRef.current = true;
+  // NEW: Track connection state more precisely
+  const connectionStateRef = useRef<'idle' | 'connecting' | 'connected' | 'failed'>('idle');
+  const initialConnectionAttemptRef = useRef<boolean>(false);
 
-    const checkExistingSession = async () => {
-      console.log('🔍 Checking for existing session...');
-
-      const storedSession = getStoredSession();
-
-      if (storedSession && isSessionValid(storedSession)) {
-        console.log('✅ Found valid stored session, restoring...');
-        await restoreSession(storedSession);
-      } else {
-        if (storedSession) {
-          console.log('🧹 Stored session expired, clearing...');
-          clearStoredSession();
-        }
-      }
-
-      setIsRestoringSession(false);
-    };
-
-    checkExistingSession();
-  }, []);
-
-  // Restore session from storage and connect directly to WebSocket
-  const restoreSession = async (sessionData: any) => {
+  // Improved session restoration with better timing
+  const restoreSession = useCallback(async (sessionData: any) => {
     try {
       console.log('🔄 Restoring session:', sessionData.sessionId);
-      
-      // Prevent duplicate restoration
+
       if (currentSessionIdRef.current === sessionData.sessionId && currentConversation) {
         console.log('⏸️ Session already restored, skipping...');
         return;
       }
-      
+
       setIsConnecting(true);
       setConnectionError(null);
       setIsWebSocketConnected(false);
       reconnectAttempts.current = 0;
+      connectionStateRef.current = 'connecting';
 
-      // Ensure all message timestamps are proper Date objects
       const messagesWithDates = (sessionData.messages || []).map((message: any) => ({
         ...message,
         timestamp: ensureDate(message.timestamp)
@@ -98,7 +81,7 @@ export const useChat = () => {
       const conversation: ChatConversation = {
         id: sessionData.sessionId,
         title: `Chat with ${sessionData.agentName}`,
-        messages: messagesWithDates, // Use messages with proper Date objects
+        messages: messagesWithDates,
         updatedAt: new Date(),
         sessionId: sessionData.sessionId,
         agentId: sessionData.agentId,
@@ -108,7 +91,10 @@ export const useChat = () => {
       setCurrentConversation(conversation);
       currentSessionIdRef.current = sessionData.sessionId;
 
-      // Directly connect to WebSocket using stored session ID
+      // IMPROVED: Wait a bit for session to be ready, then connect
+      console.log('⏳ Waiting for session to be ready before WebSocket connection...');
+      await waitForSessionReady(sessionData.sessionId);
+
       initializeWebSocket(sessionData.sessionId);
       updateLastActivity();
 
@@ -117,12 +103,197 @@ export const useChat = () => {
       clearStoredSession();
       setConnectionError('Unable to restore your previous session. Please start a new session.');
       setIsWebSocketConnected(false);
+      connectionStateRef.current = 'failed';
     } finally {
       setIsConnecting(false);
     }
-  };
+  }, [currentConversation]);
 
-  // Create session with backend API
+  // Improved WebSocket initialization with better error handling
+  const initializeWebSocket = useCallback((sessionId: string) => {
+    // Prevent duplicate connections more strictly
+    if (connectionStateRef.current === 'connecting' || connectionStateRef.current === 'connected') {
+      console.log('⏸️ WebSocket already connecting/connected, skipping...');
+      return;
+    }
+
+    if (wsRef.current && (wsRef.current.readyState === WebSocket.CONNECTING || wsRef.current.readyState === WebSocket.OPEN)) {
+      console.log('⏸️ WebSocket already active, skipping...');
+      return;
+    }
+
+    console.log('🔌 Initializing WebSocket connection for session:', sessionId);
+    connectionStateRef.current = 'connecting';
+
+    // Clear any existing reconnection timeout
+    if (reconnectTimeoutRef.current) {
+      clearTimeout(reconnectTimeoutRef.current);
+      reconnectTimeoutRef.current = null;
+    }
+
+    // Close existing connection if needed
+    if (wsRef.current && wsRef.current.readyState !== WebSocket.CLOSED) {
+      console.log('🔌 Closing existing WebSocket connection');
+      wsRef.current.close();
+      setIsWebSocketConnected(false);
+    }
+
+    const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'https://api.continuia.health';
+    const wsBaseUrl = apiBaseUrl.replace('https://', 'wss://').replace('http://', 'ws://');
+    const wsUrl = `${wsBaseUrl}/agents/ws/${sessionId}`;
+
+    console.log(`🔗 Connecting to WebSocket (attempt ${reconnectAttempts.current + 1}/${maxReconnectAttempts + 1}):`, wsUrl);
+
+    try {
+      const ws = new WebSocket(wsUrl);
+
+      // IMPROVED: Set a connection timeout
+      const connectionTimeout = setTimeout(() => {
+        if (ws.readyState === WebSocket.CONNECTING) {
+          console.log('⏰ WebSocket connection timeout, closing...');
+          ws.close();
+          connectionStateRef.current = 'failed';
+          setConnectionError('Connection timeout. Retrying...');
+        }
+      }, 10000); // 10 second timeout
+
+      ws.onopen = () => {
+        clearTimeout(connectionTimeout);
+        console.log('✅ WebSocket connected successfully');
+        setConnectionError(null);
+        setIsWebSocketConnected(true);
+        reconnectAttempts.current = 0;
+        connectionStateRef.current = 'connected';
+        initialConnectionAttemptRef.current = true;
+        updateLastActivity();
+      };
+
+      ws.onmessage = (event) => {
+        try {
+          const data = JSON.parse(event.data);
+          console.log('📨 Received WebSocket message:', data);
+
+          if (data.type === "agent_response") {
+            const cleanContent = data.content.replace(/\u001b\[[0-9;]*m/g, '');
+
+            const assistantMessage: ChatMessage = {
+              id: crypto.randomUUID(),
+              content: cleanContent,
+              role: 'assistant',
+              timestamp: ensureDate(data.timestamp || Date.now()),
+            };
+
+            setCurrentConversation(prev => {
+              if (!prev) return prev;
+              const updatedConversation = {
+                ...prev,
+                messages: [...prev.messages, assistantMessage],
+                updatedAt: new Date(),
+              };
+
+              storeMessages(updatedConversation.messages);
+              updateLastActivity();
+              return updatedConversation;
+            });
+
+            setIsAgentTyping(false);
+            setIsLoading(false);
+          }
+          else if (data.type === "connection_established") {
+            console.log('🎉 WebSocket connection established:', data.message);
+          }
+          else {
+            console.log('❓ Received unknown message type:', data.type, data);
+          }
+
+        } catch (error) {
+          console.error('❌ Error parsing WebSocket message:', error);
+          setIsAgentTyping(false);
+          setIsLoading(false);
+        }
+      };
+
+      ws.onerror = (error) => {
+        clearTimeout(connectionTimeout);
+        console.error('❌ WebSocket error:', error);
+        setIsWebSocketConnected(false);
+        setIsAgentTyping(false);
+        setIsLoading(false);
+        connectionStateRef.current = 'failed';
+
+        // IMPROVED: Different error messages based on attempt count
+        if (reconnectAttempts.current === 0 && !initialConnectionAttemptRef.current) {
+          setConnectionError('Initial connection failed. This is common on first load - retrying...');
+        } else if (reconnectAttempts.current >= maxReconnectAttempts) {
+          setConnectionError('Unable to establish connection to Arika. Please check your internet connection or try refreshing the page.');
+        } else {
+          setConnectionError(`Connection failed. Retrying... (${reconnectAttempts.current + 1}/${maxReconnectAttempts})`);
+        }
+      };
+
+      ws.onclose = (event) => {
+        clearTimeout(connectionTimeout);
+        console.log(`🔌 WebSocket disconnected: Code ${event.code}, Reason: ${event.reason || 'Unknown'}`);
+        setIsWebSocketConnected(false);
+        setIsAgentTyping(false);
+        setIsLoading(false);
+        connectionStateRef.current = 'failed';
+
+        // IMPROVED: More aggressive retry for initial connection failures
+        const shouldRetry = event.code !== 1000 && event.code !== 1001 && reconnectAttempts.current < maxReconnectAttempts;
+
+        if (shouldRetry) {
+          reconnectAttempts.current += 1;
+
+          // IMPROVED: Faster retry for first few attempts, especially initial load
+          let delay;
+          if (!initialConnectionAttemptRef.current && reconnectAttempts.current <= 2) {
+            delay = 1000; // Quick retry for initial connection issues
+          } else {
+            delay = Math.min(1000 * reconnectAttempts.current, 3000);
+          }
+
+          console.log(`🔄 Scheduling reconnection ${reconnectAttempts.current}/${maxReconnectAttempts} in ${delay}ms...`);
+
+          if (reconnectAttempts.current === 1 && !initialConnectionAttemptRef.current) {
+            setConnectionError('Initial connection failed - this is normal. Retrying...');
+          } else {
+            setConnectionError(`Connection lost. Reconnecting... (${reconnectAttempts.current}/${maxReconnectAttempts})`);
+          }
+
+          reconnectTimeoutRef.current = setTimeout(() => {
+            console.log('🔄 Executing reconnection attempt...');
+            connectionStateRef.current = 'idle'; // Reset state for retry
+            initializeWebSocket(sessionId);
+          }, delay);
+        } else {
+          if (reconnectAttempts.current >= maxReconnectAttempts) {
+            console.log('⚠️ Max reconnection attempts reached.');
+            setConnectionError('Unable to maintain connection to Arika. Please refresh the page or start a new session.');
+          }
+          reconnectAttempts.current = 0;
+          connectionStateRef.current = 'failed';
+        }
+      };
+
+      wsRef.current = ws;
+
+    } catch (error) {
+      console.error('❌ Failed to create WebSocket:', error);
+      connectionStateRef.current = 'failed';
+      setConnectionError('Failed to initialize connection. Retrying...');
+
+      // Retry after a delay
+      setTimeout(() => {
+        if (reconnectAttempts.current < maxReconnectAttempts) {
+          reconnectAttempts.current += 1;
+          initializeWebSocket(sessionId);
+        }
+      }, 2000);
+    }
+  }, []);
+
+  // IMPROVED: Better session creation with timing
   const createSession = useCallback(async (): Promise<SessionResponse | null> => {
     if (sessionCreationRef.current) {
       console.log('⏳ Session creation already in progress, skipping...');
@@ -135,15 +306,22 @@ export const useChat = () => {
       setConnectionError(null);
       setIsWebSocketConnected(false);
       reconnectAttempts.current = 0;
+      connectionStateRef.current = 'idle';
 
       console.log('🚀 Making API call to create session...');
       const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'https://api.continuia.health';
+
+      // IMPROVED: Add timeout to session creation
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout
+
       const response = await fetch(`${apiBaseUrl}/api/auto-session`, {
         method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
+        signal: controller.signal,
       });
+
+      clearTimeout(timeoutId);
 
       if (!response.ok) {
         if (response.status === 503) {
@@ -159,13 +337,23 @@ export const useChat = () => {
 
       const sessionData: SessionResponse = await response.json();
       console.log('✅ Session created successfully:', sessionData.sessionId);
+
+      // IMPROVED: Give server more time to fully initialize session
+      console.log('⏳ Allowing server time to initialize session...');
+      await new Promise(resolve => setTimeout(resolve, 1500)); // Increased delay
+
       return sessionData;
     } catch (error) {
       console.error('❌ Failed to create session:', error);
       setIsWebSocketConnected(false);
+      connectionStateRef.current = 'failed';
 
       if (error instanceof Error) {
-        setConnectionError(error.message);
+        if (error.name === 'AbortError') {
+          setConnectionError('Session creation timeout. Please try again.');
+        } else {
+          setConnectionError(error.message);
+        }
       } else {
         setConnectionError('Auto-session connection failed. Please check your internet connection and try again.');
       }
@@ -176,137 +364,35 @@ export const useChat = () => {
     }
   }, []);
 
-  // Initialize WebSocket connection - IMPROVED
-  const initializeWebSocket = useCallback((sessionId: string) => {
-    // Enhanced checks to prevent duplicate connections
-    if (wsRef.current && (wsRef.current.readyState === WebSocket.CONNECTING || wsRef.current.readyState === WebSocket.OPEN)) {
-      console.log('⏸️ WebSocket already connecting/connected, skipping...');
-      return;
-    }
+  // Check for existing session on component mount - IMPROVED
+  useEffect(() => {
+    if (isInitializedRef.current) return;
+    isInitializedRef.current = true;
 
-    // Prevent multiple simultaneous connection attempts
-    if (currentSessionIdRef.current === sessionId && wsRef.current && wsRef.current.readyState !== WebSocket.CLOSED) {
-      console.log('⏸️ WebSocket for this session already exists, skipping...');
-      return;
-    }
+    const checkExistingSession = async () => {
+      console.log('🔍 Checking for existing session...');
 
-    console.log('🔌 Initializing WebSocket connection for session:', sessionId);
+      // IMPROVED: Add small delay to ensure page is fully loaded
+      await new Promise(resolve => setTimeout(resolve, 100));
 
-    // Clear any existing reconnection timeout
-    if (reconnectTimeoutRef.current) {
-      clearTimeout(reconnectTimeoutRef.current);
-      reconnectTimeoutRef.current = null;
-    }
+      const storedSession = getStoredSession();
 
-    // Only close if we have a different session or closed connection
-    if (wsRef.current && (currentSessionIdRef.current !== sessionId || wsRef.current.readyState === WebSocket.CLOSED)) {
-      console.log('🔌 Closing existing WebSocket connection');
-      wsRef.current.close();
-      setIsWebSocketConnected(false);
-    }
-
-    const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'https://api.continuia.health';
-    const wsBaseUrl = apiBaseUrl.replace('https://', 'wss://').replace('http://', 'ws://');
-    const wsUrl = `${wsBaseUrl}/agents/ws/${sessionId}`;
-    console.log(`🔗 Connecting to WebSocket (attempt ${reconnectAttempts.current + 1}):`, wsUrl);
-    const ws = new WebSocket(wsUrl);
-
-    ws.onopen = () => {
-      console.log('✅ WebSocket connected successfully');
-      setConnectionError(null);
-      setIsWebSocketConnected(true);
-      reconnectAttempts.current = 0;
-      updateLastActivity();
-    };
-
-    ws.onmessage = (event) => {
-      try {
-        const data = JSON.parse(event.data);
-        console.log('📨 Received WebSocket message:', data);
-
-        if (data.type === "agent_response") {
-          const cleanContent = data.content.replace(/\u001b\[[0-9;]*m/g, '');
-
-          const assistantMessage: ChatMessage = {
-            id: crypto.randomUUID(),
-            content: cleanContent,
-            role: 'assistant',
-            timestamp: ensureDate(data.timestamp || Date.now()), // Ensure proper Date object
-          };
-
-          setCurrentConversation(prev => {
-            if (!prev) return prev;
-            const updatedConversation = {
-              ...prev,
-              messages: [...prev.messages, assistantMessage],
-              updatedAt: new Date(),
-            };
-
-            storeMessages(updatedConversation.messages);
-            updateLastActivity();
-
-            return updatedConversation;
-          });
-
-          setIsAgentTyping(false);
-          setIsLoading(false);
-        }
-        else if (data.type === "connection_established") {
-          console.log('🎉 WebSocket connection established:', data.message);
-        }
-        else {
-          console.log('❓ Received unknown message type:', data.type, data);
-        }
-
-      } catch (error) {
-        console.error('❌ Error parsing WebSocket message:', error);
-        setIsAgentTyping(false);
-        setIsLoading(false);
-      }
-    };
-
-    ws.onerror = (error) => {
-      console.error('❌ WebSocket error:', error);
-      setIsWebSocketConnected(false);
-      setIsAgentTyping(false);
-      setIsLoading(false);
-
-      if (reconnectAttempts.current >= maxReconnectAttempts) {
-        setConnectionError('Unable to establish connection to Arika. Please check your internet connection or try retrying the connection.');
+      if (storedSession && isSessionValid(storedSession)) {
+        console.log('✅ Found valid stored session, restoring...');
+        await restoreSession(storedSession);
       } else {
-        setConnectionError(`Connection failed. Retrying... (${reconnectAttempts.current + 1}/${maxReconnectAttempts})`);
-      }
-    };
-
-    ws.onclose = (event) => {
-      console.log(`🔌 WebSocket disconnected: Code ${event.code}, Reason: ${event.reason}`);
-      setIsWebSocketConnected(false);
-      setIsAgentTyping(false);
-      setIsLoading(false);
-
-      // Only attempt reconnection if it's not a normal closure and we haven't exceeded max attempts
-      if (event.code !== 1000 && event.code !== 1001 && reconnectAttempts.current < maxReconnectAttempts) {
-        reconnectAttempts.current += 1;
-        const delay = Math.min(1000 * reconnectAttempts.current, 3000); // Faster reconnection: 1s, 2s, 3s
-
-        console.log(`🔄 Scheduling reconnection ${reconnectAttempts.current}/${maxReconnectAttempts} in ${delay}ms...`);
-        setConnectionError(`Connection lost. Reconnecting... (${reconnectAttempts.current}/${maxReconnectAttempts})`);
-
-        reconnectTimeoutRef.current = setTimeout(() => {
-          console.log('🔄 Executing reconnection attempt...');
-          initializeWebSocket(sessionId);
-        }, delay);
-      } else {
-        if (reconnectAttempts.current >= maxReconnectAttempts) {
-          console.log('⚠️ Max reconnection attempts reached. Stopping reconnection.');
-          setConnectionError('Unable to maintain connection to Arika. Please refresh the page or start a new session.');
+        if (storedSession) {
+          console.log('🧹 Stored session expired, clearing...');
+          clearStoredSession();
         }
-        reconnectAttempts.current = 0;
+        console.log('ℹ️ No valid session found, waiting for user to start new conversation');
       }
+
+      setIsRestoringSession(false);
     };
 
-    wsRef.current = ws;
-  }, []);
+    checkExistingSession();
+  }, [restoreSession]);
 
   // Retry WebSocket connection with existing session
   const retryWebSocketConnection = useCallback(() => {
@@ -322,6 +408,7 @@ export const useChat = () => {
     console.log('🔄 Retrying WebSocket connection with session ID:', sessionIdToUse);
 
     reconnectAttempts.current = 0;
+    connectionStateRef.current = 'idle';
     setConnectionError(null);
     setIsConnecting(true);
 
@@ -385,7 +472,7 @@ export const useChat = () => {
     currentSessionIdRef.current = sessionData.sessionId;
     storeSession(sessionData, []);
     initializeWebSocket(sessionData.sessionId);
-  }, [createSession, initializeWebSocket, currentConversation]);
+  }, [createSession, initializeWebSocket, currentConversation, restoreSession]);
 
   // Force create new session (for "Start New Session" button)
   const forceCreateNewConversation = useCallback(async () => {
@@ -406,6 +493,7 @@ export const useChat = () => {
       }
       reconnectAttempts.current = 0;
       currentSessionIdRef.current = null;
+      connectionStateRef.current = 'idle';
 
       clearStoredSession();
       setCurrentConversation(undefined);
@@ -504,6 +592,7 @@ export const useChat = () => {
     }
     reconnectAttempts.current = 0;
     currentSessionIdRef.current = null;
+    connectionStateRef.current = 'idle';
 
     clearStoredSession();
     setCurrentConversation(undefined);
@@ -532,6 +621,7 @@ export const useChat = () => {
       setIsWebSocketConnected(false);
       sessionCreationRef.current = false;
       isCreatingNewSession.current = false;
+      connectionStateRef.current = 'idle';
     };
   }, []);
 
