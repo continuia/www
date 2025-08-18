@@ -624,7 +624,6 @@ const ChatPage: React.FC = () => {
         </Box>
       </Box>
     </Box>
-  );
     </>
   );
 };
