@@ -123,7 +123,7 @@ const ChatPage: React.FC = () => {
   if (isMobile) {
     // Mobile: Full-screen chat
     return (
-      <Box sx={{ height: "100vh", backgroundColor: "var(--bg-primary)" }}>
+      <Box sx={{  backgroundColor: "var(--bg-primary)" }}>
         <ChatContainer
           conversation={currentConversation}
           isLoading={isLoading || isConnecting}
