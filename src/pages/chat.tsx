@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { Alert, Box, CircularProgress, Typography, Snackbar, Button } from "@mui/material";
+import {  Box, CircularProgress, Typography,  Button } from "@mui/material";
 import { Paper, Stack, Chip, useMediaQuery, useTheme } from "@mui/material";
 import { motion } from "framer-motion";
 import { useChat } from "../components/chat/hooks/useChat";
@@ -28,7 +28,7 @@ const fadeInVariants = {
 const ChatPage: React.FC = () => {
   const { currentConversation, isLoading, isConnecting, isRestoringSession, isAgentTyping, connectionError, isWebSocketConnected, createNewConversation, forceCreateNewConversation, sendMessage, clearSession } = useChat();
   const { user, isAuthenticated, isLoading: authLoading, logout } = useAuth();
-  const [showError, setShowError] = useState(false);
+  // const [showError, setShowError] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
   const hasTriedConnection = useRef(false);
   const theme = useTheme();
@@ -66,7 +66,7 @@ const ChatPage: React.FC = () => {
 
   useEffect(() => {
     if (connectionError) {
-      setShowError(true);
+      // setShowError(true);
       hasTriedConnection.current = false;
       console.error(connectionError);
     }
@@ -355,7 +355,6 @@ const ChatPage: React.FC = () => {
           variants={fadeInVariants}
           sx={{
             width: "38%",
-            height: "100vh",
             display: "flex",
             flexDirection: "column",
             position: "relative",
@@ -366,7 +365,6 @@ const ChatPage: React.FC = () => {
           <MotionPaper
             elevation={6}
             sx={{
-              height: "100vh",
               borderRadius: 0,
               bgcolor: "var(--bg-primary)",
               boxShadow: "0 8px 32px rgba(0, 0, 0, 0.08)",
