@@ -126,7 +126,7 @@ const ChatContainer: React.FC<ChatContainerProps> = ({ conversation, isLoading, 
           )}
         </Box>
 
-        <Box sx={{ display: "flex", gap: 1 }}>
+        <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 1 }}>
           {!isAuthenticated && (
             <Button
               variant="contained"
@@ -134,10 +134,11 @@ const ChatContainer: React.FC<ChatContainerProps> = ({ conversation, isLoading, 
               startIcon={<Login />}
               onClick={onShowAuthModal}
               sx={{
+                minWidth: "auto",
                 backgroundColor: "var(--primary-600)",
                 color: "white",
                 fontSize: "var(--text-sm)",
-                padding: "var(--space-2) var(--space-4)",
+                padding: { xs: "var(--space-2)", md: "var(--space-2) var(--space-4)" },
                 borderRadius: "var(--radius-lg)",
                 textTransform: "none",
                 fontWeight: 600,
@@ -146,9 +147,17 @@ const ChatContainer: React.FC<ChatContainerProps> = ({ conversation, isLoading, 
                   backgroundColor: "var(--primary-700)",
                   boxShadow: "var(--shadow-md)",
                 },
+                // Hide text on small screens
+                "& .signin-text": {
+                  display: { xs: "none", md: "inline" },
+                },
+                "& .MuiButton-startIcon": {
+                  marginRight: { xs: 0, md: 1 },
+                  marginLeft: 0,
+                },
               }}
             >
-              Sign In
+              <span className="signin-text">Sign In</span>
             </Button>
           )}
           <Button
@@ -161,7 +170,8 @@ const ChatContainer: React.FC<ChatContainerProps> = ({ conversation, isLoading, 
               borderColor: "var(--primary-500)",
               color: "var(--primary-600)",
               fontSize: "var(--text-sm)",
-              padding: "var(--space-2) var(--space-4)",
+              minWidth: "auto",
+              padding: { xs: "var(--space-2)", md: "var(--space-2) var(--space-4)" },
               borderRadius: "var(--radius-lg)",
               textTransform: "none",
               fontWeight: 500,
@@ -173,9 +183,17 @@ const ChatContainer: React.FC<ChatContainerProps> = ({ conversation, isLoading, 
                 borderColor: "var(--neutral-300)",
                 color: "var(--neutral-400)",
               },
+              // Hide text on small screens
+              "& .newchat-text": {
+                display: { xs: "none", md: "inline" },
+              },
+              "& .MuiButton-startIcon": {
+                marginRight: { xs: 0, md: 1 },
+                marginLeft: 0,
+              },
             }}
           >
-            New Chat
+            <span className="newchat-text">New Chat</span>
           </Button>
         </Box>
       </Box>
