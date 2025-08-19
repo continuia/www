@@ -1,6 +1,5 @@
 import { Box } from "@mui/material";
 import Header from "../components/home/header";
-import Footer from "../components/home/footer";
 import SidebarNav from "../components/privacy/sidebarNav";
 import { Outlet } from "react-router-dom";
 
@@ -14,7 +13,6 @@ export default function PrivacyLayout() {
           <Outlet />
         </Box>
       </Box>
-      <Footer />
     </Box>
   );
 }
