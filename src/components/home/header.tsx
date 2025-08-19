@@ -4,9 +4,8 @@ import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { NavLink } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-import { useLocation } from "react-router-dom";
+import { NavLink, useNavigate, useLocation } from "react-router-dom";
+import { mainSections } from "../../constants/sections";
 
 type NavScreen = "all" | "small" | "medium" | "large";
 interface NavLinkBase {
@@ -17,41 +16,27 @@ interface NavLinkBase {
   id?: string;
 }
 
-// ToS sidebar nav (for Drawer only, not in desktop nav)
-const tosSidebarNav: NavLinkBase[] = [
-  { id: "welcome", label: "Welcome" },
-  { id: "scope", label: "Scope of Services" },
-  { id: "who", label: "Who May Use Continuia" },
-  { id: "disclaimers", label: "Important Disclaimers" },
-  { id: "compliance", label: "Global Compliance" },
-  { id: "consent", label: "Consent & Privacy" },
-  { id: "account-security", label: "Accounts & Security" },
-  { id: "for-clinicians", label: "For Clinicians" },
-  { id: "payment-refunds", label: "Payment & Refunds" },
-  { id: "data-ownership", label: "Data Ownership" },
-  { id: "intellectual-property", label: "Intellectual Property" },
-  { id: "termination", label: "Termination" },
-  { id: "disputes", label: "Disputes & Jurisdiction" },
-  { id: "updates", label: "Updates" },
-  { id: "contact", label: "Contact & Support" },
-];
+// Update tosSidebarNav to include correct paths under /privacy/
+const tosSidebarNav: NavLinkBase[] = mainSections.map((section) => ({
+  id: section.id,
+  label: section.label,
+  href: section.path, // Use full relative path here for routing
+}));
 
-// NavLink config
 const navLinks: NavLinkBase[] = [
   { label: "Home", href: "/", showOn: "all" },
   { label: "Insights", href: "/insights" },
   { label: "Governance", href: "/governance" },
   { label: "Partnership", href: "/partners" },
-  { label: "About", href: "/about", showOn: ["large", "medium"] }, // example: hide on mobile
+  { label: "About", href: "/about", showOn: ["large", "medium"] },
   {
     label: "Terms of Service",
-    href: "/privacy",
+    href: "/privacy/terms-of-service",
     children: tosSidebarNav,
-    showOn: "small", // <-- only show in Drawer/mobile, not in desktop
+    showOn: "small",
   },
 ];
 
-/** Utility to determine what screen we're on ("small", "medium", "large") */
 function useNavScreen() {
   const theme = useTheme();
   const isLarge = useMediaQuery(theme.breakpoints.up("lg")); // ≥1200px
@@ -63,7 +48,7 @@ function useNavScreen() {
 
 function linkVisibleOn(link: NavLinkBase, screen: NavScreen): boolean {
   const showOn = link.showOn;
-  if (!showOn || showOn === "all") return true; // handles both undefined and "all"
+  if (!showOn || showOn === "all") return true;
   if (Array.isArray(showOn)) return showOn.includes(screen) || showOn.includes("all");
   return showOn === screen;
 }
@@ -74,27 +59,24 @@ function MobileNavDrawer({ open, onClose }: { open: boolean; onClose: () => void
   const navigate = useNavigate();
   const location = useLocation();
 
-  const handleTosSectionClick = (sectionId: string) => {
+  const handleTosSectionClick = (href?: string, sectionId?: string) => {
     onClose();
-    if (window.location.pathname === "/privacy") {
-      // Already on ToS page? Scroll now:
+    if (!href) return;
+    if (window.location.pathname.startsWith("/privacy") && href.startsWith("/privacy")) {
+      // If already on /privacy, scroll to section if possible
       setTimeout(() => {
-        const section = document.getElementById(sectionId);
-        if (section) {
-          if (screen === "large") {
-            const contentBox = document.getElementById("terms-content-scroll");
-            if (contentBox) {
-              const offset = section.offsetTop - contentBox.offsetTop;
-              contentBox.scrollTo({ top: offset, behavior: "smooth" });
-            }
-          } else {
+        if (sectionId) {
+          const section = document.getElementById(sectionId);
+          if (section) {
             section.scrollIntoView({ behavior: "smooth", block: "start" });
           }
         }
       }, 80);
+      // Also update URL without reload but force navigate for path
+      navigate(href, { replace: true });
     } else {
-      // NOT on ToS page: navigate (the ToS page will auto-scroll via its own code)
-      navigate(`/privacy#${sectionId}`);
+      // Navigate to privacy route directly
+      navigate(href);
     }
   };
 
@@ -132,7 +114,6 @@ function MobileNavDrawer({ open, onClose }: { open: boolean; onClose: () => void
                     px: 3,
                     fontWeight: 600,
                     letterSpacing: 0.6,
-                    // Use "isActive" style by comparing `location.pathname`
                     bgcolor: location.pathname === link.href ? "var(--primary-50)" : "transparent",
                     color: location.pathname === link.href ? "var(--primary-800)" : "var(--primary-700)",
                     "&.active, &:hover": { bgcolor: "var(--primary-50)" },
@@ -163,11 +144,10 @@ function MobileNavDrawer({ open, onClose }: { open: boolean; onClose: () => void
                               fontSize: "0.98rem",
                               fontWeight: 500,
                               "&:hover": { bgcolor: "var(--primary-50)" },
-                              // HIGHLIGHT if matches current hash
-                              bgcolor: location.hash === `#${section.id}` && location.pathname === "/privacy" ? "var(--primary-100)" : "transparent",
-                              color: location.hash === `#${section.id}` && location.pathname === "/privacy" ? "var(--primary-900)" : "var(--primary-700)",
+                              bgcolor: location.pathname === section.href ? "var(--primary-100)" : "transparent",
+                              color: location.pathname === section.href ? "var(--primary-900)" : "var(--primary-700)",
                             }}
-                            onClick={() => section.id && handleTosSectionClick(section.id)}
+                            onClick={() => handleTosSectionClick(section.href, section.id)}
                           >
                             <ListItemText primary={section.label} />
                           </ListItemButton>
@@ -236,17 +216,6 @@ export default function Header() {
           {/* Logo */}
           <Box display="flex" alignItems="center">
             <Box component="img" src="/continuia.png" alt="Continuia Logo" height={{ xs: 36, md: 50 }} />
-            {/* <Typography
-              variant="h6"
-              sx={{
-                fontWeight: 700,
-                color: "var(--primary-700)",
-                letterSpacing: 1,
-                fontSize: { xs: "1.2rem", sm: "1.5rem" },
-              }}
-            >
-              Continuia
-            </Typography> */}
           </Box>
           {/* Desktop nav – only items with showOn: 'all' or 'large'/'medium' */}
           <Paper

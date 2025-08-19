@@ -4,7 +4,7 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { Fab, Zoom } from "@mui/material";
 import { AuthProvider } from "./components/auth/AuthContext";
 import HomeLayout from "./layout/landingPage";
-import TermsOfServiceLayout from "./layout/termsOfService";
+import TermsOfServiceLayout from "./layout/privacy";
 import NotFound from "./pages/notFound";
 import ScrollToTop from "./components/scrollToTop";
 import Homepage from "./pages/home";
@@ -23,9 +23,13 @@ import AdvocacyAndNGOs from "./pages/eachPartners/advocacyAndNGOs";
 import MedicalTourism from "./pages/eachPartners/tourismAndConcierge";
 import DoctorsPage from "./pages/doctors";
 import DoctorProfile from "./components/doctors/doctorProfile";
-import { TermsOfService } from "./pages/privacy";
 import GetInTouchPage from "./pages/getInTouch";
 import ChatLayout from "./layout/chat";
+import Terms from "./components/privacy/termsOfService";
+import AiAssistedPolicy from "./components/privacy/aiAssistedpolicy";
+import PublicEthicsPledge from "./components/privacy/publicEthicsPledge";
+import DataProcessingAddendum from "./components/privacy/dataProcessingAddendum";
+import BusinessAssociateAgreement from "./components/privacy/businessAssociateAgreement";
 
 function App() {
   const [showButton, setShowButton] = useState(false);
@@ -47,65 +51,69 @@ function App() {
       <Router>
         <ScrollToTop />
         <Routes>
-        {/* Chat Route - Standalone layout */}
-        <Route path="/chat" element={<ChatLayout />} />
-        
-        {/* Privacy Routes */}
-        <Route path="privacy" element={<TermsOfServiceLayout />}>
-          <Route index element={<TermsOfService />} />
-        </Route>
-        
-        {/* Public Routes */}
-        <Route path="/" element={<HomeLayout />}>
-          <Route index element={<Homepage />} />
-          <Route path="insights" element={<Insights />} />
-          <Route path="governance" element={<Governance />} />
-          <Route path="partners">
-            <Route index element={<Partners />} />
-            <Route path="hospitals" element={<HospitalPartner />} />
-            <Route path="nursing-and-living" element={<NursingAndLivingPartner />} />
-            <Route path="doctors-and-specialists" element={<DoctorsAndSpecialists />} />
-            <Route path="clinics-diagnostics" element={<ClinicsAndDiagnostic />} />
-            <Route path="health-plans-tpas" element={<HealthPlansAndTPA />} />
-            <Route path="benefit-consultants" element={<ConsultantsAndWellness />} />
-            <Route path="advocacy-ngos" element={<AdvocacyAndNGOs />} />
-            <Route path="medical-tourism" element={<MedicalTourism />} />
+          {/* Chat Route - Standalone layout */}
+          <Route path="/chat" element={<ChatLayout />} />
+
+          {/* Public Routes */}
+          <Route path="/" element={<HomeLayout />}>
+            <Route index element={<Homepage />} />
+            <Route path="insights" element={<Insights />} />
+            <Route path="governance" element={<Governance />} />
+            <Route path="partners">
+              <Route index element={<Partners />} />
+              <Route path="hospitals" element={<HospitalPartner />} />
+              <Route path="nursing-and-living" element={<NursingAndLivingPartner />} />
+              <Route path="doctors-and-specialists" element={<DoctorsAndSpecialists />} />
+              <Route path="clinics-diagnostics" element={<ClinicsAndDiagnostic />} />
+              <Route path="health-plans-tpas" element={<HealthPlansAndTPA />} />
+              <Route path="benefit-consultants" element={<ConsultantsAndWellness />} />
+              <Route path="advocacy-ngos" element={<AdvocacyAndNGOs />} />
+              <Route path="medical-tourism" element={<MedicalTourism />} />
+            </Route>
+            <Route path="doctors" element={<DoctorsPage />} />
+            <Route path="getInTouch" element={<GetInTouchPage />} />
+            <Route path="doctorProfile/:id" element={<DoctorProfile />} />
+
+            <Route path="about" element={<AboutPage />} />
+            <Route path="cxa-globallaunch-c1a7e3d" element={<Campaign />} />
+            <Route path="launch" element={<Campaign />} />
           </Route>
-          <Route path="doctors" element={<DoctorsPage />} />
-          <Route path="getInTouch" element={<GetInTouchPage />} />
-          <Route path="doctorProfile/:id" element={<DoctorProfile />} />
 
-          <Route path="about" element={<AboutPage />} />
-          <Route path="cxa-globallaunch-c1a7e3d" element={<Campaign />} />
-          <Route path="launch" element={<Campaign />} />
-        </Route>
-        
-        {/* Catch-all route - Must be last */}
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+          {/* Privacy Routes */}
+          <Route path="/privacy" element={<TermsOfServiceLayout />}>
+            <Route path="terms-of-service" element={<Terms />} />
+            <Route path="ai-assisted-policy" element={<AiAssistedPolicy />} />
+            <Route path="public-ethics-pledge" element={<PublicEthicsPledge />} />
+            <Route path="data-processing-addendum" element={<DataProcessingAddendum />} />
+            <Route path="business-associate-agreement" element={<BusinessAssociateAgreement />} />
+          </Route>
 
-      {/* Floating Scroll-to-Top Button */}
-      <Zoom in={showButton}>
-        <Fab
-          color="primary"
-          size="medium"
-          onClick={scrollToTop}
-          aria-label="scroll back to top"
-          sx={{
-            position: "fixed",
-            bottom: { xs: 28, sm: 100 },
-            right: { xs: 20, sm: 30 },
-            zIndex: 1700,
-            boxShadow: "var(--shadow-lg)",
-            bgcolor: "var(--primary-600)",
-            color: "var(--text-inverse)",
-            "&:hover": { bgcolor: "var(--primary-700)" },
-            transition: "background 0.2s",
-          }}
-        >
-          <KeyboardArrowUpIcon fontSize="large" />
-        </Fab>
-      </Zoom>
+          {/* Catch-all route - Must be last */}
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+
+        {/* Floating Scroll-to-Top Button */}
+        <Zoom in={showButton}>
+          <Fab
+            color="primary"
+            size="medium"
+            onClick={scrollToTop}
+            aria-label="scroll back to top"
+            sx={{
+              position: "fixed",
+              bottom: { xs: 28, sm: 100 },
+              right: { xs: 20, sm: 30 },
+              zIndex: 1700,
+              boxShadow: "var(--shadow-lg)",
+              bgcolor: "var(--primary-600)",
+              color: "var(--text-inverse)",
+              "&:hover": { bgcolor: "var(--primary-700)" },
+              transition: "background 0.2s",
+            }}
+          >
+            <KeyboardArrowUpIcon fontSize="large" />
+          </Fab>
+        </Zoom>
       </Router>
     </AuthProvider>
   );
