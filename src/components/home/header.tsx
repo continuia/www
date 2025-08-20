@@ -178,7 +178,7 @@ function MobileNavDrawer({ open, onClose }: { open: boolean; onClose: () => void
             "&:hover": { background: "var(--primary-800)" },
           }}
         >
-          Get Started
+          Get In Touch
         </Button>
       </ListItem>
     </Drawer>
@@ -300,7 +300,7 @@ export default function Header() {
               },
             }}
           >
-            Get Started
+            Get In Touch
           </Button>
         </Toolbar>
       </AppBar>
