@@ -288,7 +288,7 @@ const HeroSection = () => {
               size="large"
               startIcon={<LocalHospitalIcon />}
               onClick={() => {
-                navigate("/insights");
+                navigate("/share-your-story");
               }}
               sx={{
                 background: "var(--primary-700)",
@@ -306,7 +306,7 @@ const HeroSection = () => {
                 },
               }}
             >
-              Explore Insights
+              Get a Second Opinion
             </Button>
             <Button
               variant="outlined"

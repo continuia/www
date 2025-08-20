@@ -52,7 +52,7 @@ function App() {
         <ScrollToTop />
         <Routes>
           {/* Chat Route - Standalone layout */}
-          <Route path="/chat" element={<ChatLayout />} />
+          <Route path="/share-your-story" element={<ChatLayout />} />
 
           {/* Public Routes */}
           <Route path="/" element={<HomeLayout />}>
