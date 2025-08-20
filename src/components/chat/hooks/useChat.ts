@@ -37,7 +37,6 @@ const waitForSessionReady = async (sessionId: string): Promise<void> => {
 
 export const useChat = () => {
   const [currentConversation, setCurrentConversation] = useState<ChatConversation | undefined>();
-  const [isLoading, setIsLoading] = useState(false);
   const [isConnecting, setIsConnecting] = useState(false);
   const [isRestoringSession, setIsRestoringSession] = useState(true);
   const [connectionError, setConnectionError] = useState<string | null>(null);
@@ -159,7 +158,7 @@ export const useChat = () => {
 
     const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'https://api.continuia.health';
     const wsBaseUrl = apiBaseUrl.replace('https://', 'wss://').replace('http://', 'ws://');
-    const wsUrl = `${wsBaseUrl}/agents/ws/${sessionId}`;
+    const wsUrl = `${wsBaseUrl}/agents/ws?session_id=${sessionId}&agent_name=Arika_Reddy`;
 
     console.log(`🔗 Connecting to WebSocket (attempt ${reconnectAttempts.current + 1}/${maxReconnectAttempts + 1}):`, wsUrl);
 
@@ -216,7 +215,6 @@ export const useChat = () => {
             });
 
             setIsAgentTyping(false);
-            setIsLoading(false);
           }
           else if (data.type === "connection_established") {
             console.log('🎉 WebSocket connection established:', data.message);
@@ -228,7 +226,6 @@ export const useChat = () => {
         } catch (error) {
           console.error('❌ Error parsing WebSocket message:', error);
           setIsAgentTyping(false);
-          setIsLoading(false);
         }
       };
 
@@ -237,7 +234,6 @@ export const useChat = () => {
         console.error('❌ WebSocket error:', error);
         setIsWebSocketConnected(false);
         setIsAgentTyping(false);
-        setIsLoading(false);
         connectionStateRef.current = 'failed';
 
         if (reconnectAttempts.current === 0 && !initialConnectionAttemptRef.current) {
@@ -254,7 +250,6 @@ export const useChat = () => {
         console.log(`🔌 WebSocket disconnected: Code ${event.code}, Reason: ${event.reason || 'Unknown'}`);
         setIsWebSocketConnected(false);
         setIsAgentTyping(false);
-        setIsLoading(false);
         connectionStateRef.current = 'failed';
 
         const shouldRetry = event.code !== 1000 && event.code !== 1001 && reconnectAttempts.current < maxReconnectAttempts;
@@ -585,7 +580,6 @@ export const useChat = () => {
     });
 
     setIsAgentTyping(true);
-    setIsLoading(false);
 
     try {
       const messageToSend = {
@@ -647,7 +641,6 @@ export const useChat = () => {
 
   return {
     currentConversation,
-    isLoading,
     isConnecting,
     isRestoringSession,
     isAgentTyping,
