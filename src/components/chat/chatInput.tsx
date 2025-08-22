@@ -6,10 +6,10 @@ interface ChatInputProps {
   onSendMessage: (message: string) => void;
   isLoading: boolean;
   disabled?: boolean;
-  agent:string;
+  agent: string;
 }
 
-const ChatInput: React.FC<ChatInputProps> = ({agent, onSendMessage, isLoading }) => {
+const ChatInput: React.FC<ChatInputProps> = ({ agent, onSendMessage, isLoading }) => {
   const [message, setMessage] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -73,7 +73,7 @@ const ChatInput: React.FC<ChatInputProps> = ({agent, onSendMessage, isLoading })
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             onKeyPress={handleKeyPress}
-            placeholder={isLoading ? `Connecting to ${agent}......` : "Share your Story or request a second opinion......"}
+            placeholder={isLoading ? `Connecting to ${agent}......` : "Share your Story"}
             variant="standard"
             InputProps={{
               disableUnderline: true,

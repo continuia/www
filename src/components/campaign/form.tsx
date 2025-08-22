@@ -10,7 +10,7 @@ import { useToast } from "../toastContext";
 
 const schema = z.object({
   name: z.string().min(2, "Name is required").max(100, "Name must be less than 100 characters"),
-  email: z.string().email({ message: "Enter a valid email address" }).min(1, "Email is required"),
+  email: z.email({ message: "Enter a valid email address" }).min(1, "Email is required"),
   phone: z
     .string()
     .min(8, { message: "Phone is required" })

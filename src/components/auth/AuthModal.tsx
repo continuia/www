@@ -1,217 +1,149 @@
-import React, { useState } from 'react';
-import { 
-  Dialog, 
-  DialogContent, 
-  Box, 
-  Typography, 
-  Tabs, 
-  Tab, 
-  IconButton,
-  Alert,
-  Divider
-} from '@mui/material';
-import { Close, Google, WhatsApp, Email } from '@mui/icons-material';
-import GoogleOneTap from './GoogleOneTap';
-import WhatsAppAuth from './WhatsAppAuth';
-import UsernamePasswordAuth from './UsernamePasswordAuth';
+import { useState } from "react";
+import { Dialog, DialogContent, Box, Typography, IconButton, Button } from "@mui/material";
+import { Close, Email, WhatsApp } from "@mui/icons-material";
+import GoogleOneTap from "./GoogleOneTap";
+import WhatsAppAuth from "./WhatsAppAuth";
+import UsernamePasswordAuth from "./UsernamePasswordAuth";
+import { useAuthStore } from "../../store/useAuthStore";
 
-interface AuthModalProps {
-  open: boolean;
-  onClose: () => void;
-  onSuccess?: (user: any) => void;
-}
-
-interface TabPanelProps {
-  children?: React.ReactNode;
-  index: number;
-  value: number;
-}
-
-const TabPanel: React.FC<TabPanelProps> = ({ children, value, index, ...other }) => {
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`auth-tabpanel-${index}`}
-      aria-labelledby={`auth-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box sx={{ pt: 3 }}>
-          {children}
-        </Box>
-      )}
-    </div>
-  );
-};
-
-const AuthModal: React.FC<AuthModalProps> = ({ open, onClose, onSuccess }) => {
-  const [tabValue, setTabValue] = useState(0);
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
-
-  const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
-    setTabValue(newValue);
-    setError('');
-    setSuccess('');
-  };
-
-  const handleAuthSuccess = (user: any) => {
-    setSuccess(`Welcome, ${user.firstName}!`);
-    setTimeout(() => {
-      onSuccess?.(user);
-      onClose();
-    }, 1500);
-  };
-
-  const handleAuthError = (errorMessage: string) => {
-    setError(errorMessage);
-  };
+const AuthModal = () => {
+  const setShowAuthModal = useAuthStore((s) => s.setShowAuthModal);
+  const open = useAuthStore((s) => s.showAuthModal);
+  const [tab, setTab] = useState<"whatsapp" | "email">("whatsapp");
 
   const handleClose = () => {
-    setError('');
-    setSuccess('');
-    setTabValue(0);
-    onClose();
+    setTab("whatsapp");
+    setShowAuthModal(false);
   };
 
   return (
-    <>
-      {/* Google One-Tap (invisible component) */}
-      {open && (
-        <GoogleOneTap
-          onSuccess={handleAuthSuccess}
-          onError={handleAuthError}
-        />
-      )}
-
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        maxWidth="sm"
-        fullWidth
-        PaperProps={{
+    <Dialog
+      open={open}
+      onClose={handleClose}
+      maxWidth="sm"
+      fullWidth
+      slotProps={{
+        paper: {
           sx: {
-            borderRadius: 'var(--radius-2xl)',
-            maxWidth: 500,
-          }
-        }}
-      >
-        <DialogContent sx={{ p: 0 }}>
-          {/* Header */}
-          <Box sx={{ 
-            p: 3, 
-            pb: 0, 
-            display: 'flex', 
-            justifyContent: 'space-between', 
-            alignItems: 'center' 
-          }}>
-            <Typography variant="h5" sx={{ 
-              color: 'var(--primary-800)', 
-              fontWeight: 700 
-            }}>
-              Sign in to Continue
-            </Typography>
-            <IconButton onClick={handleClose} size="small">
-              <Close />
-            </IconButton>
-          </Box>
+            borderRadius: "var(--radius-2xl)",
+            maxWidth: 430,
+            boxShadow: "var(--shadow-2xl)",
+            bgcolor: "var(--bg-primary)",
+          },
+        },
+      }}
+    >
+      <DialogContent sx={{ p: 0 }}>
+        {/* Header */}
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            padding: "var(--space-4) var(--space-6)",
+            borderBottom: "1px solid var(--border-light)",
+          }}
+        >
+          <Typography
+            sx={{
+              fontSize: "var(--text-xl)",
+              fontWeight: 700,
+              color: "var(--text-primary)",
+            }}
+          >
+            Sign in to Continue
+          </Typography>
+          <IconButton onClick={handleClose} sx={{ color: "var(--neutral-500)" }}>
+            <Close />
+          </IconButton>
+        </Box>
 
-          <Box sx={{ p: 3 }}>
-            {/* Success/Error Messages */}
-            {success && (
-              <Alert severity="success" sx={{ mb: 2 }}>
-                {success}
-              </Alert>
-            )}
+        {/* Google area */}
+        <Box display="flex" flexDirection="column" gap={2} sx={{ m: "var(--space-6)" }}>
+          <GoogleOneTap />
+        </Box>
 
-            {error && (
-              <Alert severity="error" sx={{ mb: 2 }}>
-                {error}
-              </Alert>
-            )}
-
-            {/* Google One-Tap Notice */}
-            <Box sx={{ 
-              mb: 3, 
-              p: 2, 
-              bgcolor: 'var(--primary-50)', 
-              borderRadius: 'var(--radius-lg)',
-              border: '1px solid var(--primary-200)'
-            }}>
-              <Typography variant="body2" sx={{ 
-                color: 'var(--primary-800)', 
-                textAlign: 'center',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: 1
-              }}>
-                <Google sx={{ fontSize: 20 }} />
-                Look for the Google One-Tap prompt above, or choose an option below
-              </Typography>
-            </Box>
-
-            {/* Authentication Tabs */}
-            <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 2 }}>
-              <Tabs 
-                value={tabValue} 
-                onChange={handleTabChange} 
-                variant="fullWidth"
+        {/* Tabs */}
+        <Box display="flex" mx="var(--space-6)" mb="var(--space-3)">
+          <Button
+            fullWidth
+            onClick={() => setTab("whatsapp")}
+            startIcon={
+              <WhatsApp
                 sx={{
-                  '& .MuiTab-root': {
-                    minHeight: 48,
-                    textTransform: 'none',
-                    fontWeight: 600,
-                  }
+                  fontSize: 18,
+                  color: tab === "whatsapp" ? "var(--text-inverse)" : "var(--neutral-700)",
                 }}
-              >
-                <Tab 
-                  icon={<WhatsApp />} 
-                  label="WhatsApp" 
-                  iconPosition="start"
-                  sx={{ color: 'var(--success-600)' }}
-                />
-                <Tab 
-                  icon={<Email />} 
-                  label="Email" 
-                  iconPosition="start"
-                  sx={{ color: 'var(--primary-600)' }}
-                />
-              </Tabs>
-            </Box>
-
-            {/* Tab Panels */}
-            <TabPanel value={tabValue} index={0}>
-              <WhatsAppAuth
-                onSuccess={handleAuthSuccess}
-                onError={handleAuthError}
               />
-            </TabPanel>
+            }
+            sx={{
+              background: tab === "whatsapp" ? "var(--primary-600)" : "var(--neutral-100)",
+              color: tab === "whatsapp" ? "var(--text-inverse)" : "var(--neutral-700)",
+              fontWeight: 600,
+              borderRadius: "var(--radius-md) 0 0 var(--radius-md)",
+              py: "var(--space-2)",
+              gap: "var(--space-2)",
+              textTransform: "none",
+              "&:hover": {
+                background: tab === "whatsapp" ? "var(--primary-700)" : "var(--neutral-200)",
+              },
+            }}
+          >
+            WhatsApp
+          </Button>
 
-            <TabPanel value={tabValue} index={1}>
-              <UsernamePasswordAuth
-                onSuccess={handleAuthSuccess}
-                onError={handleAuthError}
+          <Button
+            fullWidth
+            onClick={() => setTab("email")}
+            startIcon={
+              <Email
+                sx={{
+                  fontSize: 18,
+                  color: tab === "email" ? "var(--text-inverse)" : "var(--neutral-700)",
+                }}
               />
-            </TabPanel>
+            }
+            sx={{
+              background: tab === "email" ? "var(--primary-600)" : "var(--neutral-100)",
+              color: tab === "email" ? "var(--text-inverse)" : "var(--neutral-700)",
+              fontWeight: 600,
+              borderRadius: "0 var(--radius-md) var(--radius-md) 0",
+              py: "var(--space-2)",
+              gap: "var(--space-2)",
+              textTransform: "none",
+              "&:hover": {
+                background: tab === "email" ? "var(--primary-700)" : "var(--neutral-200)",
+              },
+            }}
+          >
+            Email
+          </Button>
+        </Box>
 
-            {/* Footer */}
-            <Divider sx={{ my: 3 }} />
-            
-            <Typography variant="caption" sx={{ 
-              display: 'block', 
-              textAlign: 'center', 
-              color: 'var(--text-muted)',
-              lineHeight: 1.4
-            }}>
-              By signing in, you agree to our Terms of Service and Privacy Policy.
-              Your data is protected with HIPAA-compliant security.
-            </Typography>
-          </Box>
-        </DialogContent>
-      </Dialog>
-    </>
+        {/* Form content */}
+        <Box px="var(--space-6)" pb="var(--space-6)">
+          {tab === "whatsapp" ? <WhatsAppAuth /> : <UsernamePasswordAuth />}
+          <Typography
+            sx={{
+              fontSize: "var(--text-xs)",
+              textAlign: "center",
+              color: "var(--text-tertiary)",
+              mt: "var(--space-4)",
+            }}
+          >
+            By signing in, you agree to{" "}
+            <a href="#" style={{ color: "var(--primary-600)" }}>
+              Terms
+            </a>{" "}
+            and{" "}
+            <a href="#" style={{ color: "var(--primary-600)" }}>
+              Privacy Policy
+            </a>
+            .
+          </Typography>
+        </Box>
+      </DialogContent>
+    </Dialog>
   );
 };
 

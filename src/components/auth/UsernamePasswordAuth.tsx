@@ -1,272 +1,267 @@
-import React, { useState } from 'react';
-import { 
-  Box, 
-  TextField, 
-  Button, 
-  Typography, 
-  Alert, 
-  CircularProgress,
-  InputAdornment,
-  IconButton,
-  Divider
-} from '@mui/material';
-import { Email, Lock, Visibility, VisibilityOff, Person } from '@mui/icons-material';
-import { useAuth } from './AuthContext';
-import axiosInstance from '../../api/axiosConfig';
+import React, { useMemo, useState } from "react";
+import { Box, TextField, Button, CircularProgress, InputAdornment, IconButton, OutlinedInput, Typography, Divider } from "@mui/material";
+import { Email, Lock, Visibility, VisibilityOff, Person } from "@mui/icons-material";
+import { useToast } from "../toastContext";
+import { useForm, Controller } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useAuthStore } from "../../store/useAuthStore";
 
-interface UsernamePasswordAuthProps {
-  onSuccess?: (user: any) => void;
-  onError?: (error: string) => void;
-}
+type Mode = "login" | "signup";
 
-const UsernamePasswordAuth: React.FC<UsernamePasswordAuthProps> = ({ onSuccess, onError }) => {
-  const { login } = useAuth();
-  const [isLogin, setIsLogin] = useState(true);
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-    firstName: '',
-    lastName: '',
-  });
+// Base schema with optional names; we’ll enforce conditionally
+const baseSchema = z.object({
+  firstName: z.string().optional(),
+  lastName: z.string().optional(),
+  email: z.email("Invalid email"),
+  password: z.string().min(1, "Password is required"),
+});
+
+type FormValues = z.infer<typeof baseSchema>;
+
+const UsernamePasswordAuth: React.FC = () => {
+  const loginWithToken = useAuthStore((s) => s.loginWithToken);
+  const { addToast } = useToast();
+
+  const [mode, setMode] = useState<Mode>("login");
   const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
 
-  const handleInputChange = (field: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData(prev => ({
-      ...prev,
-      [field]: event.target.value
-    }));
-    // Clear error when user starts typing
-    if (error) setError('');
-  };
-
-  const validateForm = (): boolean => {
-    if (!formData.email.trim()) {
-      setError('Email is required');
-      return false;
+  // One unified resolver; add a refinement when in signup mode
+  const schemaForMode = useMemo(() => {
+    if (mode === "signup") {
+      return baseSchema.extend({
+        firstName: z.string().min(1, "First name is required"),
+        lastName: z.string().min(1, "Last name is required"),
+        password: z.string().min(8, "Password must be at least 8 characters"),
+      });
     }
+    // login mode uses base rules (email + password required)
+    return baseSchema;
+  }, [mode]);
 
-    if (!formData.password.trim()) {
-      setError('Password is required');
-      return false;
-    }
+  const { control, handleSubmit, reset, formState } = useForm<FormValues>({
+    resolver: zodResolver(schemaForMode),
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      password: "",
+    },
+    mode: "onTouched",
+  });
 
-    if (!isLogin) {
-      if (!formData.firstName.trim()) {
-        setError('First name is required');
-        return false;
-      }
-      if (!formData.lastName.trim()) {
-        setError('Last name is required');
-        return false;
-      }
-      if (formData.password.length < 8) {
-        setError('Password must be at least 8 characters long');
-        return false;
-      }
-    }
-
-    // Basic email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(formData.email)) {
-      setError('Please enter a valid email address');
-      return false;
-    }
-
-    return true;
-  };
-
-  const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
-    
-    if (!validateForm()) return;
-
-    setIsLoading(true);
-    setError('');
-
+  const onSubmit = async (data: FormValues) => {
     try {
-      let result;
-      
-      if (isLogin) {
-        // Login with existing auth endpoint
-        result = await axiosInstance.post('/api/auth/login', {
-          email: formData.email,
-          password: formData.password,
-        });
-      } else {
-        // Register with new social auth endpoint
-        result = await axiosInstance.post('/api/social-auth/username-password/register', {
-          email: formData.email,
-          password: formData.password,
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-        });
+      const endpoint = mode === "login" ? "/api/auth/login" : "/api/social-auth/username-password/register";
+
+      const payload =
+        mode === "login"
+          ? { email: data.email, password: data.password }
+          : {
+              email: data.email,
+              password: data.password,
+              firstName: data.firstName,
+              lastName: data.lastName,
+            };
+
+      const res = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      const result = await res.json();
+      if (!res.ok) throw new Error(result?.message || (mode === "login" ? "Login failed" : "Registration failed"));
+
+      if (!result?.token || !result?.user) {
+        throw new Error("Invalid response from server");
       }
 
-      if (result.data.user && result.data.token) {
-        login(result.data.token, result.data.user);
-        onSuccess?.(result.data.user);
-      }
-      
+      loginWithToken(result.token, result.user);
+      addToast(`Welcome, ${result.user.firstName || result.user.email}`, "success");
     } catch (error: any) {
-      const errorMessage = error.response?.data?.message || 
-        (isLogin ? 'Login failed' : 'Registration failed');
-      setError(errorMessage);
-      onError?.(errorMessage);
-    } finally {
-      setIsLoading(false);
+      addToast(error?.message || (mode === "login" ? "Login failed" : "Registration failed"), "error");
     }
   };
 
   const toggleMode = () => {
-    setIsLogin(!isLogin);
-    setError('');
-    setFormData({
-      email: '',
-      password: '',
-      firstName: '',
-      lastName: '',
+    const nextMode: Mode = mode === "login" ? "signup" : "login";
+    setMode(nextMode);
+    setShowPassword(false);
+    // reset keeps consistent types for both modes
+    reset({
+      firstName: "",
+      lastName: "",
+      email: "",
+      password: "",
     });
   };
 
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
+  const fieldStyle = {
+    bgcolor: "var(--neutral-100)",
+    borderRadius: "var(--radius-lg)",
+    "& .MuiOutlinedInput-root": {
+      "& fieldset": { borderColor: "var(--border-light)" },
+      "&:hover fieldset": { borderColor: "var(--border-focus)" },
+      "&.Mui-focused fieldset": {
+        borderColor: "var(--primary-500)",
+        borderWidth: 2,
+      },
+    },
+    "& .MuiInputBase-input::placeholder": {
+      color: "var(--text-tertiary)",
+      opacity: 1,
+    },
+  } as const;
+
+  const isLogin = mode === "login";
 
   return (
-    <Box sx={{ width: '100%', maxWidth: 400 }}>
-      <Typography variant="h6" sx={{ mb: 3, textAlign: 'center', color: 'var(--primary-800)' }}>
-        {isLogin ? 'Sign In' : 'Create Account'}
-      </Typography>
+    <Box component="form" onSubmit={handleSubmit(onSubmit)}>
 
-      {error && (
-        <Alert severity="error" sx={{ mb: 2 }}>
-          {error}
-        </Alert>
+      {!isLogin && (
+        <>
+          <Controller
+            name="firstName"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                placeholder="First name"
+                error={!!formState.errors.firstName}
+                helperText={formState.errors.firstName?.message}
+                fullWidth
+                margin="normal"
+                sx={fieldStyle}
+                slots={{ input: OutlinedInput }}
+                slotProps={{
+                  input: {
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <Person sx={{ color: "var(--neutral-400)" }} />
+                      </InputAdornment>
+                    ),
+                  },
+                }}
+              />
+            )}
+          />
+
+          <Controller
+            name="lastName"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                placeholder="Last name"
+                error={!!formState.errors.lastName}
+                helperText={formState.errors.lastName?.message}
+                fullWidth
+                margin="normal"
+                sx={fieldStyle}
+                slots={{ input: OutlinedInput }}
+                slotProps={{
+                  input: {
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <Person sx={{ color: "var(--neutral-400)" }} />
+                      </InputAdornment>
+                    ),
+                  },
+                }}
+              />
+            )}
+          />
+        </>
       )}
 
-      <Box component="form" onSubmit={handleSubmit}>
-        {!isLogin && (
-          <>
-            <TextField
-              fullWidth
-              label="First Name"
-              value={formData.firstName}
-              onChange={handleInputChange('firstName')}
-              InputProps={{
+      <Controller
+        name="email"
+        control={control}
+        render={({ field }) => (
+          <TextField
+            {...field}
+            placeholder="Email"
+            error={!!formState.errors.email}
+            helperText={formState.errors.email?.message}
+            fullWidth
+            margin="normal"
+            sx={fieldStyle}
+            slots={{ input: OutlinedInput }}
+            slotProps={{
+              input: {
                 startAdornment: (
                   <InputAdornment position="start">
-                    <Person />
+                    <Email sx={{ color: "var(--neutral-400)" }} />
                   </InputAdornment>
                 ),
-              }}
-              sx={{ mb: 2 }}
-              disabled={isLoading}
-              required
-            />
-
-            <TextField
-              fullWidth
-              label="Last Name"
-              value={formData.lastName}
-              onChange={handleInputChange('lastName')}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <Person />
-                  </InputAdornment>
-                ),
-              }}
-              sx={{ mb: 2 }}
-              disabled={isLoading}
-              required
-            />
-          </>
+              },
+            }}
+          />
         )}
+      />
 
-        <TextField
-          fullWidth
-          label="Email"
-          type="email"
-          value={formData.email}
-          onChange={handleInputChange('email')}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <Email />
-              </InputAdornment>
-            ),
-          }}
-          sx={{ mb: 2 }}
-          disabled={isLoading}
-          required
-        />
+      <Controller
+        name="password"
+        control={control}
+        render={({ field }) => (
+          <TextField
+            {...field}
+            placeholder="Password"
+            type={showPassword ? "text" : "password"}
+            error={!!formState.errors.password}
+            helperText={formState.errors.password?.message}
+            fullWidth
+            margin="normal"
+            sx={fieldStyle}
+            slots={{ input: OutlinedInput }}
+            slotProps={{
+              input: {
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Lock sx={{ color: "var(--neutral-400)" }} />
+                  </InputAdornment>
+                ),
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={() => setShowPassword((p) => !p)} edge="end" aria-label={showPassword ? "Hide password" : "Show password"}>
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              },
+            }}
+          />
+        )}
+      />
 
-        <TextField
-          fullWidth
-          label="Password"
-          type={showPassword ? 'text' : 'password'}
-          value={formData.password}
-          onChange={handleInputChange('password')}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <Lock />
-              </InputAdornment>
-            ),
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton
-                  onClick={togglePasswordVisibility}
-                  edge="end"
-                  disabled={isLoading}
-                >
-                  {showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
-          sx={{ mb: 3 }}
-          disabled={isLoading}
-          required
-        />
+      <Button
+        type="submit"
+        fullWidth
+        variant="contained"
+        disabled={formState.isSubmitting}
+        sx={{
+          mt: "var(--space-3)",
+          bgcolor: "var(--primary-600)",
+          color: "var(--text-inverse)",
+          fontWeight: 600,
+          borderRadius: "var(--radius-lg)",
+          transition: "var(--transition-normal)",
+          "&:hover": { bgcolor: "var(--primary-700)" },
+        }}
+      >
+        {formState.isSubmitting ? <CircularProgress size={24} color="inherit" /> : isLogin ? "Sign In" : "Create Account"}
+      </Button>
 
-        <Button
-          type="submit"
-          fullWidth
-          variant="contained"
-          disabled={isLoading}
-          sx={{
-            bgcolor: 'var(--primary-600)',
-            '&:hover': { bgcolor: 'var(--primary-700)' },
-            py: 1.5,
-            mb: 2,
-          }}
-        >
-          {isLoading ? (
-            <CircularProgress size={24} color="inherit" />
-          ) : (
-            isLogin ? 'Sign In' : 'Create Account'
-          )}
+      <Divider sx={{ my: "var(--space-3)" }} />
+
+      <Box sx={{ textAlign: "center" }}>
+        <Typography variant="body2" sx={{ color: "var(--text-secondary)", mb: "var(--space-1)" }}>
+          {isLogin ? "Don't have an account?" : "Already have an account?"}
+        </Typography>
+        <Button variant="text" onClick={toggleMode} disabled={formState.isSubmitting} sx={{ color: "var(--primary-600)", fontWeight: 600 }}>
+          {isLogin ? "Create Account" : "Sign In"}
         </Button>
-
-        <Divider sx={{ my: 2 }} />
-
-        <Box sx={{ textAlign: 'center' }}>
-          <Typography variant="body2" sx={{ color: 'var(--text-secondary)', mb: 1 }}>
-            {isLogin ? "Don't have an account?" : "Already have an account?"}
-          </Typography>
-          
-          <Button
-            variant="text"
-            onClick={toggleMode}
-            disabled={isLoading}
-            sx={{ color: 'var(--primary-600)' }}
-          >
-            {isLogin ? 'Create Account' : 'Sign In'}
-          </Button>
-        </Box>
       </Box>
     </Box>
   );

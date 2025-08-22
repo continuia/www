@@ -2,7 +2,6 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useState, useEffect } from "react";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { Fab, Zoom } from "@mui/material";
-import { AuthProvider } from "./components/auth/AuthContext";
 import HomeLayout from "./layout/landingPage";
 import TermsOfServiceLayout from "./layout/privacy";
 import NotFound from "./pages/notFound";
@@ -30,6 +29,7 @@ import AiAssistedPolicy from "./components/privacy/aiAssistedpolicy";
 import PublicEthicsPledge from "./components/privacy/publicEthicsPledge";
 import DataProcessingAddendum from "./components/privacy/dataProcessingAddendum";
 import BusinessAssociateAgreement from "./components/privacy/businessAssociateAgreement";
+import ChatPage from "./pages/chat";
 
 function App() {
   const [showButton, setShowButton] = useState(false);
@@ -47,12 +47,13 @@ function App() {
   };
 
   return (
-    <AuthProvider>
       <Router>
         <ScrollToTop />
         <Routes>
           {/* Chat Route - Standalone layout */}
-          <Route path="/share-your-story" element={<ChatLayout />} />
+          <Route path="/share-your-story" element={<ChatLayout />}>
+            <Route index element={<ChatPage />} />
+          </Route>
 
           {/* Public Routes */}
           <Route path="/" element={<HomeLayout />}>
@@ -115,7 +116,6 @@ function App() {
           </Fab>
         </Zoom>
       </Router>
-    </AuthProvider>
   );
 }
 

@@ -1,11 +1,7 @@
-import React, { useEffect, useRef } from 'react';
-import { useAuth } from './AuthContext';
-import axiosInstance from '../../api/axiosConfig';
-
-interface GoogleOneTapProps {
-  onSuccess?: (user: any) => void;
-  onError?: (error: string) => void;
-}
+import { useEffect, useRef } from "react";
+import { useAuthStore } from "../../store/useAuthStore";
+import axiosInstance from "../../api/axiosConfig";
+import { useToast } from "../toastContext";
 
 declare global {
   interface Window {
@@ -14,64 +10,52 @@ declare global {
   }
 }
 
-const GoogleOneTap: React.FC<GoogleOneTapProps> = ({ onSuccess, onError }) => {
-  const { login } = useAuth();
+const GoogleOneTap = () => {
+  const loginWithToken = useAuthStore((s) => s.loginWithToken);
   const isInitialized = useRef(false);
-  const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || ''; // You'll need to set this
+  const buttonRef = useRef<HTMLDivElement | null>(null);
+  const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || "";
+  const { addToast } = useToast();
 
   useEffect(() => {
     if (isInitialized.current || !GOOGLE_CLIENT_ID) return;
-    
-    // Load Google Identity Services script
-    const script = document.createElement('script');
-    script.src = 'https://accounts.google.com/gsi/client';
+
+    const script = document.createElement("script");
+    script.src = "https://accounts.google.com/gsi/client";
     script.async = true;
     script.defer = true;
-    
-    script.onload = () => {
-      initializeGoogleOneTap();
-    };
-    
+    script.onload = () => initializeGoogleOneTap();
     document.head.appendChild(script);
+
     isInitialized.current = true;
 
     return () => {
-      // Cleanup
-      const existingScript = document.querySelector('script[src="https://accounts.google.com/gsi/client"]');
-      if (existingScript) {
-        document.head.removeChild(existingScript);
-      }
+      // optional: clean up if needed
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [GOOGLE_CLIENT_ID]);
 
   const initializeGoogleOneTap = () => {
     if (!window.google || !GOOGLE_CLIENT_ID) return;
 
-    // Define the callback function globally
     window.handleCredentialResponse = async (response: any) => {
       try {
-        console.log('Google One-Tap response received:', response);
-        
-        // Send the credential to our backend
-        const result = await axiosInstance.post('/api/social-auth/google-one-tap', {
+        const result = await axiosInstance.post("/api/social-auth/google-one-tap", {
           credential: response.credential,
           clientId: GOOGLE_CLIENT_ID,
         });
 
-        if (result.data.user && result.data.token) {
-          // Login successful
-          login(result.data.token, result.data.user);
-          onSuccess?.(result.data.user);
-          console.log('Google One-Tap login successful:', result.data.user);
+        if (result.data?.user && result.data?.token) {
+          loginWithToken(result.data.token, result.data.user);
+        } else {
+          throw new Error("Invalid Google auth response");
         }
       } catch (error: any) {
-        console.error('Google One-Tap login failed:', error);
-        const errorMessage = error.response?.data?.message || 'Google authentication failed';
-        onError?.(errorMessage);
+        addToast(error?.response?.data?.message || "Google authentication failed", "error");
       }
     };
 
-    // Initialize Google One-Tap
+    // Initialize the GSI client
     window.google.accounts.id.initialize({
       client_id: GOOGLE_CLIENT_ID,
       callback: window.handleCredentialResponse,
@@ -79,23 +63,24 @@ const GoogleOneTap: React.FC<GoogleOneTapProps> = ({ onSuccess, onError }) => {
       cancel_on_tap_outside: true,
     });
 
-    // Display the One-Tap prompt
-    window.google.accounts.id.prompt((notification: any) => {
-      console.log('Google One-Tap notification:', notification);
-      
-      if (notification.isNotDisplayed()) {
-        console.log('Google One-Tap was not displayed:', notification.getNotDisplayedReason());
-      } else if (notification.isSkippedMoment()) {
-        console.log('Google One-Tap was skipped:', notification.getSkippedReason());
-      } else if (notification.isDismissedMoment()) {
-        console.log('Google One-Tap was dismissed:', notification.getDismissedReason());
-      }
-    });
+    // Render a visible Google button inside our container
+    if (buttonRef.current) {
+      window.google.accounts.id.renderButton(buttonRef.current, {
+        theme: "outline",
+        size: "large",
+        shape: "pill",
+        text: "continue_with", // shows "Continue with Google"
+        logo_alignment: "left",
+        width: "100%",
+      });
+    }
+
+    // Also trigger the One Tap prompt (will show as a small top-right prompt if eligible)
+    window.google.accounts.id.prompt();
   };
 
-  // This component doesn't render anything visible
-  // The Google One-Tap prompt appears as an overlay
-  return null;
+  // Container for the rendered button
+  return <div ref={buttonRef} />;
 };
 
 export default GoogleOneTap;

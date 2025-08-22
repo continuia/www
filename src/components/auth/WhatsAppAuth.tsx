@@ -1,261 +1,160 @@
-import React, { useState } from 'react';
-import { 
-  Box, 
-  TextField, 
-  Button, 
-  Typography, 
-  Alert, 
-  CircularProgress,
-  InputAdornment,
-  Stepper,
-  Step,
-  StepLabel
-} from '@mui/material';
-import { Phone, Message } from '@mui/icons-material';
-import { useAuth } from './AuthContext';
-import axiosInstance from '../../api/axiosConfig';
+import React from "react";
+import { Box, Button, TextField, Typography, InputAdornment, OutlinedInput } from "@mui/material";
+import { Phone } from "@mui/icons-material";
+import { useForm, Controller } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useToast } from "../toastContext";
+import { useAuthStore } from "../../store/useAuthStore";
 
-interface WhatsAppAuthProps {
-  onSuccess?: (user: any) => void;
-  onError?: (error: string) => void;
-}
+const schema = z.object({
+  phoneNumber: z
+    .string()
+    .min(8, "Enter valid phone")
+    .regex(/^\+?[0-9\s\-]{8,}$/, "Enter valid phone"),
+  otp: z.string().length(6, "OTP must be 6 digits").optional(),
+});
+type FormValues = z.infer<typeof schema>;
 
-const WhatsAppAuth: React.FC<WhatsAppAuthProps> = ({ onSuccess, onError }) => {
-  const { login } = useAuth();
-  const [step, setStep] = useState(0); // 0: phone input, 1: OTP input
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [otp, setOtp] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [countdown, setCountdown] = useState(0);
+const WhatsAppAuth: React.FC = () => {
+  const loginWithToken = useAuthStore((s) => s.loginWithToken);
+  const { addToast } = useToast();
 
-  const steps = ['Enter Phone Number', 'Verify OTP'];
+  const { control, handleSubmit, formState, setError } = useForm<FormValues>({
+    resolver: zodResolver(schema),
+    defaultValues: { phoneNumber: "", otp: "" },
+  });
 
-  // Format phone number with country code
-  const formatPhoneNumber = (phone: string): string => {
-    // Remove all non-digits
-    const digits = phone.replace(/\D/g, '');
-    
-    // Add + prefix if not present
-    if (!digits.startsWith('+')) {
-      // Assume US number if no country code
-      if (digits.length === 10) {
-        return `+1${digits}`;
-      }
-      return `+${digits}`;
+  const [step, setStep] = React.useState<0 | 1>(0);
+  const [countdown, setCountdown] = React.useState(0);
+
+  React.useEffect(() => {
+    if (countdown > 0) {
+      const timer = setTimeout(() => setCountdown((c) => c - 1), 1000);
+      return () => clearTimeout(timer);
     }
-    return `+${digits}`;
+  }, [countdown]);
+
+  const fieldStyle = {
+    bgcolor: "var(--neutral-100)",
+    borderRadius: "var(--radius-lg)",
+    "& .MuiOutlinedInput-root": {
+      "& fieldset": { borderColor: "var(--border-light)" },
+      "&:hover fieldset": { borderColor: "var(--border-focus)" },
+      "&.Mui-focused fieldset": {
+        borderColor: "var(--primary-500)",
+        borderWidth: 2,
+      },
+    },
   };
 
-  const requestOTP = async () => {
-    if (!phoneNumber.trim()) {
-      setError('Please enter your phone number');
-      return;
-    }
-
-    setIsLoading(true);
-    setError('');
-
+  const requestOTP = async (data: FormValues) => {
     try {
-      const formattedPhone = formatPhoneNumber(phoneNumber);
-      
-      await axiosInstance.post('/api/social-auth/whatsapp/request-otp', {
-        phoneNumber: formattedPhone,
+      await fetch("/api/social-auth/whatsapp/request-otp", {
+        method: "POST",
+        body: JSON.stringify({ phoneNumber: data.phoneNumber }),
+        headers: { "Content-Type": "application/json" },
       });
-
       setStep(1);
-      startCountdown();
-      
-    } catch (error: any) {
-      const errorMessage = error.response?.data?.message || 'Failed to send OTP';
-      setError(errorMessage);
-      onError?.(errorMessage);
-    } finally {
-      setIsLoading(false);
+      setCountdown(60);
+      addToast("OTP sent via WhatsApp", "success");
+    } catch {
+      setError("phoneNumber", {
+        type: "manual",
+        message: "Failed to send OTP",
+      });
     }
   };
 
-  const verifyOTP = async () => {
-    if (!otp.trim() || otp.length !== 6) {
-      setError('Please enter the 6-digit OTP');
-      return;
-    }
-
-    setIsLoading(true);
-    setError('');
-
+  const verifyOTP = async (data: FormValues) => {
     try {
-      const formattedPhone = formatPhoneNumber(phoneNumber);
-      
-      const result = await axiosInstance.post('/api/social-auth/whatsapp/verify-otp', {
-        phoneNumber: formattedPhone,
-        otp: otp.trim(),
+      const resp = await fetch("/api/social-auth/whatsapp/verify-otp", {
+        method: "POST",
+        body: JSON.stringify({
+          phoneNumber: data.phoneNumber,
+          otp: data.otp,
+        }),
+        headers: { "Content-Type": "application/json" },
       });
+      const result = await resp.json();
+      if (!resp.ok) throw new Error(result.message || "Invalid OTP");
 
-      if (result.data.user && result.data.token) {
-        login(result.data.token, result.data.user);
-        onSuccess?.(result.data.user);
-      }
-      
-    } catch (error: any) {
-      const errorMessage = error.response?.data?.message || 'Invalid OTP';
-      setError(errorMessage);
-      onError?.(errorMessage);
-    } finally {
-      setIsLoading(false);
+      loginWithToken(result.token, result.user);
+      addToast(`Welcome, ${result.user.firstName}`, "success");
+    } catch (e: any) {
+      setError("otp", { type: "manual", message: e.message || "Invalid OTP" });
     }
-  };
-
-  const startCountdown = () => {
-    setCountdown(60);
-    const timer = setInterval(() => {
-      setCountdown((prev) => {
-        if (prev <= 1) {
-          clearInterval(timer);
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-  };
-
-  const resendOTP = () => {
-    if (countdown === 0) {
-      requestOTP();
-    }
-  };
-
-  const goBack = () => {
-    setStep(0);
-    setOtp('');
-    setError('');
   };
 
   return (
-    <Box sx={{ width: '100%', maxWidth: 400 }}>
-      <Typography variant="h6" sx={{ mb: 3, textAlign: 'center', color: 'var(--primary-800)' }}>
-        WhatsApp Authentication
-      </Typography>
-
-      <Stepper activeStep={step} sx={{ mb: 4 }}>
-        {steps.map((label) => (
-          <Step key={label}>
-            <StepLabel>{label}</StepLabel>
-          </Step>
-        ))}
-      </Stepper>
-
-      {error && (
-        <Alert severity="error" sx={{ mb: 2 }}>
-          {error}
-        </Alert>
-      )}
-
+    <Box component="form" onSubmit={handleSubmit(step === 0 ? requestOTP : verifyOTP)}>
       {step === 0 && (
-        <Box>
-          <TextField
-            fullWidth
-            label="Phone Number"
-            value={phoneNumber}
-            onChange={(e) => setPhoneNumber(e.target.value)}
-            placeholder="+1234567890"
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <Phone />
-                </InputAdornment>
-              ),
-            }}
-            sx={{ mb: 3 }}
-            disabled={isLoading}
+        <>
+          <Controller
+            name="phoneNumber"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                placeholder="Enter phone number"
+                error={!!formState.errors.phoneNumber}
+                helperText={formState.errors.phoneNumber?.message}
+                fullWidth
+                sx={fieldStyle}
+                slots={{ input: OutlinedInput }}
+                slotProps={{
+                  input: {
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <Phone sx={{ color: "var(--neutral-400)" }} />
+                      </InputAdornment>
+                    ),
+                  },
+                }}
+              />
+            )}
           />
-          
           <Button
+            type="submit"
             fullWidth
             variant="contained"
-            onClick={requestOTP}
-            disabled={isLoading || !phoneNumber.trim()}
             sx={{
-              bgcolor: 'var(--success-600)',
-              '&:hover': { bgcolor: 'var(--success-700)' },
-              py: 1.5,
+              mt: 2,
+              bgcolor: "var(--primary-600)",
+              color: "white",
+              fontWeight: 600,
+              borderRadius: "var(--radius-lg)",
+              "&:hover": { bgcolor: "var(--primary-700)" },
             }}
           >
-            {isLoading ? (
-              <CircularProgress size={24} color="inherit" />
-            ) : (
-              'Send OTP via WhatsApp'
-            )}
+            Send OTP
           </Button>
-        </Box>
+        </>
       )}
 
       {step === 1 && (
-        <Box>
-          <Typography variant="body2" sx={{ mb: 2, textAlign: 'center', color: 'var(--text-secondary)' }}>
-            We've sent a 6-digit code to your WhatsApp
-          </Typography>
-          
-          <Typography variant="body2" sx={{ mb: 3, textAlign: 'center', fontWeight: 600 }}>
-            {formatPhoneNumber(phoneNumber)}
-          </Typography>
-
-          <TextField
-            fullWidth
-            label="Enter OTP"
-            value={otp}
-            onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
-            placeholder="123456"
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <Message />
-                </InputAdornment>
-              ),
-            }}
-            sx={{ mb: 3 }}
-            disabled={isLoading}
-          />
-
+        <>
+          <Controller name="otp" control={control} render={({ field }) => <TextField {...field} placeholder="Enter OTP" error={!!formState.errors.otp} helperText={formState.errors.otp?.message} fullWidth sx={fieldStyle} slots={{ input: OutlinedInput }} />} />
           <Button
+            type="submit"
             fullWidth
             variant="contained"
-            onClick={verifyOTP}
-            disabled={isLoading || otp.length !== 6}
             sx={{
-              bgcolor: 'var(--success-600)',
-              '&:hover': { bgcolor: 'var(--success-700)' },
-              py: 1.5,
-              mb: 2,
+              mt: 2,
+              bgcolor: "var(--primary-600)",
+              color: "white",
+              fontWeight: 600,
+              borderRadius: "var(--radius-lg)",
+              "&:hover": { bgcolor: "var(--primary-700)" },
             }}
           >
-            {isLoading ? (
-              <CircularProgress size={24} color="inherit" />
-            ) : (
-              'Verify OTP'
-            )}
+            Verify OTP
           </Button>
 
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <Button
-              variant="text"
-              onClick={goBack}
-              disabled={isLoading}
-              sx={{ color: 'var(--text-secondary)' }}
-            >
-              Change Number
-            </Button>
-
-            <Button
-              variant="text"
-              onClick={resendOTP}
-              disabled={isLoading || countdown > 0}
-              sx={{ color: countdown > 0 ? 'var(--text-muted)' : 'var(--primary-600)' }}
-            >
-              {countdown > 0 ? `Resend in ${countdown}s` : 'Resend OTP'}
-            </Button>
-          </Box>
-        </Box>
+          <Typography align="center" mt={2} color="var(--text-tertiary)">
+            {countdown > 0 ? `Resend OTP in ${countdown}s` : <Button onClick={() => setStep(0)}>Change Number</Button>}
+          </Typography>
+        </>
       )}
     </Box>
   );

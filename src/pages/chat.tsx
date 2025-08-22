@@ -1,44 +1,10 @@
-import { useEffect, useState, useRef } from "react";
 import { Box, Typography, Stack, Chip } from "@mui/material";
-import { useChat } from "../components/chat/hooks/useChat";
-import ChatContainer from "../components/chat/chatContainer";
-import AuthModal from "../components/auth/AuthModal";
+import RacchaAgent from "../components/chat/racchaAgent";
 import Image1 from "../assets/home/img1.webp";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import EmojiEmotionsIcon from "@mui/icons-material/EmojiEmotions";
-import ChatHeader from "../components/chat/chatHeader";
-
 const ChatPage: React.FC = () => {
-  const { currentConversation, isConnecting, isRestoringSession, isAgentTyping, connectionError, createNewConversation, sendMessage, forceCreateNewConversation } = useChat();
-  const [showAuthModal, setShowAuthModal] = useState(false);
-  const hasTriedConnection = useRef(false);
-
-  // Handle conversation creation after consent
-  useEffect(() => {
-    if (!currentConversation && !isConnecting && !isRestoringSession && !hasTriedConnection.current) {
-      hasTriedConnection.current = true;
-      createNewConversation();
-    }
-  }, [currentConversation, isConnecting, isRestoringSession, createNewConversation]);
-
-  useEffect(() => {
-    if (currentConversation) {
-      hasTriedConnection.current = false;
-    }
-  }, [currentConversation]);
-
-  useEffect(() => {
-    if (connectionError) {
-      hasTriedConnection.current = false;
-      console.error(connectionError);
-    }
-  }, [connectionError]);
-
-  const handleAuthSuccess = () => {
-    setShowAuthModal(false);
-  };
-
   const LeftPanel = () => (
     <Box
       sx={{
@@ -73,7 +39,7 @@ const ChatPage: React.FC = () => {
       }}
     >
       {/* Share Your Story */}
-      <Box flex={1} gap="var(--space-4)"  display={"flex"} flexDirection={"column"} justifyContent={"space-around"}>
+      <Box flex={1} gap="var(--space-4)" display={"flex"} flexDirection={"column"} justifyContent={"space-around"}>
         {/* Share Your Story */}
         <Box sx={{ display: "flex", alignItems: "center", mb: "var(--space-3)" }}>
           <Box sx={{ flex: 1 }}>
@@ -278,19 +244,15 @@ const ChatPage: React.FC = () => {
       </Box>
     </Box>
   );
-
   const RightPanel = () => {
     return (
       <Box sx={{ width: { xs: "100%", lg: "62%" }, display: "flex", flexDirection: "column", position: "relative", zIndex: 2 }}>
-        <ChatHeader setShowAuthModal={setShowAuthModal} isConnecting={isConnecting} newConversation={forceCreateNewConversation} />
-        <ChatContainer agent="Arika_Reddy" conversation={currentConversation} isLoading={isConnecting} isAgentTyping={isAgentTyping} onSendMessage={sendMessage} />
+        <RacchaAgent heading="HealthCare Consultation" agent="Arika_Reddy" />
       </Box>
     );
   };
-
   return (
     <>
-      <AuthModal open={showAuthModal} onClose={() => setShowAuthModal(false)} onSuccess={handleAuthSuccess} />
       <Box sx={{ flex: 1, backgroundColor: "var(--bg-primary)", display: "flex", minHeight: 0 }}>
         <LeftPanel />
         <RightPanel />

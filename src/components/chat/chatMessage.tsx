@@ -26,7 +26,7 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
 
   return (
     <Box display="flex" justifyContent={isUser ? "flex-end" : "flex-start"} sx={{ mb: "var(--space-3)" }}>
-      <Box display="flex" alignItems="flex-start" gap="var(--space-3)" maxWidth="75%" flexDirection={isUser ? "row-reverse" : "row"}>
+      <Box display="flex" alignItems="flex-start" gap="var(--space-3)" maxWidth="85%" flexDirection={isUser ? "row-reverse" : "row"}>
         <Avatar
           sx={{
             width: 36,
@@ -43,8 +43,8 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
           sx={{
             backgroundColor: isUser ? "var(--primary-600)" : "var(--bg-secondary)",
             color: isUser ? "var(--text-inverse)" : "var(--text-primary)",
-            borderRadius: isUser ? "var(--radius-2xl) var(--radius-2xl) var(--radius-md) var(--radius-2xl)" : "var(--radius-2xl) var(--radius-2xl) var(--radius-2xl) var(--radius-md)",
-            padding: "var(--space-4) var(--space-5)",
+            borderRadius: isUser ? "var(--radius-xl) var(--radius-xl) var(--radius-md) var(--radius-xl)" : "var(--radius-xl) var(--radius-xl) var(--radius-xl) var(--radius-md)",
+            padding: "var(--space-2) var(--space-4)",
             boxShadow: "var(--shadow-sm)",
             border: isUser ? "none" : "1px solid var(--border-light)",
             position: "relative",
@@ -57,7 +57,6 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
               lineHeight: "var(--leading-relaxed)",
               whiteSpace: "pre-wrap",
               wordBreak: "break-word",
-              mb: "var(--space-1)",
             }}
           >
             {message.content}
@@ -66,7 +65,7 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
           <Typography
             variant="caption"
             sx={{
-              fontSize: "var(--text-xs)",
+              fontSize: "var(--text-xxs)",
               opacity: 0.7,
               display: "block",
               textAlign: isUser ? "right" : "left",
