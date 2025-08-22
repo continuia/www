@@ -4,12 +4,14 @@ import LocalHospitalIcon from "@mui/icons-material/LocalHospital";
 import { motion } from "framer-motion";
 import type { Variants } from "framer-motion";
 import poster from "../../assets/poster.webp";
-import video2 from "../../assets/heroVideo2.mp4";
-import video1 from "../../assets/heroVideo2.mp4";
+import video4 from "../../assets/heroVideo4.webm";
+import video3 from "../../assets/heroVideo3.webm";
+import video2 from "../../assets/heroVideo2.webm";
+import video1 from "../../assets/heroVideo1.webm";
 import { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-const videos = [video2, video1];
+const videos = [video2, video3, video4, video1];
 
 const fadeLeft: Variants = {
   hidden: { opacity: 0, y: 20 },
@@ -195,7 +197,7 @@ const HeroSection = () => {
               borderRadius: "inherit",
               opacity: shouldShow ? 1 : 0,
               transition: "opacity 0.5s ease-in-out",
-              transform: "scale(1.2)",
+              transform: "scale(1)",
               pointerEvents: "none",
             }}
             aria-label={`Medical consultation background video ${index + 1}`}
@@ -237,9 +239,8 @@ const HeroSection = () => {
           viewport={{ once: true, amount: 0.22 }}
           variants={fadeLeft}
           sx={{
-            flex: 1,
             maxWidth: "650",
-            px: { xs: 0, sm: "var(--space-2)" },
+            p: { xs: 0, sm: "var(--space-6)" },
           }}
         >
           <Typography
@@ -251,7 +252,7 @@ const HeroSection = () => {
               lineHeight: "var(--leading-tight)",
               letterSpacing: "-0.04em",
               display: "block",
-              background: "linear-gradient(1800deg, var(--primary-900), var(--primary-900))",
+              background: "linear-gradient(1800deg, var(--primary-800), var(--primary-400))",
               WebkitBackgroundClip: "text",
               backgroundClip: "text",
               WebkitTextFillColor: "transparent",
