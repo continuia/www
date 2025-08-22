@@ -99,7 +99,7 @@ const HeroSection = () => {
               display: "inline-block",
             }}
           >
-            Make Every Flight Count—Pre-Screen Medical Cases Before Travel
+            Make Every Flight Count Pre-Screen Medical Cases Before Travel
           </Typography>
           <Typography
             variant="h6"

@@ -114,7 +114,7 @@ const HeroSection = () => {
             Skilled nursing and senior living teams often manage complex cases with limited access to specialists. Families seek clarity, nurses feel the pressure, and avoidable hospitalizations strain resources.
             <br />
             <br />
-            Continuia partners with your staff—offering on-demand case reviews, delivered in plain language summaries. No apps, no logins, no disruption: your care coordinator uploads records; we do the rest.
+            Continuia partners with your staff offering on-demand case reviews, delivered in plain language summaries. No apps, no logins, no disruption: your care coordinator uploads records; we do the rest.
             <br />
             <br />
             This service improves family confidence, reduces transfers, and positions your facility as a leader in proactive, coordinated care.

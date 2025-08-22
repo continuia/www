@@ -146,7 +146,7 @@ export const WhyThisPartnerMatters: React.FC = () => {
               maxWidth: 480,
             }}
           >
-            Patients often seek second opinions — not because they doubt their doctor, but because they need clarity and peace of mind. You shouldn't lose control of the care journey just because they want a second set of eyes.
+            Patients often seek second opinions   not because they doubt their doctor, but because they need clarity and peace of mind. You shouldn't lose control of the care journey just because they want a second set of eyes.
           </Typography>
         </Box>
         {/* Right: 2x2 grid of reasons */}

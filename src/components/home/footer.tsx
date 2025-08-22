@@ -63,7 +63,7 @@ const Footer = () => {
           >
             © {new Date().getFullYear()} Continuia. All rights reserved.
           </Typography>
-          <NavLink key={"/privacy"} to={"/privacy"} end style={{ textDecoration: "none" }}>
+          <NavLink key={"/privacy"} to={"/privacy/terms-of-service"} end style={{ textDecoration: "none" }}>
             <Typography
               variant="caption"
               sx={{
@@ -78,7 +78,7 @@ const Footer = () => {
                 },
               }}
             >
-              Terms Of Service
+              privacy
             </Typography>
           </NavLink>
         </Stack>

@@ -12,7 +12,7 @@ const featureList = [
   {
     icon: <ArticleOutlined fontSize="inherit" sx={{ color: "var(--text-inverse)" }} />,
     title: "Plain-Language Summaries",
-    description: "We don't diagnose. We don't advise. We simply clarify — giving your members a voice, a document, and deeper understanding they can carry back to their care teams.",
+    description: "We don't diagnose. We don't advise. We simply clarify giving your members a voice, a document, and deeper understanding they can carry back to their care teams.",
   },
   {
     icon: <VisibilityOutlined fontSize="inherit" sx={{ color: "var(--text-inverse)" }} />,

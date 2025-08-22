@@ -2,9 +2,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useState, useEffect } from "react";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { Fab, Zoom } from "@mui/material";
-import PasswordProtection from "./components/PasswordProtection";
 import HomeLayout from "./layout/landingPage";
-import TermsOfServiceLayout from "./layout/termsOfService";
+import TermsOfServiceLayout from "./layout/privacy";
 import NotFound from "./pages/notFound";
 import ScrollToTop from "./components/scrollToTop";
 import Homepage from "./pages/home";
@@ -23,10 +22,14 @@ import AdvocacyAndNGOs from "./pages/eachPartners/advocacyAndNGOs";
 import MedicalTourism from "./pages/eachPartners/tourismAndConcierge";
 import DoctorsPage from "./pages/doctors";
 import DoctorProfile from "./components/doctors/doctorProfile";
-import { TermsOfService } from "./pages/privacy";
 import GetInTouchPage from "./pages/getInTouch";
+import ChatLayout from "./layout/chat";
+import Terms from "./components/privacy/termsOfService";
+import AiAssistedPolicy from "./components/privacy/aiAssistedpolicy";
+import PublicEthicsPledge from "./components/privacy/publicEthicsPledge";
+import DataProcessingAddendum from "./components/privacy/dataProcessingAddendum";
+import BusinessAssociateAgreement from "./components/privacy/businessAssociateAgreement";
 import ChatPage from "./pages/chat";
-import DevOnlyRoute from "./components/devOnlyRoute";
 
 function App() {
   const [showButton, setShowButton] = useState(false);
@@ -44,16 +47,20 @@ function App() {
   };
 
   return (
-    <PasswordProtection password="Continuia123">
       <Router>
         <ScrollToTop />
         <Routes>
+          {/* Chat Route - Standalone layout */}
+          <Route path="/share-your-story" element={<ChatLayout />}>
+            <Route index element={<ChatPage />} />
+          </Route>
+
           {/* Public Routes */}
           <Route path="/" element={<HomeLayout />}>
             <Route index element={<Homepage />} />
             <Route path="insights" element={<Insights />} />
             <Route path="governance" element={<Governance />} />
-            <Route path="/partners">
+            <Route path="partners">
               <Route index element={<Partners />} />
               <Route path="hospitals" element={<HospitalPartner />} />
               <Route path="nursing-and-living" element={<NursingAndLivingPartner />} />
@@ -67,26 +74,23 @@ function App() {
             <Route path="doctors" element={<DoctorsPage />} />
             <Route path="getInTouch" element={<GetInTouchPage />} />
             <Route path="doctorProfile/:id" element={<DoctorProfile />} />
-            <Route
-              path="/chat"
-              element={
-                <DevOnlyRoute>
-                  {" "}
-                  <ChatPage />{" "}
-                </DevOnlyRoute>
-              }
-            />
 
             <Route path="about" element={<AboutPage />} />
             <Route path="cxa-globallaunch-c1a7e3d" element={<Campaign />} />
             <Route path="launch" element={<Campaign />} />
-            <Route path="*" element={<NotFound />} />
-          </Route>
-          <Route path="/privacy" element={<TermsOfServiceLayout />}>
-            <Route index element={<TermsOfService />} />
           </Route>
 
-          {/* Unknown routes nagivated to not-found */}
+          {/* Privacy Routes */}
+          <Route path="/privacy" element={<TermsOfServiceLayout />}>
+            <Route path="terms-of-service" element={<Terms />} />
+            <Route path="ai-assisted-policy" element={<AiAssistedPolicy />} />
+            <Route path="public-ethics-pledge" element={<PublicEthicsPledge />} />
+            <Route path="data-processing-addendum" element={<DataProcessingAddendum />} />
+            <Route path="business-associate-agreement" element={<BusinessAssociateAgreement />} />
+          </Route>
+
+          {/* Catch-all route - Must be last */}
+          <Route path="*" element={<NotFound />} />
         </Routes>
 
         {/* Floating Scroll-to-Top Button */}
@@ -112,7 +116,6 @@ function App() {
           </Fab>
         </Zoom>
       </Router>
-    </PasswordProtection>
   );
 }
 

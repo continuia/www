@@ -111,7 +111,7 @@ const HeroSection = () => {
               maxWidth: 600,
             }}
           >
-            Continuia partners with health plans and TPAs to help members make informed choices—before unnecessary surgeries, costly scans, or specialist loops.
+            Continuia partners with health plans and TPAs to help members make informed choices before unnecessary surgeries, costly scans, or specialist loops.
             <br />
             <br />
             Structured second opinions lower downstream costs and boost member satisfaction, all while staying neutral and non-disruptive.

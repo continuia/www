@@ -99,7 +99,7 @@ const HeroSection = () => {
               display: "inline-block",
             }}
           >
-            You Stay in Control — We Simply Support Your Patients
+            You Stay in Control   We Simply Support Your Patients
           </Typography>
           <Typography
             variant="h6"
@@ -114,7 +114,7 @@ const HeroSection = () => {
             Sometimes, the best care means inviting a second pair of eyes. Continuia helps doctors like you deliver clarity without delay, while reinforcing trust with your patients.
             <br />
             <br />
-            When you refer to Continuia, you're not giving up control. Our role is purely interpretive—we help the patient understand what's already been done, not what to do next.
+            When you refer to Continuia, you're not giving up control. Our role is purely interpretive we help the patient understand what's already been done, not what to do next.
             <br />
             <br />
             Patients return to you more confident and engaged. You stay center stage. We're just the spotlight.

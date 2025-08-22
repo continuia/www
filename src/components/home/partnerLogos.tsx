@@ -8,6 +8,7 @@ import logo4 from "../../assets/partnersLogos/Partner 4.png";
 import logo5 from "../../assets/partnersLogos/Partner 5.png";
 import logo6 from "../../assets/partnersLogos/Partner 6.png";
 import logo7 from "../../assets/partnersLogos/Partner 7.png";
+import logo8 from "../../assets/partnersLogos/Partner 8.png";
 
 // Helper for responsive logo/gap
 const useLogoSize = () => {
@@ -30,17 +31,22 @@ export default function PartnerLogosMarquee() {
   const [isHovered, setIsHovered] = useState(false);
   const speed = 0.05;
 
-  const logos: string[] = [logo1, logo2, logo3, logo4, logo5, logo6, logo7];
+  const logos = [logo1, logo8, logo2, logo3, logo4, logo5, logo6, logo7];
   const totalWidth = logos.length * (LOGO_WIDTH + GAP);
 
+  // Smooth infinite loop using modulo for seamless transition
   useAnimationFrame((_, delta) => {
     if (!isHovered) {
-      setOffsetX((prev) => prev - delta * speed);
+      setOffsetX((prev) => {
+        const next = prev - delta * speed;
+        // Use modulo to create seamless loop without visible jump
+        return next % (-totalWidth);
+      });
     }
   });
 
-  const translateX = offsetX % totalWidth;
-  const renderLogos = [...logos, ...logos];
+  // Create enough duplicates to ensure smooth scrolling
+  const renderLogos = [...logos, ...logos, ...logos];
 
   return (
     <Box
@@ -61,7 +67,7 @@ export default function PartnerLogosMarquee() {
             xs: "h5",
             sm: "h4",
             md: "h3",
-            lg: "h2", // Even bigger for large screens
+            lg: "h2",
           } as any
         }
         sx={{
@@ -77,12 +83,12 @@ export default function PartnerLogosMarquee() {
           textAlign: { xs: "center" },
           width: "100%",
           pb: 0,
-          // Extra fontSize bump at XL screens if you want even more:
           lineHeight: { xs: "1.1", lg: "1.05" },
         }}
       >
         Our Partners
       </Typography>
+
       <Box
         sx={{
           flex: 1,
@@ -95,7 +101,8 @@ export default function PartnerLogosMarquee() {
           style={{
             display: "flex",
             gap: `${GAP}px`,
-            transform: `translateX(${translateX}px)`,
+            transform: `translate3d(${offsetX}px, 0, 0)`,
+            willChange: "transform",
             alignItems: "center",
           }}
           onMouseEnter={() => setIsHovered(true)}
@@ -108,7 +115,7 @@ export default function PartnerLogosMarquee() {
               component="img"
               key={i}
               src={img}
-              alt={`Hospital Partner Logo ${i + 1}`}
+              alt={`Hospital Partner Logo ${(i % logos.length) + 1}`}
               sx={{
                 width: LOGO_WIDTH,
                 height: "auto",

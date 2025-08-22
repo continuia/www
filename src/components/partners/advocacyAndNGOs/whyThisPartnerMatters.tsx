@@ -141,7 +141,7 @@ export const WhyThisPartnerMatters: React.FC = () => {
               maxWidth: 480,
             }}
           >
-            Members of patient advocacy groups and health-focused NGOs often face some of the most difficult journeys in medicine — rare diseases, delayed diagnoses, fragmented care, and emotional burnout. These individuals aren't looking for shortcuts — they're looking for understanding.{" "}
+            Members of patient advocacy groups and health-focused NGOs often face some of the most difficult journeys in medicine rare diseases, delayed diagnoses, fragmented care, and emotional burnout. These individuals aren't looking for shortcuts they're looking for understanding.{" "}
           </Typography>
         </Box>
         {/* Right: 2x2 grid of reasons */}

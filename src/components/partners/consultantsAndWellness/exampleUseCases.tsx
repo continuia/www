@@ -69,7 +69,7 @@ export const ExampleUseCases: React.FC = () => {
           color: "var(--text-secondary)",
         }}
       >
-        Continuia fits cleanly into any benefits mix — as a navigator complement or standalone perk
+        Continuia fits cleanly into any benefits mix   as a navigator complement or standalone perk
       </Typography>
       <Box
         sx={{

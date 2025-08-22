@@ -111,7 +111,7 @@ const HeroSection = () => {
               maxWidth: 600,
             }}
           >
-            In today's benefits environment, employers want smart, flexible ways to improve care access—without driving up plan costs.
+            In today's benefits environment, employers want smart, flexible ways to improve care access without driving up plan costs.
             <br />
             <br />
             Continuia is a turnkey second-opinion layer that adds medical clarity without legal risk. It's fast to deploy, highly valued by families and caregivers, and customizable for any population.

@@ -11,7 +11,7 @@ const featureList = [
   {
     icon: <TouchAppOutlined fontSize="inherit" sx={{ color: "var(--text-inverse)" }} />,
     title: "Single Click Access",
-    description: "With a single click, your patients can access a structured, physician-led second opinion on their diagnostic reports — be it an MRI, biopsy, or routine bloodwork.",
+    description: "With a single click, your patients can access a structured, physician-led second opinion on their diagnostic reports   be it an MRI, biopsy, or routine bloodwork.",
   },
   {
     icon: <MenuBookOutlined fontSize="inherit" sx={{ color: "var(--text-inverse)" }} />,
@@ -74,7 +74,7 @@ export const HowContinuiaSupports: React.FC = () => {
           color: "var(--text-secondary)",
         }}
       >
-        We focus on interpreting what's already been done — not what should be done next.
+        We focus on interpreting what's already been done   not what should be done next.
       </Typography>
       <Box
         sx={{

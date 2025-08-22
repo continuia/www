@@ -279,7 +279,7 @@ const HeroSection = () => {
           >
             Every patient deserves confidence in their care.
             <br />
-            Our AI-powered platform connects you with world-class specialists who provide expert second opinions—ensuring you make informed decisions about your health journey.
+            Our AI-powered platform connects you with world-class specialists who provide expert second opinions ensuring you make informed decisions about your health journey.
           </Typography>
 
           <Stack direction={{ xs: "column", sm: "row" }} spacing={"var(--space-3)"} mb={"var(--space-5)"} alignItems={{ xs: "center", sm: "flex-start" }} justifyContent={{ xs: "center", sm: "flex-start" }}>
@@ -288,7 +288,7 @@ const HeroSection = () => {
               size="large"
               startIcon={<LocalHospitalIcon />}
               onClick={() => {
-                navigate("/insights");
+                navigate("/share-your-story");
               }}
               sx={{
                 background: "var(--primary-700)",
@@ -306,7 +306,7 @@ const HeroSection = () => {
                 },
               }}
             >
-              Explore Insights
+              Get a Second Opinion
             </Button>
             <Button
               variant="outlined"
