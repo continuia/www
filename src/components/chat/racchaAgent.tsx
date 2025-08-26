@@ -60,7 +60,7 @@ const RacchaAgent: React.FC<ChatContainerProps> = ({ agent = "defaultAgent", hea
   const sessionCreationRef = useRef(false);
   const reconnectAttempts = useRef(0);
   const maxReconnectAttempts = 3;
-  const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const reconnectTimeoutRef = useRef<any>(null);
   const currentSessionIdRef = useRef<string | null>(null);
   const isInitializedRef = useRef(false);
   const connectionStateRef = useRef<"idle" | "connecting" | "connected" | "failed">("idle");
