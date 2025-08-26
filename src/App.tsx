@@ -30,7 +30,7 @@ import PublicEthicsPledge from "./components/privacy/publicEthicsPledge";
 import DataProcessingAddendum from "./components/privacy/dataProcessingAddendum";
 import BusinessAssociateAgreement from "./components/privacy/businessAssociateAgreement";
 import ChatPage from "./pages/chat";
-
+import PatientPricing from "./pages/patientPricing";
 function App() {
   const [showButton, setShowButton] = useState(false);
 
@@ -47,75 +47,76 @@ function App() {
   };
 
   return (
-      <Router>
-        <ScrollToTop />
-        <Routes>
-          {/* Chat Route - Standalone layout */}
-          <Route path="/share-your-story" element={<ChatLayout />}>
-            <Route index element={<ChatPage />} />
+    <Router>
+      <ScrollToTop />
+      <Routes>
+        {/* Chat Route - Standalone layout */}
+        <Route path="/share-your-story" element={<ChatLayout />}>
+          <Route index element={<ChatPage />} />
+        </Route>
+
+        {/* Public Routes */}
+        <Route path="/" element={<HomeLayout />}>
+          <Route index element={<Homepage />} />
+          <Route path="insights" element={<Insights />} />
+          <Route path="governance" element={<Governance />} />
+          <Route path="partners">
+            <Route index element={<Partners />} />
+            <Route path="hospitals" element={<HospitalPartner />} />
+            <Route path="nursing-and-living" element={<NursingAndLivingPartner />} />
+            <Route path="doctors-and-specialists" element={<DoctorsAndSpecialists />} />
+            <Route path="clinics-diagnostics" element={<ClinicsAndDiagnostic />} />
+            <Route path="health-plans-tpas" element={<HealthPlansAndTPA />} />
+            <Route path="benefit-consultants" element={<ConsultantsAndWellness />} />
+            <Route path="advocacy-ngos" element={<AdvocacyAndNGOs />} />
+            <Route path="medical-tourism" element={<MedicalTourism />} />
           </Route>
+          <Route path="doctors" element={<DoctorsPage />} />
+          <Route path="getInTouch" element={<GetInTouchPage />} />
+          <Route path="doctorProfile/:id" element={<DoctorProfile />} />
+          <Route path="patient-pricing" element={<PatientPricing />} />
 
-          {/* Public Routes */}
-          <Route path="/" element={<HomeLayout />}>
-            <Route index element={<Homepage />} />
-            <Route path="insights" element={<Insights />} />
-            <Route path="governance" element={<Governance />} />
-            <Route path="partners">
-              <Route index element={<Partners />} />
-              <Route path="hospitals" element={<HospitalPartner />} />
-              <Route path="nursing-and-living" element={<NursingAndLivingPartner />} />
-              <Route path="doctors-and-specialists" element={<DoctorsAndSpecialists />} />
-              <Route path="clinics-diagnostics" element={<ClinicsAndDiagnostic />} />
-              <Route path="health-plans-tpas" element={<HealthPlansAndTPA />} />
-              <Route path="benefit-consultants" element={<ConsultantsAndWellness />} />
-              <Route path="advocacy-ngos" element={<AdvocacyAndNGOs />} />
-              <Route path="medical-tourism" element={<MedicalTourism />} />
-            </Route>
-            <Route path="doctors" element={<DoctorsPage />} />
-            <Route path="getInTouch" element={<GetInTouchPage />} />
-            <Route path="doctorProfile/:id" element={<DoctorProfile />} />
+          <Route path="about" element={<AboutPage />} />
+          <Route path="cxa-globallaunch-c1a7e3d" element={<Campaign />} />
+          <Route path="launch" element={<Campaign />} />
+        </Route>
 
-            <Route path="about" element={<AboutPage />} />
-            <Route path="cxa-globallaunch-c1a7e3d" element={<Campaign />} />
-            <Route path="launch" element={<Campaign />} />
-          </Route>
+        {/* Privacy Routes */}
+        <Route path="/privacy" element={<TermsOfServiceLayout />}>
+          <Route path="terms-of-service" element={<Terms />} />
+          <Route path="ai-assisted-policy" element={<AiAssistedPolicy />} />
+          <Route path="public-ethics-pledge" element={<PublicEthicsPledge />} />
+          <Route path="data-processing-addendum" element={<DataProcessingAddendum />} />
+          <Route path="business-associate-agreement" element={<BusinessAssociateAgreement />} />
+        </Route>
 
-          {/* Privacy Routes */}
-          <Route path="/privacy" element={<TermsOfServiceLayout />}>
-            <Route path="terms-of-service" element={<Terms />} />
-            <Route path="ai-assisted-policy" element={<AiAssistedPolicy />} />
-            <Route path="public-ethics-pledge" element={<PublicEthicsPledge />} />
-            <Route path="data-processing-addendum" element={<DataProcessingAddendum />} />
-            <Route path="business-associate-agreement" element={<BusinessAssociateAgreement />} />
-          </Route>
+        {/* Catch-all route - Must be last */}
+        <Route path="*" element={<NotFound />} />
+      </Routes>
 
-          {/* Catch-all route - Must be last */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-
-        {/* Floating Scroll-to-Top Button */}
-        <Zoom in={showButton}>
-          <Fab
-            color="primary"
-            size="medium"
-            onClick={scrollToTop}
-            aria-label="scroll back to top"
-            sx={{
-              position: "fixed",
-              bottom: { xs: 28, sm: 100 },
-              right: { xs: 20, sm: 30 },
-              zIndex: 1700,
-              boxShadow: "var(--shadow-lg)",
-              bgcolor: "var(--primary-600)",
-              color: "var(--text-inverse)",
-              "&:hover": { bgcolor: "var(--primary-700)" },
-              transition: "background 0.2s",
-            }}
-          >
-            <KeyboardArrowUpIcon fontSize="large" />
-          </Fab>
-        </Zoom>
-      </Router>
+      {/* Floating Scroll-to-Top Button */}
+      <Zoom in={showButton}>
+        <Fab
+          color="primary"
+          size="medium"
+          onClick={scrollToTop}
+          aria-label="scroll back to top"
+          sx={{
+            position: "fixed",
+            bottom: { xs: 28, sm: 100 },
+            right: { xs: 20, sm: 30 },
+            zIndex: 1700,
+            boxShadow: "var(--shadow-lg)",
+            bgcolor: "var(--primary-600)",
+            color: "var(--text-inverse)",
+            "&:hover": { bgcolor: "var(--primary-700)" },
+            transition: "background 0.2s",
+          }}
+        >
+          <KeyboardArrowUpIcon fontSize="large" />
+        </Fab>
+      </Zoom>
+    </Router>
   );
 }
 
