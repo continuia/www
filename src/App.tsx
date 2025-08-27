@@ -31,6 +31,7 @@ import DataProcessingAddendum from "./components/privacy/dataProcessingAddendum"
 import BusinessAssociateAgreement from "./components/privacy/businessAssociateAgreement";
 import ChatPage from "./pages/chat";
 import PatientPricing from "./pages/patientPricing";
+import Pricing from "./pages/pricing";
 function App() {
   const [showButton, setShowButton] = useState(false);
 
@@ -75,6 +76,7 @@ function App() {
           <Route path="getInTouch" element={<GetInTouchPage />} />
           <Route path="doctorProfile/:id" element={<DoctorProfile />} />
           <Route path="patient-pricing" element={<PatientPricing />} />
+           <Route path="pricing" element={<Pricing />} />
 
           <Route path="about" element={<AboutPage />} />
           <Route path="cxa-globallaunch-c1a7e3d" element={<Campaign />} />
