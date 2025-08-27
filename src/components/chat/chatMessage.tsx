@@ -1,7 +1,7 @@
 import { Box, Typography, Avatar } from "@mui/material";
-import { Person, SmartToy } from "@mui/icons-material";
+import { Person } from "@mui/icons-material";
 import type { ChatMessage as ChatMessageType } from "./chat.types";
-
+import ArikaReddy from "../../assets/arika-reddy.webp";
 interface ChatMessageProps {
   message: ChatMessageType;
 }
@@ -27,18 +27,30 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
   return (
     <Box display="flex" justifyContent={isUser ? "flex-end" : "flex-start"} sx={{ mb: "var(--space-3)" }}>
       <Box display="flex" alignItems="flex-start" gap="var(--space-3)" maxWidth="85%" flexDirection={isUser ? "row-reverse" : "row"}>
-        <Avatar
-          sx={{
-            width: 36,
-            height: 36,
-            backgroundColor: isUser ? "var(--primary-600)" : "var(--neutral-200)",
-            color: isUser ? "var(--text-inverse)" : "var(--text-primary)",
-            boxShadow: "var(--shadow-sm)",
-          }}
-        >
-          {isUser ? <Person fontSize="small" /> : <SmartToy fontSize="small" />}
-        </Avatar>
-
+        {isUser ? (
+          <Avatar
+            sx={{
+              width: 36,
+              height: 36,
+              backgroundColor: isUser ? "var(--primary-600)" : "var(--neutral-200)",
+              color: isUser ? "var(--text-inverse)" : "var(--text-primary)",
+              boxShadow: "var(--shadow-sm)",
+            }}
+          >
+            <Person fontSize="small" />
+          </Avatar>
+        ) : (
+          <Avatar
+            src={ArikaReddy}
+            sx={{
+              width: 36,
+              height: 36,
+              backgroundColor: isUser ? "var(--primary-600)" : "var(--neutral-200)",
+              color: isUser ? "var(--text-inverse)" : "var(--text-primary)",
+              boxShadow: "var(--shadow-sm)",
+            }}
+          />
+        )}
         <Box
           sx={{
             backgroundColor: isUser ? "var(--primary-600)" : "var(--bg-secondary)",

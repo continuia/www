@@ -13,18 +13,37 @@ import { useNavigate } from "react-router-dom";
 
 const videos = [video2, video3, video4, video1];
 
-const fadeLeft: Variants = {
-  hidden: { opacity: 0, y: 20 },
+const fadeUp: Variants = {
+  hidden: { opacity: 0, y: 40 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.5, type: "spring", stiffness: 60, damping: 18 },
+    transition: { duration: 0.8, ease: [0.25, 0.1, 0.25, 1] },
+  },
+};
+
+const staggerChildren: Variants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.2,
+    },
+  },
+};
+
+const slideInLeft: Variants = {
+  hidden: { opacity: 0, x: -60 },
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: { duration: 0.9, ease: [0.25, 0.1, 0.25, 1] },
   },
 };
 
 const features = ["Board-certified specialists", "AI-enhanced analysis", "Global expertise"];
 
 const MotionBox = motion.create(Box);
+const MotionStack = motion.create(Stack);
 
 const HeroSection = () => {
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
@@ -50,13 +69,11 @@ const HeroSection = () => {
       const newState = [...prev];
       newState[index] = true;
 
-      // Check if all videos are loaded
       const allLoaded = newState.every((loaded) => loaded);
       if (allLoaded && !allVideosLoaded) {
         setAllVideosLoaded(true);
       }
 
-      // Start first video when it's ready
       if (index === 0 && !videoStarted) {
         const firstVideo = videoRefs.current[0];
         if (firstVideo) {
@@ -71,7 +88,6 @@ const HeroSection = () => {
               .catch(console.error);
           };
 
-          // Small delay to ensure smooth transition from poster
           setTimeout(startPlayback, 1000);
         }
       }
@@ -114,16 +130,13 @@ const HeroSection = () => {
     }
   };
 
-  // Load videos with priority
   useEffect(() => {
     const loadVideos = async () => {
-      // Load first video immediately
       const firstVideo = videoRefs.current[0];
       if (firstVideo) {
         firstVideo.load();
       }
 
-      // Load other videos with slight delay to prioritize first video
       setTimeout(() => {
         videoRefs.current.forEach((video, index) => {
           if (video && index > 0) {
@@ -148,18 +161,17 @@ const HeroSection = () => {
     <Box
       sx={{
         position: "relative",
-        minHeight: { xs: "calc(var(--space-48) + var(--space-16))", md: "90vh" },
+        minHeight: { xs: "100vh", md: "100vh" },
         display: "flex",
         alignItems: "center",
-        justifyContent: "center",
-        px: { xs: "var(--space-4)", sm: "var(--space-8)", md: "var(--space-8)" },
-        py: { xs: "var(--space-6)", md: "var(--space-8)" },
-        boxShadow: "var(--shadow-lg)",
+        justifyContent: "flex-start",
+        px: { xs: "var(--space-4)", sm: "var(--space-6)", md: "var(--space-12)", lg: "var(--space-16)" },
+        py: { xs: "var(--space-8)", md: "var(--space-16)" },
         overflow: "hidden",
-        background: !videoStarted ? "var(--neutral-100)" : "transparent",
+        background: !videoStarted ? "var(--neutral-50)" : "transparent",
       }}
     >
-      {/* Video Loop with Poster */}
+      {/* Video Background */}
       {videos.map((videoSrc, index) => {
         const isCurrentVideo = index === currentVideoIndex;
         const isNextVideo = index === nextVideoIndex && isTransitioning;
@@ -172,7 +184,7 @@ const HeroSection = () => {
               videoRefs.current[index] = el;
             }}
             src={videoSrc}
-            poster={index === 0 ? poster : undefined} // Only first video gets poster
+            poster={index === 0 ? poster : undefined}
             muted
             playsInline
             loop={false}
@@ -194,10 +206,8 @@ const HeroSection = () => {
               objectFit: "cover",
               objectPosition: "center center",
               zIndex: shouldShow ? 1 : 0,
-              borderRadius: "inherit",
               opacity: shouldShow ? 1 : 0,
-              transition: "opacity 0.5s ease-in-out",
-              transform: "scale(1)",
+              transition: "opacity 0.5s ease",
               pointerEvents: "none",
             }}
             aria-label={`Medical consultation background video ${index + 1}`}
@@ -205,7 +215,7 @@ const HeroSection = () => {
         );
       })}
 
-      {/* Overlay for text contrast */}
+      {/* Enhanced Overlay */}
       <Box
         sx={{
           position: "absolute",
@@ -213,159 +223,253 @@ const HeroSection = () => {
           left: 0,
           width: "100%",
           height: "100%",
-          bgcolor: "rgba(255,255,255,0.35)",
+          background: {
+            xs: "linear-gradient(180deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.6) 100%)",
+            md: "linear-gradient(90deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.5) 60%, rgba(0,0,0,0.3) 100%)"
+          },
           zIndex: 2,
-          borderRadius: "inherit",
-          pointerEvents: "none",
         }}
       />
 
-      {/* Main Content */}
-      <Stack
-        direction={{ xs: "column", md: "row" }}
-        alignItems="center"
-        justifyContent="start"
-        spacing={{ xs: "var(--space-8)", md: "var(--space-16)" }}
+      {/* Main Content Container */}
+      <Box
         sx={{
           width: "100%",
+          maxWidth: "1400px",
           position: "relative",
           zIndex: 3,
         }}
       >
-        {/* Text Content */}
-        <MotionBox
+        <MotionStack
+          direction="column"
+          alignItems={{ xs: "center", md: "flex-start" }}
+          justifyContent="center"
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, amount: 0.22 }}
-          variants={fadeLeft}
+          viewport={{ once: true, amount: 0.2 }}
+          variants={staggerChildren}
           sx={{
-            maxWidth: "650",
-            p: { xs: 0, sm: "var(--space-6)" },
+            maxWidth: { xs: "100%", md: "60%", lg: "55%" },
+            textAlign: { xs: "center", md: "left" },
           }}
         >
-          <Typography
-            variant="h1"
-            sx={{
-              fontWeight: 800,
-              fontSize: { xs: "var(--text-4xl)", sm: "var(--text-5xl)", md: "var(--text-6xl)" },
-              mb: "var(--space-3)",
-              lineHeight: "var(--leading-tight)",
-              letterSpacing: "-0.04em",
-              display: "block",
-              background: "linear-gradient(1800deg, var(--primary-800), var(--primary-400))",
-              WebkitBackgroundClip: "text",
-              backgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              color: "transparent",
-              textAlign: { xs: "center", md: "left" },
-            }}
-          >
-            When Medical
-            <br />
-            Decisions Matter Most
-          </Typography>
+          {/* Main Headline */}
+          <MotionBox variants={slideInLeft}>
+            <Typography
+              variant="h1"
+              sx={{
+                fontWeight: 800,
+                fontSize: { 
+                  xs: "clamp(var(--text-4xl), 8vw, var(--text-5xl))", 
+                  sm: "clamp(var(--text-5xl), 6vw, var(--text-6xl))", 
+                  md: "clamp(var(--text-6xl), 5vw, var(--text-7xl))"
+                },
+                mb: "var(--space-6)",
+                lineHeight: { xs: "var(--leading-tight)", md: "var(--leading-none)" },
+                letterSpacing: { xs: "-0.02em", md: "-0.04em" },
+                color: "white",
+                textShadow: "0 2px 20px rgba(0,0,0,0.5)",
+              }}
+            >
+              When Medical
+              <br />
+              <Box 
+                component="span" 
+                sx={{ 
+                  color: "var(--primary-300)",
+                  textShadow: "0 0 30px var(--primary-300), 0 2px 20px rgba(0,0,0,0.5)",
+                  fontWeight: 900,
+                }}
+              >
+                Decisions Matter
+              </Box>
+              <br />
+              Most
+            </Typography>
+          </MotionBox>
 
-          <Typography
-            variant="h5"
-            sx={{
-              color: "var(--text-secondary)",
-              fontWeight: 500,
-              mb: "var(--space-6)",
-              fontSize: { xs: "var(--text-lg)", sm: "var(--text-xl)", md: "var(--text-2xl)" },
-              lineHeight: "var(--leading-relaxed)",
-              maxWidth: 580,
-              mx: { xs: "auto", md: 0 },
-              textAlign: { xs: "center", md: "left" },
-            }}
-          >
-            Every patient deserves confidence in their care.
-            <br />
-            Our AI-powered platform connects you with world-class specialists who provide expert second opinions ensuring you make informed decisions about your health journey.
-          </Typography>
+          {/* Subtitle */}
+          <MotionBox variants={fadeUp}>
+            <Typography
+              variant="h4"
+              sx={{
+                color: "rgba(255,255,255,0.95)",
+                fontWeight: 400,
+                mb: "var(--space-10)",
+                fontSize: { 
+                  xs: "var(--text-lg)", 
+                  sm: "var(--text-xl)", 
+                  md: "var(--text-2xl)",
+                  lg: "var(--text-3xl)"
+                },
+                lineHeight: "var(--leading-relaxed)",
+                maxWidth: { xs: "100%", md: "90%" },
+                textShadow: "0 2px 10px rgba(0,0,0,0.3)",
+              }}
+            >
+              Connect with world-class specialists for expert second opinions.{" "}
+              <Box component="span" sx={{ color: "var(--primary-200)", fontWeight: 500 }}>
+                Make informed decisions
+              </Box>{" "}
+              about your health journey with confidence.
+            </Typography>
+          </MotionBox>
 
-          <Stack direction={{ xs: "column", sm: "row" }} spacing={"var(--space-3)"} mb={"var(--space-5)"} alignItems={{ xs: "center", sm: "flex-start" }} justifyContent={{ xs: "center", sm: "flex-start" }}>
+          {/* CTA Buttons */}
+          <MotionStack
+            direction={{ xs: "column", sm: "row" }}
+            spacing={"var(--space-4)"}
+            mb={"var(--space-12)"}
+            alignItems="center"
+            variants={fadeUp}
+            sx={{ width: { xs: "100%", sm: "auto" } }}
+          >
             <Button
               variant="contained"
               size="large"
-              startIcon={<LocalHospitalIcon />}
-              onClick={() => {
-                navigate("/share-your-story");
-              }}
+              startIcon={<LocalHospitalIcon sx={{ fontSize: "var(--text-xl) !important" }} />}
+              onClick={() => navigate("/share-your-story")}
               sx={{
-                background: "var(--primary-700)",
-                color: "var(--text-inverse)",
+                background: "linear-gradient(135deg, var(--primary-500), var(--primary-700))",
+                color: "white",
                 fontWeight: 700,
-                px: "var(--space-5)",
-                py: "calc(var(--space-2) + var(--space-1))",
-                fontSize: "var(--text-lg)",
-                borderRadius: "var(--radius-xl)",
-                boxShadow: "var(--shadow-md)",
+                px: { xs: "var(--space-8)", sm: "var(--space-10)" },
+                py: { xs: "var(--space-4)", sm: "var(--space-4)" },
+                fontSize: { xs: "var(--text-lg)", sm: "var(--text-xl)" },
+                borderRadius: "var(--radius-2xl)",
                 textTransform: "none",
+                width: { xs: "100%", sm: "auto" },
+                minWidth: { sm: "280px" },
+                boxShadow: "0 8px 32px rgba(0,0,0,0.3)",
+                border: "1px solid rgba(255,255,255,0.1)",
                 "&:hover": {
-                  background: "var(--primary-900)",
-                  boxShadow: "var(--shadow-lg)",
+                  background: "linear-gradient(135deg, var(--primary-600), var(--primary-800))",
+                  transform: "translateY(-2px)",
+                  boxShadow: "0 12px 40px rgba(0,0,0,0.4)",
                 },
+                transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
               }}
             >
-              Get a Second Opinion
+              Get Second Opinion
             </Button>
+            
             <Button
               variant="outlined"
               size="large"
               onClick={handleHowItworks}
               sx={{
-                color: "var(--primary-700)",
-                borderColor: "var(--primary-300)",
-                background: "var(--bg-primary)",
-                fontWeight: 700,
-                px: "var(--space-5)",
-                py: "calc(var(--space-2) + var(--space-1))",
-                fontSize: "var(--text-lg)",
-                borderRadius: "var(--radius-xl)",
+                color: "white",
+                borderColor: "rgba(255,255,255,0.3)",
+                background: "rgba(255,255,255,0.05)",
+                backdropFilter: "blur(10px)",
+                fontWeight: 600,
+                px: { xs: "var(--space-8)", sm: "var(--space-10)" },
+                py: { xs: "var(--space-4)", sm: "var(--space-4)" },
+                fontSize: { xs: "var(--text-lg)", sm: "var(--text-xl)" },
+                borderRadius: "var(--radius-2xl)",
+                borderWidth: "2px",
                 textTransform: "none",
+                width: { xs: "100%", sm: "auto" },
+                minWidth: { sm: "280px" },
                 "&:hover": {
-                  borderColor: "var(--primary-700)",
-                  background: "var(--primary-50)",
+                  borderColor: "rgba(255,255,255,0.8)",
+                  background: "rgba(255,255,255,0.1)",
+                  transform: "translateY(-2px)",
                 },
+                transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
               }}
             >
-              Learn How It Works
+              How It Works
             </Button>
-          </Stack>
+          </MotionStack>
 
-          {/* Features */}
-          <Stack direction="row" spacing={"var(--space-2)"} mt={"var(--space-2)"} flexWrap="wrap" rowGap={"var(--space-2)"} justifyContent={{ xs: "center", md: "flex-start" }}>
-            {features.map((feature) => (
-              <Stack
-                direction="row"
-                alignItems="center"
-                spacing={"var(--space-1)"}
-                key={feature}
-                sx={{
-                  borderRadius: "var(--radius-md)",
-                  px: "var(--space-3)",
-                  py: "var(--space-1)",
-                  bgcolor: "var(--primary-100)",
-                  boxShadow: "var(--shadow-xs)",
-                }}
-              >
-                <CheckCircleIcon sx={{ color: "var(--success)", fontSize: "var(--text-xl)" }} />
-                <Typography
-                  variant="body1"
+          {/* Enhanced Features - Card Style */}
+          <MotionBox variants={fadeUp} sx={{ width: "100%" }}>
+   
+            <Stack
+              direction={{ xs: "column", sm: "row" }}
+              spacing={"var(--space-4)"}
+              sx={{ width: "100%" }}
+            >
+              {features.map((feature, index) => (
+                <Box
+                  key={feature}
                   sx={{
-                    color: "var(--text-primary)",
-                    fontWeight: 600,
-                    fontSize: "var(--text-base)",
-                    letterSpacing: "0.01em",
+                    flex: 1,
+                    background: "linear-gradient(145deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)",
+                    backdropFilter: "blur(20px)",
+                    borderRadius: "var(--radius-2xl)",
+                    p: "var(--space-6)",
+                    border: "1px solid rgba(255,255,255,0.2)",
+                    boxShadow: "0 8px 32px rgba(0,0,0,0.1)",
+                    transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+                    position: "relative",
+                    overflow: "hidden",
+                    "&::before": {
+                      content: '""',
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      height: "3px",
+                      background: index === 0 ? "linear-gradient(90deg, var(--primary-400), var(--primary-600))" :
+                                 index === 1 ? "linear-gradient(90deg, var(--accent-400), var(--accent-600))" :
+                                 "linear-gradient(90deg, var(--success-400), var(--success-600))",
+                    },
+                    "&:hover": {
+                      background: "linear-gradient(145deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.08) 100%)",
+                      transform: "translateY(-4px)",
+                      boxShadow: "0 12px 40px rgba(0,0,0,0.2)",
+                      border: "1px solid rgba(255,255,255,0.3)",
+                    },
                   }}
                 >
-                  {feature}
-                </Typography>
-              </Stack>
-            ))}
-          </Stack>
-        </MotionBox>
-      </Stack>
+                  <Stack
+                    direction="column"
+                    alignItems={{ xs: "center", md: "flex-start" }}
+                    spacing={"var(--space-3)"}
+                  >
+                    <Box
+                      sx={{
+                        width: "48px",
+                        height: "48px",
+                        borderRadius: "var(--radius-xl)",
+                        background: index === 0 ? "linear-gradient(135deg, var(--primary-500), var(--primary-700))" :
+                                   index === 1 ? "linear-gradient(135deg, var(--accent-500), var(--accent-700))" :
+                                   "linear-gradient(135deg, var(--success-500), var(--success-700))",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        boxShadow: "0 4px 20px rgba(0,0,0,0.2)",
+                      }}
+                    >
+                      <CheckCircleIcon 
+                        sx={{ 
+                          color: "white",
+                          fontSize: "var(--text-2xl)",
+                        }} 
+                      />
+                    </Box>
+                    
+                    <Typography
+                      variant="h6"
+                      sx={{
+                        color: "white",
+                        fontWeight: 600,
+                        fontSize: { xs: "var(--text-base)", sm: "var(--text-lg)" },
+                        textAlign: { xs: "center", md: "left" },
+                        lineHeight: "var(--leading-tight)",
+                      }}
+                    >
+                      {feature}
+                    </Typography>
+                  </Stack>
+                </Box>
+              ))}
+            </Stack>
+          </MotionBox>
+        </MotionStack>
+      </Box>
     </Box>
   );
 };

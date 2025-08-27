@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Box, Typography, Button, Avatar, Container, Card, CardContent } from "@mui/material";
 import { Chat as ChatIcon } from "@mui/icons-material";
 import { motion, type Variants } from "framer-motion";
-
+import ArikaReddy from "../../assets/arika-reddy.webp";
 const ConciergeSection: React.FC = () => {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -243,7 +243,7 @@ const ConciergeSection: React.FC = () => {
                 <Box sx={{ position: "relative", display: "inline-block", mb: "var(--space-8)" }}>
                   <motion.div variants={avatarVariants} whileHover="hover" style={{ position: "relative", zIndex: 1 }}>
                     <Avatar
-                      src="/api/placeholder/80/80"
+                      src={ArikaReddy}
                       alt="Aarika Reddy"
                       sx={{
                         width: 80,
@@ -253,29 +253,6 @@ const ConciergeSection: React.FC = () => {
                         cursor: "pointer",
                       }}
                     />
-                  </motion.div>
-
-                  {/* Floating wave emoji */}
-                  <motion.div
-                    style={{
-                      position: "absolute",
-                      top: "-5px",
-                      right: "-5px",
-                      fontSize: "24px",
-                      zIndex: 2,
-                    }}
-                    animate={{
-                      rotate: [0, 20, -10, 20, 0],
-                      scale: [1, 1.1, 1, 1.1, 1],
-                    }}
-                    transition={{
-                      duration: 2,
-                      ease: "easeInOut",
-                      repeat: Infinity,
-                      repeatDelay: 3,
-                    }}
-                  >
-                    👋
                   </motion.div>
                 </Box>
 
