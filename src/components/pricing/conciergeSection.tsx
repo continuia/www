@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Box, Typography, Button, Avatar, Container, Card, CardContent } from "@mui/material";
 import { Chat as ChatIcon } from "@mui/icons-material";
 import { motion, type Variants } from "framer-motion";
-import ArikaReddy from "../../assets/arika-reddy.webp";
+import ArikaReddy from "../../assets/arika_reddy.webp";
 const ConciergeSection: React.FC = () => {
   const [isHovered, setIsHovered] = useState(false);
 

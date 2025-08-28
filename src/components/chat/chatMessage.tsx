@@ -1,7 +1,7 @@
 import { Box, Typography, Avatar } from "@mui/material";
 import { Person } from "@mui/icons-material";
 import type { ChatMessage as ChatMessageType } from "./chat.types";
-import ArikaReddy from "../../assets/arika-reddy.webp";
+import ArikaReddy from "../../assets/arika_reddy.webp";
 interface ChatMessageProps {
   message: ChatMessageType;
 }
