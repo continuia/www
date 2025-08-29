@@ -1,6 +1,6 @@
 import { useState, useRef, useCallback } from "react";
-import { TextField, IconButton, Box, CircularProgress, Chip, Avatar, Menu, MenuItem, Typography, Divider, Button, Tooltip, ListItemIcon, ListItemText, Dialog, DialogContent, DialogActions } from "@mui/material";
-import { Send, AttachFile, Image, PictureAsPdf, Close, ExpandMore, Delete, CameraAlt, Add, PhotoLibrary, PhotoCamera, FlipCameraAndroid } from "@mui/icons-material";
+import { TextField, IconButton, Box, CircularProgress, Chip, Avatar, Menu, MenuItem, Typography, Divider, Button, Dialog, DialogContent, DialogActions } from "@mui/material";
+import { Send, AttachFile, Image, PictureAsPdf, Close, Delete, CameraAlt, Add, PhotoLibrary, PhotoCamera, FlipCameraAndroid } from "@mui/icons-material";
 
 interface UploadedFile {
   id: string;
@@ -32,11 +32,10 @@ const ChatInput: React.FC<ChatInputProps> = ({ agent, onSendMessage, isLoading }
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
-  // const cameraInputRef = useRef<HTMLInputElement>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
+  const videoRef = useRef<any>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  // Mock upload API
+  // All existing functions remain the same...
   const uploadFile = async (file: File): Promise<UploadedFile> => {
     return new Promise((resolve) => {
       setTimeout(() => {
@@ -53,7 +52,6 @@ const ChatInput: React.FC<ChatInputProps> = ({ agent, onSendMessage, isLoading }
     });
   };
 
-  // Start camera stream
   const startCamera = useCallback(async () => {
     try {
       const mediaStream = await navigator.mediaDevices.getUserMedia({
@@ -74,7 +72,6 @@ const ChatInput: React.FC<ChatInputProps> = ({ agent, onSendMessage, isLoading }
     }
   }, [facingMode]);
 
-  // Stop camera stream
   const stopCamera = useCallback(() => {
     if (stream) {
       stream.getTracks().forEach((track) => track.stop());
@@ -82,7 +79,6 @@ const ChatInput: React.FC<ChatInputProps> = ({ agent, onSendMessage, isLoading }
     }
   }, [stream]);
 
-  // Open camera dialog
   const openCamera = async () => {
     setAttachMenuAnchor(null);
     setIsCameraOpen(true);
@@ -90,14 +86,12 @@ const ChatInput: React.FC<ChatInputProps> = ({ agent, onSendMessage, isLoading }
     await startCamera();
   };
 
-  // Close camera dialog
   const closeCamera = () => {
     stopCamera();
     setIsCameraOpen(false);
     setCapturedImage(null);
   };
 
-  // Capture photo
   const capturePhoto = () => {
     if (videoRef.current && canvasRef.current) {
       const video = videoRef.current;
@@ -116,7 +110,6 @@ const ChatInput: React.FC<ChatInputProps> = ({ agent, onSendMessage, isLoading }
     }
   };
 
-  // Switch camera (front/back)
   const switchCamera = async () => {
     const newFacingMode = facingMode === "user" ? "environment" : "user";
     setFacingMode(newFacingMode);
@@ -129,7 +122,6 @@ const ChatInput: React.FC<ChatInputProps> = ({ agent, onSendMessage, isLoading }
     }
   };
 
-  // Convert data URL to File
   const dataURLtoFile = (dataurl: string, filename: string): File => {
     const arr = dataurl.split(",");
     const mime = arr[0].match(/:(.*?);/)![1];
@@ -142,7 +134,6 @@ const ChatInput: React.FC<ChatInputProps> = ({ agent, onSendMessage, isLoading }
     return new File([u8arr], filename, { type: mime });
   };
 
-  // Use captured photo
   const useCapturedPhoto = async () => {
     if (capturedImage) {
       setUploading(true);
@@ -163,13 +154,11 @@ const ChatInput: React.FC<ChatInputProps> = ({ agent, onSendMessage, isLoading }
     }
   };
 
-  // Retake photo
   const retakePhoto = async () => {
     setCapturedImage(null);
     await startCamera();
   };
 
-  // Mock delete API
   const deleteFile = async (fileId: string): Promise<void> => {
     return new Promise((resolve) => {
       setTimeout(() => {
@@ -208,7 +197,14 @@ const ChatInput: React.FC<ChatInputProps> = ({ agent, onSendMessage, isLoading }
         if (fileToRemove?.previewUrl) {
           URL.revokeObjectURL(fileToRemove.previewUrl);
         }
-        return prev.filter((f) => f.id !== fileId);
+        const newFiles = prev.filter((f) => f.id !== fileId);
+
+        // Fix #3: Auto-close files menu when 3 or fewer files remain
+        if (newFiles.length <= 3) {
+          setFilesMenuAnchor(null);
+        }
+
+        return newFiles;
       });
     } catch (error) {
       console.error("Delete failed:", error);
@@ -256,188 +252,284 @@ const ChatInput: React.FC<ChatInputProps> = ({ agent, onSendMessage, isLoading }
   return (
     <Box
       sx={{
-        padding: "var(--space-4) var(--space-6)",
+        // Mobile-first responsive design
+        padding: {
+          xs: "var(--space-2) var(--space-3)", // Mobile: 8px 12px
+          sm: "var(--space-3) var(--space-4)", // Tablet: 12px 16px
+          lg: "var(--space-3) var(--space-8)", // Large desktop: 20px 32px
+        },
         backgroundColor: "var(--bg-primary)",
-        borderTop: "1px solid var(--border-light)",
+        borderTop: {
+          xs: "0.5px solid var(--border-light)", // Thinner on mobile
+          sm: "1px solid var(--border-light)",
+        },
         flexShrink: 0,
-        position: "relative",
+        width: "100%",
+        maxWidth: {
+          xs: "100%", // Mobile: full width
+        },
+        margin: "0 auto",
+        // Mobile-specific adjustments
+        paddingBottom: {
+          xs: "calc(var(--space-2) + env(safe-area-inset-bottom))", // iOS safe area
+          sm: "var(--space-3)",
+        },
+        position: { xs: "sticky", sm: "relative" },
+        bottom: { xs: 0, sm: "auto" },
+        zIndex: { xs: "var(--z-50)", sm: "auto" },
       }}
     >
-      {/* File attachments preview */}
+      {/* Responsive file attachments preview */}
       {uploadedFiles.length > 0 && (
         <Box
           sx={{
-            maxWidth: "800px",
-            margin: "0 auto var(--space-4) auto",
             display: "flex",
             alignItems: "center",
-            gap: "var(--space-2)",
+            gap: {
+              xs: "var(--space-1)", // Mobile: 4px
+              sm: "var(--space-2)", // Tablet: 8px
+              md: "var(--space-2)", // Desktop: 8px
+            },
+            marginBottom: {
+              xs: "var(--space-2)", // Mobile: 8px
+              sm: "var(--space-3)", // Tablet+: 12px
+            },
             flexWrap: "wrap",
+            padding: {
+              xs: "var(--space-2) var(--space-3)", // Mobile: 8px 12px
+              sm: "var(--space-3) var(--space-4)", // Tablet+: 12px 16px
+            },
+            backgroundColor: "var(--bg-secondary)",
+            borderRadius: {
+              xs: "var(--radius-lg)", // Mobile: 8px
+              sm: "var(--radius-xl)", // Tablet+: 12px
+            },
+            border: "1px solid var(--border-light)",
+            maxHeight: { xs: "80px", sm: "none" },
+            overflowY: { xs: "auto", sm: "visible" },
           }}
         >
-          <Box sx={{ display: "flex", gap: "var(--space-2)", flexWrap: "wrap", flex: 1 }}>
-            {uploadedFiles.slice(0, 3).map((file) => (
-              <Tooltip key={file.id} title={file.name} placement="top" arrow>
-                <Chip
-                  avatar={file.previewUrl ? <Avatar src={file.previewUrl} sx={{ width: 18, height: 18 }} /> : <Avatar sx={{ width: 18, height: 18, backgroundColor: "var(--primary-100)" }}>{getFileIcon(file.type)}</Avatar>}
-                  label={truncateFileName(file.name, 12)}
-                  onDelete={() => handleRemoveFile(file.id)}
-                  deleteIcon={<Close fontSize="small" />}
-                  variant="outlined"
-                  size="small"
-                  sx={{
-                    backgroundColor: "var(--bg-secondary)",
-                    borderColor: "var(--border-light)",
-                    maxWidth: { xs: "90px", sm: "110px", md: "130px" },
-                    minWidth: "65px",
-                    height: "28px",
-                    display: "inline-flex",
-                    "& .MuiChip-label": {
-                      fontSize: { xs: "0.65rem", sm: "0.7rem" },
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                      whiteSpace: "nowrap",
-                      paddingLeft: "var(--space-1)",
-                      paddingRight: "var(--space-1)",
-                    },
-                    "& .MuiChip-avatar": {
-                      width: { xs: "16px", sm: "18px" },
-                      height: { xs: "16px", sm: "18px" },
-                      marginLeft: "2px",
-                    },
-                    "& .MuiChip-deleteIcon": {
-                      width: { xs: "14px", sm: "16px" },
-                      height: { xs: "14px", sm: "16px" },
-                      marginRight: "2px",
-                    },
-                  }}
-                />
-              </Tooltip>
-            ))}
-          </Box>
+          {/* Show different number of files based on screen size */}
+          {uploadedFiles.slice(0, 3).map((file) => (
+            <Chip
+              key={file.id}
+              avatar={
+                file.previewUrl ? (
+                  <Avatar
+                    src={file.previewUrl}
+                    sx={{
+                      width: { xs: 16, sm: 18, md: 20 },
+                      height: { xs: 16, sm: 18, md: 20 },
+                    }}
+                  />
+                ) : (
+                  <Avatar
+                    sx={{
+                      width: { xs: 16, sm: 18, md: 20 },
+                      height: { xs: 16, sm: 18, md: 20 },
+                      backgroundColor: "var(--primary-100)",
+                    }}
+                  >
+                    {getFileIcon(file.type)}
+                  </Avatar>
+                )
+              }
+              label={truncateFileName(file.name, { xs: 6, sm: 8, md: 10, lg: 12 }.md || 10)}
+              onDelete={() => handleRemoveFile(file.id)}
+              deleteIcon={<Close sx={{ fontSize: { xs: "12px", sm: "14px", md: "16px" } }} />}
+              size="small"
+              sx={{
+                height: { xs: "20px", sm: "24px", md: "28px" },
+                backgroundColor: "var(--bg-primary)",
+                borderColor: "var(--border-light)",
+                fontSize: { xs: "var(--text-xxs)", sm: "var(--text-xs)", md: "var(--text-sm)" },
+                fontWeight: 500,
+                transition: "var(--transition-fast)",
+                "&:hover": {
+                  backgroundColor: "var(--bg-tertiary)",
+                  transform: "scale(1.02)",
+                },
+                "& .MuiChip-label": {
+                  paddingX: { xs: "var(--space-1)", sm: "var(--space-2)" },
+                },
+                "& .MuiChip-avatar": {
+                  marginLeft: "var(--space-px)",
+                  marginRight: { xs: "-var(--space-1)", sm: "0" },
+                },
+                "& .MuiChip-deleteIcon": {
+                  marginRight: "var(--space-px)",
+                  "&:hover": {
+                    color: "var(--error)",
+                  },
+                },
+              }}
+            />
+          ))}
 
+          {/* More files indicator - Only show if more than 3 files */}
           {uploadedFiles.length > 3 && (
             <Button
               size="small"
-              variant="outlined"
-              endIcon={<ExpandMore sx={{ fontSize: { xs: "14px", sm: "16px" } }} />}
               onClick={(e) => setFilesMenuAnchor(e.currentTarget)}
               sx={{
-                fontSize: { xs: "0.65rem", sm: "0.7rem" },
-                borderColor: "var(--border-light)",
-                color: "var(--text-secondary)",
                 minWidth: "auto",
-                padding: { xs: "2px 6px", sm: "4px 8px" },
-                height: "28px",
+                height: { xs: "20px", sm: "24px", md: "28px" },
+                padding: { xs: "0 var(--space-2)", sm: "0 var(--space-3)" },
+                fontSize: { xs: "var(--text-xxs)", sm: "var(--text-xs)", md: "var(--text-sm)" },
+                backgroundColor: "var(--primary-100)",
+                color: "var(--primary-700)",
+                borderRadius: { xs: "var(--radius-lg)", sm: "var(--radius-xl)" },
+                fontWeight: 600,
+                transition: "var(--transition-fast)",
+                "&:hover": {
+                  backgroundColor: "var(--primary-200)",
+                  transform: "scale(1.05)",
+                },
               }}
             >
-              +{uploadedFiles.length - 3} More
+              +{uploadedFiles.length - 3}
             </Button>
           )}
         </Box>
       )}
 
+      {/* Fix #2: Improved responsive input container with proper alignment */}
       <Box
         component="form"
         onSubmit={handleSubmit}
         sx={{
           display: "flex",
-          alignItems: "center",
-          gap: { xs: "var(--space-2)", sm: "var(--space-3)" },
-          maxWidth: "800px",
-          margin: "0 auto",
-          width: "100%",
+          alignItems: "center", // Fix #2: Center align items
+          gap: {
+            xs: "var(--space-1)", // Mobile: 4px - tighter
+            sm: "var(--space-2)", // Tablet: 8px
+            md: "var(--space-3)", // Desktop: 12px - more space
+          },
+          backgroundColor: "var(--bg-secondary)",
+          borderRadius: {
+            xs: "var(--radius-2xl)", // Mobile: 16px
+          },
+          border: {
+            xs: "1px solid var(--border-light)", // Mobile: thinner border
+            sm: "2px solid var(--border-light)", // Desktop: thicker border
+          },
+          padding: {
+            xs: "var(--space-1)", // Mobile: 4px
+          },
+          minHeight: {
+            xs: "44px", // Mobile: minimum touch target
+            sm: "48px", // Tablet+: larger
+          },
+          transition: "all var(--transition-fast)",
+          "&:focus-within": {
+            borderColor: "var(--primary-500)",
+            backgroundColor: "var(--bg-primary)",
+            boxShadow: {
+              xs: "0 0 0 2px var(--primary-100)", // Mobile: smaller shadow
+              sm: "0 0 0 4px var(--primary-100)", // Desktop: larger shadow
+            },
+          },
         }}
       >
-        <Box
-          sx={{
-            flex: 1,
-            backgroundColor: "var(--bg-secondary)",
-            borderRadius: "var(--radius-2xl)",
-            border: "1px solid var(--border-light)",
-            padding: "var(--space-1)",
-            display: "flex",
-            alignItems: "flex-end",
-            transition: "border-color var(--transition-fast)",
-            "&:focus-within": {
-              borderColor: "var(--primary-500)",
-              boxShadow: "0 0 0 3px var(--primary-100)",
-            },
-          }}
-        >
-          <TextField
-            multiline
-            maxRows={4}
-            fullWidth
-            disabled={isLoading || uploading}
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            onKeyDown={handleKeyDown}
-            placeholder={isLoading ? `Connecting to ${agent}...` : uploading ? "Uploading files..." : "Share your Story"}
-            variant="standard"
-            slotProps={{
-              input: {
-                disableUnderline: true,
-                sx: {
-                  fontSize: { xs: "0.9rem", sm: "var(--text-base)" },
-                  lineHeight: "var(--leading-normal)",
-                  padding: { xs: "var(--space-2) var(--space-3)", sm: "var(--space-3) var(--space-4)" },
-                  "& .MuiInputBase-input": {
-                    padding: 0,
-                    "&::placeholder": {
-                      color: "var(--text-muted)",
-                      opacity: 1,
-                    },
-                  },
-                },
-              },
-            }}
-          />
-        </Box>
-
-        {/* Hidden file inputs */}
-        <input ref={fileInputRef} type="file" multiple accept="image/*,application/pdf" onChange={handleFileSelect} style={{ display: "none" }} />
-
-        {/* Attachment options button */}
+        {/* Fix #1: Attachment button with proper CircularProgress alignment */}
         <IconButton
           onClick={(e) => setAttachMenuAnchor(e.currentTarget)}
           disabled={isLoading || uploading}
           sx={{
-            backgroundColor: "var(--bg-secondary)",
-            border: "1px solid var(--border-light)",
-            width: { xs: 40, sm: 48 },
-            height: { xs: 40, sm: 48 },
-            borderRadius: "var(--radius-xl)",
-            transition: "all var(--transition-fast)",
+            width: { xs: 32, sm: 36, md: 40 },
+            height: { xs: 32, sm: 36, md: 40 },
+            margin: { xs: "var(--space-1)", sm: "var(--space-2)" },
+            color: "var(--text-tertiary)",
+            transition: "var(--transition-fast)",
+            display: "flex", // Fix #1: Ensure flex display
+            alignItems: "center", // Fix #1: Center align
+            justifyContent: "center", // Fix #1: Center align
             "&:hover": {
-              backgroundColor: "var(--bg-tertiary)",
-              borderColor: "var(--border-medium)",
+              backgroundColor: "var(--primary-50)",
+              color: "var(--primary-600)",
+              transform: { xs: "none", sm: "scale(1.05)" }, // No transform on mobile
             },
             "&:disabled": {
-              backgroundColor: "var(--neutral-100)",
-              color: "var(--neutral-400)",
+              opacity: 0.5,
+              transform: "none",
             },
           }}
         >
-          {uploading ? <CircularProgress size={16} sx={{ color: "var(--primary-600)" }} /> : <Add sx={{ fontSize: { xs: "18px", sm: "20px" } }} />}
+          {uploading ? (
+            <CircularProgress
+              size={20}
+              sx={{
+                color: "var(--primary-600)",
+                display: "block",
+              }}
+            />
+          ) : (
+            <Add sx={{ fontSize: { xs: "16px", sm: "18px", md: "20px" } }} />
+          )}
         </IconButton>
 
-        {/* Send button */}
+        {/* Fix #2: Responsive text input with proper flex properties */}
+        <TextField
+          multiline
+          fullWidth
+          disabled={isLoading || uploading}
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          onKeyDown={handleKeyDown}
+          placeholder={isLoading ? `Connecting to ${agent}...` : uploading ? "Uploading files..." : "Type your message..."}
+          variant="standard"
+          sx={{
+            flex: 1, // Fix #2: Take available space
+            display: "flex", // Fix #2: Flex display
+            alignItems: "center", // Fix #2: Center align
+          }}
+          slotProps={{
+            input: {
+              disableUnderline: true,
+              sx: {
+                fontSize: {
+                  xs: "var(--text-sm)", // Mobile: 14px
+                  sm: "var(--text-base)", // Tablet+: 16px
+                },
+                lineHeight: "var(--leading-normal)",
+                padding: {
+                  xs: "var(--space-2) var(--space-3)", // Mobile: 8px 12px
+                  sm: "var(--space-3) var(--space-4)", // Tablet+: 12px 16px
+                },
+                minHeight: { xs: "20px", sm: "24px" },
+                display: "flex", // Fix #2: Flex display
+                alignItems: "center", // Fix #2: Center align content
+                "& .MuiInputBase-input": {
+                  padding: 0,
+                  "&::placeholder": {
+                    color: "var(--text-muted)",
+                    opacity: 0.8,
+                  },
+                },
+              },
+            },
+          }}
+        />
+
+        {/* Fix #1: Send button with proper CircularProgress alignment */}
         <IconButton
           type="submit"
           disabled={(!message.trim() && uploadedFiles.length === 0) || isLoading || uploading}
           sx={{
+            width: { xs: 32, sm: 36, md: 40 },
+            height: { xs: 32, sm: 36, md: 40 },
+            margin: { xs: "var(--space-1)", sm: "var(--space-2)" },
             backgroundColor: "var(--primary-600)",
             color: "var(--text-inverse)",
-            width: { xs: 40, sm: 48 },
-            height: { xs: 40, sm: 48 },
-            borderRadius: "var(--radius-xl)",
-            boxShadow: "var(--shadow-md)",
-            transition: "all var(--transition-fast)",
+            boxShadow: { xs: "var(--shadow-sm)", sm: "var(--shadow-md)" },
+            transition: "var(--transition-fast)",
+            display: "flex", // Fix #1: Ensure flex display
+            alignItems: "center", // Fix #1: Center align
+            justifyContent: "center", // Fix #1: Center align
             "&:hover": {
               backgroundColor: "var(--primary-700)",
-              boxShadow: "var(--shadow-lg)",
-              transform: "translateY(-1px)",
+              boxShadow: { xs: "var(--shadow-md)", sm: "var(--shadow-lg)" },
+              transform: { xs: "none", sm: "scale(1.05)" }, // No transform on mobile
             },
             "&:disabled": {
               backgroundColor: "var(--neutral-300)",
@@ -447,27 +539,54 @@ const ChatInput: React.FC<ChatInputProps> = ({ agent, onSendMessage, isLoading }
             },
           }}
         >
-          {isLoading ? <CircularProgress size={16} sx={{ color: "var(--primary-600)" }} /> : <Send sx={{ fontSize: { xs: "18px", sm: "20px" } }} />}
+          {isLoading ? (
+            <CircularProgress
+              size={20}
+              sx={{
+                color: "var(--text-inverse)",
+                display: "block",
+              }}
+            />
+          ) : (
+            <Send sx={{ fontSize: { xs: "14px", sm: "16px", md: "18px" } }} />
+          )}
         </IconButton>
       </Box>
 
-      {/* Camera Dialog */}
+      {/* Hidden file input */}
+      <input ref={fileInputRef} type="file" multiple accept="image/*,application/pdf" onChange={handleFileSelect} style={{ display: "none" }} />
+
+      {/* Full-screen Camera Dialog */}
       <Dialog
         open={isCameraOpen}
         onClose={closeCamera}
-        maxWidth="sm"
+        maxWidth={false} // Remove maxWidth constraint
         fullWidth
+        fullScreen // Make it full screen
         sx={{
           "& .MuiDialog-paper": {
             backgroundColor: "var(--bg-primary)",
-            borderRadius: "var(--radius-lg)",
+            borderRadius: 0, // Remove border radius for full screen
             overflow: "hidden",
+            margin: 0, // Remove all margins
+            maxHeight: "100vh", // Full viewport height
+            maxWidth: "100vw", // Full viewport width
+            height: "100vh",
+            width: "100vw",
           },
         }}
       >
-        <DialogContent sx={{ padding: 0, position: "relative" }}>
+        <DialogContent sx={{ padding: 0, position: "relative", height: "100vh" }}>
           {!capturedImage ? (
-            <Box sx={{ position: "relative", width: "100%", aspectRatio: "4/3" }}>
+            <Box
+              sx={{
+                position: "relative",
+                width: "100vw", // Full viewport width
+                height: "100vh", // Full viewport height
+                display: "flex",
+                flexDirection: "column",
+              }}
+            >
               <video
                 ref={videoRef}
                 autoPlay
@@ -476,80 +595,94 @@ const ChatInput: React.FC<ChatInputProps> = ({ agent, onSendMessage, isLoading }
                 style={{
                   width: "100%",
                   height: "100%",
-                  objectFit: "cover",
+                  objectFit: "cover", // This will cover the entire area
                   backgroundColor: "#000",
+                  flex: 1, // Take all available space
                 }}
               />
 
-              {/* Camera controls overlay */}
+              {/* Full-screen camera controls */}
               <Box
                 sx={{
                   position: "absolute",
                   bottom: 0,
                   left: 0,
                   right: 0,
-                  background: "linear-gradient(transparent, rgba(0,0,0,0.7))",
-                  padding: "var(--space-4)",
+                  background: "linear-gradient(transparent, rgba(0,0,0,0.8))",
+                  padding: { xs: "var(--space-6)", sm: "var(--space-8)" }, // Increased padding
                   display: "flex",
-                  justifyContent: "center",
+                  justifyContent: "space-between",
                   alignItems: "center",
-                  gap: "var(--space-4)",
+                  minHeight: { xs: "120px", sm: "140px" }, // Ensure minimum touch area
                 }}
               >
-                {/* Switch camera button */}
-                <IconButton
-                  onClick={switchCamera}
-                  sx={{
-                    backgroundColor: "rgba(255,255,255,0.2)",
-                    color: "white",
-                    "&:hover": {
-                      backgroundColor: "rgba(255,255,255,0.3)",
-                    },
-                  }}
-                >
-                  <FlipCameraAndroid />
-                </IconButton>
-
-                {/* Capture button */}
-                <IconButton
-                  onClick={capturePhoto}
-                  sx={{
-                    backgroundColor: "white",
-                    color: "var(--primary-600)",
-                    width: 70,
-                    height: 70,
-                    border: "4px solid rgba(255,255,255,0.3)",
-                    "&:hover": {
-                      backgroundColor: "rgba(255,255,255,0.9)",
-                    },
-                  }}
-                >
-                  <PhotoCamera sx={{ fontSize: "2rem" }} />
-                </IconButton>
-
-                {/* Close button */}
                 <IconButton
                   onClick={closeCamera}
                   sx={{
                     backgroundColor: "rgba(255,255,255,0.2)",
                     color: "white",
+                    backdropFilter: "blur(10px)",
+                    width: { xs: 48, sm: 56 }, // Larger for easier touch
+                    height: { xs: 48, sm: 56 },
                     "&:hover": {
                       backgroundColor: "rgba(255,255,255,0.3)",
                     },
                   }}
                 >
-                  <Close />
+                  <Close sx={{ fontSize: { xs: "24px", sm: "28px" } }} />
+                </IconButton>
+
+                <IconButton
+                  onClick={capturePhoto}
+                  sx={{
+                    backgroundColor: "white",
+                    color: "var(--primary-600)",
+                    width: { xs: 72, sm: 80 }, // Larger capture button
+                    height: { xs: 72, sm: 80 },
+                    "&:hover": {
+                      backgroundColor: "rgba(255,255,255,0.9)",
+                      transform: "scale(1.05)",
+                    },
+                  }}
+                >
+                  <PhotoCamera sx={{ fontSize: { xs: "2rem", sm: "2.2rem" } }} />
+                </IconButton>
+
+                <IconButton
+                  onClick={switchCamera}
+                  sx={{
+                    backgroundColor: "rgba(255,255,255,0.2)",
+                    color: "white",
+                    backdropFilter: "blur(10px)",
+                    width: { xs: 48, sm: 56 },
+                    height: { xs: 48, sm: 56 },
+                    "&:hover": {
+                      backgroundColor: "rgba(255,255,255,0.3)",
+                    },
+                  }}
+                >
+                  <FlipCameraAndroid sx={{ fontSize: { xs: "24px", sm: "28px" } }} />
                 </IconButton>
               </Box>
             </Box>
           ) : (
-            <Box sx={{ position: "relative", width: "100%" }}>
+            <Box
+              sx={{
+                width: "100vw",
+                height: "100vh",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                backgroundColor: "#000",
+              }}
+            >
               <img
                 src={capturedImage}
                 alt="Captured"
                 style={{
-                  width: "100%",
-                  height: "auto",
+                  maxWidth: "100%",
+                  maxHeight: "100%",
+                  objectFit: "contain", // Maintain aspect ratio while fitting
                   display: "block",
                 }}
               />
@@ -560,8 +693,39 @@ const ChatInput: React.FC<ChatInputProps> = ({ agent, onSendMessage, isLoading }
         </DialogContent>
 
         {capturedImage && (
-          <DialogActions sx={{ padding: "var(--space-4)", gap: "var(--space-2)" }}>
-            <Button onClick={retakePhoto} variant="outlined" startIcon={<PhotoCamera />} disabled={uploading}>
+          <DialogActions
+            sx={{
+              position: "absolute",
+              bottom: 0,
+              left: 0,
+              right: 0,
+              padding: { xs: "var(--space-4)", sm: "var(--space-6)" },
+              gap: "var(--space-3)",
+              flexDirection: { xs: "column", sm: "row" },
+              backgroundColor: "rgba(0,0,0,0.8)",
+              backdropFilter: "blur(10px)",
+              "& > button": {
+                width: { xs: "100%", sm: "auto" },
+              },
+            }}
+          >
+            <Button
+              onClick={retakePhoto}
+              variant="outlined"
+              startIcon={<PhotoCamera />}
+              disabled={uploading}
+              sx={{
+                borderRadius: "var(--radius-xl)",
+                fontSize: { xs: "var(--text-base)", sm: "var(--text-lg)" },
+                padding: { xs: "var(--space-4) var(--space-6)", sm: "var(--space-3) var(--space-6)" },
+                borderColor: "white",
+                color: "white",
+                "&:hover": {
+                  borderColor: "white",
+                  backgroundColor: "rgba(255,255,255,0.1)",
+                },
+              }}
+            >
               Retake
             </Button>
             <Button
@@ -571,6 +735,9 @@ const ChatInput: React.FC<ChatInputProps> = ({ agent, onSendMessage, isLoading }
               disabled={uploading}
               sx={{
                 backgroundColor: "var(--primary-600)",
+                borderRadius: "var(--radius-xl)",
+                fontSize: { xs: "var(--text-base)", sm: "var(--text-lg)" },
+                padding: { xs: "var(--space-4) var(--space-6)", sm: "var(--space-3) var(--space-6)" },
                 "&:hover": {
                   backgroundColor: "var(--primary-700)",
                 },
@@ -582,7 +749,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ agent, onSendMessage, isLoading }
         )}
       </Dialog>
 
-      {/* Attachment options menu */}
+      {/* Responsive Attachment Menu */}
       <Menu
         anchorEl={attachMenuAnchor}
         open={Boolean(attachMenuAnchor)}
@@ -591,11 +758,12 @@ const ChatInput: React.FC<ChatInputProps> = ({ agent, onSendMessage, isLoading }
         slotProps={{
           paper: {
             sx: {
-              minWidth: 200,
+              minWidth: { xs: 160, sm: 200 },
               backgroundColor: "var(--bg-primary)",
               border: "1px solid var(--border-light)",
-              boxShadow: "var(--shadow-lg)",
-              borderRadius: "var(--radius-lg)",
+              borderRadius: "var(--radius-xl)",
+              boxShadow: { xs: "var(--shadow-lg)", sm: "var(--shadow-xl)" },
+              overflow: "hidden",
             },
           },
         }}
@@ -607,57 +775,63 @@ const ChatInput: React.FC<ChatInputProps> = ({ agent, onSendMessage, isLoading }
             fileInputRef.current?.click();
           }}
           sx={{
-            padding: "var(--space-3)",
+            padding: { xs: "var(--space-3)", sm: "var(--space-4)" },
+            gap: { xs: "var(--space-2)", sm: "var(--space-3)" },
             "&:hover": {
-              backgroundColor: "var(--bg-secondary)",
+              backgroundColor: "var(--primary-50)",
             },
           }}
         >
-          <ListItemIcon>
-            <PhotoLibrary sx={{ color: "var(--primary-600)" }} />
-          </ListItemIcon>
-          <ListItemText
-            primary="Upload Files"
-            secondary="Images, PDFs, and documents"
-            primaryTypographyProps={{
-              fontSize: "0.9rem",
-              fontWeight: 500,
+          <Box
+            sx={{
+              width: { xs: 28, sm: 32 },
+              height: { xs: 28, sm: 32 },
+              borderRadius: "var(--radius-lg)",
+              backgroundColor: "var(--primary-100)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
             }}
-            secondaryTypographyProps={{
-              fontSize: "0.75rem",
-              color: "var(--text-muted)",
-            }}
-          />
+          >
+            <PhotoLibrary sx={{ fontSize: { xs: "14px", sm: "16px" }, color: "var(--primary-600)" }} />
+          </Box>
+          <Box>
+            <Typography sx={{ fontSize: { xs: "var(--text-sm)", sm: "var(--text-base)" }, fontWeight: 500 }}>Upload Files</Typography>
+            <Typography sx={{ fontSize: { xs: "var(--text-xs)", sm: "var(--text-sm)" }, color: "var(--text-muted)" }}>Images & documents</Typography>
+          </Box>
         </MenuItem>
 
         <MenuItem
           onClick={openCamera}
           sx={{
-            padding: "var(--space-3)",
+            padding: { xs: "var(--space-3)", sm: "var(--space-4)" },
+            gap: { xs: "var(--space-2)", sm: "var(--space-3)" },
             "&:hover": {
-              backgroundColor: "var(--bg-secondary)",
+              backgroundColor: "var(--primary-50)",
             },
           }}
         >
-          <ListItemIcon>
-            <CameraAlt sx={{ color: "var(--primary-600)" }} />
-          </ListItemIcon>
-          <ListItemText
-            primary="Take Photo"
-            secondary="Capture with camera"
-            primaryTypographyProps={{
-              fontSize: "0.9rem",
-              fontWeight: 500,
+          <Box
+            sx={{
+              width: { xs: 28, sm: 32 },
+              height: { xs: 28, sm: 32 },
+              borderRadius: "var(--radius-lg)",
+              backgroundColor: "var(--primary-100)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
             }}
-            secondaryTypographyProps={{
-              fontSize: "0.75rem",
-              color: "var(--text-muted)",
-            }}
-          />
+          >
+            <CameraAlt sx={{ fontSize: { xs: "14px", sm: "16px" }, color: "var(--primary-600)" }} />
+          </Box>
+          <Box>
+            <Typography sx={{ fontSize: { xs: "var(--text-sm)", sm: "var(--text-base)" }, fontWeight: 500 }}>Take Photo</Typography>
+            <Typography sx={{ fontSize: { xs: "var(--text-xs)", sm: "var(--text-sm)" }, color: "var(--text-muted)" }}>Camera capture</Typography>
+          </Box>
         </MenuItem>
       </Menu>
 
-      {/* Files menu for viewing all uploaded files */}
+      {/* Responsive Files Menu */}
       <Menu
         anchorEl={filesMenuAnchor}
         open={Boolean(filesMenuAnchor)}
@@ -666,62 +840,67 @@ const ChatInput: React.FC<ChatInputProps> = ({ agent, onSendMessage, isLoading }
         slotProps={{
           paper: {
             sx: {
-              maxWidth: { xs: 260, sm: 380 },
-              maxHeight: 280,
+              maxWidth: { xs: 280, sm: 320, md: 360 },
+              maxHeight: { xs: 240, sm: 280 },
               backgroundColor: "var(--bg-primary)",
               border: "1px solid var(--border-light)",
-              boxShadow: "var(--shadow-lg)",
-              position: "fixed",
+              borderRadius: "var(--radius-xl)",
+              boxShadow: { xs: "var(--shadow-lg)", sm: "var(--shadow-xl)" },
             },
           },
         }}
-        autoFocus={false}
-        disableAutoFocusItem={true}
-        disableEnforceFocus={true}
-        disableAutoFocus={true}
-        keepMounted={false}
-        disablePortal={false}
       >
-        <Box sx={{ padding: "var(--space-2)" }}>
-          <Typography variant="subtitle2" sx={{ color: "var(--text-secondary)", fontSize: { xs: "0.75rem", sm: "0.8rem" } }}>
-            Uploaded Files ({uploadedFiles.length})
+        <Box sx={{ padding: { xs: "var(--space-3)", sm: "var(--space-4)" } }}>
+          <Typography
+            sx={{
+              fontSize: { xs: "var(--text-sm)", sm: "var(--text-base)" },
+              fontWeight: 500,
+              color: "var(--text-secondary)",
+            }}
+          >
+            Attached Files ({uploadedFiles.length})
           </Typography>
         </Box>
         <Divider />
-        <Box sx={{ maxHeight: 180, overflow: "auto" }}>
+        <Box sx={{ maxHeight: { xs: 160, sm: 200 }, overflow: "auto" }}>
           {uploadedFiles.map((file) => (
             <MenuItem
               key={file.id}
               sx={{
-                padding: { xs: "var(--space-1) var(--space-2)", sm: "var(--space-2) var(--space-3)" },
-                display: "flex",
-                alignItems: "center",
-                gap: "var(--space-2)",
-                minHeight: { xs: "40px", sm: "48px" },
+                padding: { xs: "var(--space-2) var(--space-3)", sm: "var(--space-3) var(--space-4)" },
+                gap: { xs: "var(--space-2)", sm: "var(--space-3)" },
+                minHeight: "auto",
               }}
             >
-              {file.previewUrl ? <Avatar src={file.previewUrl} sx={{ width: { xs: 20, sm: 28 }, height: { xs: 20, sm: 28 } }} /> : <Avatar sx={{ width: { xs: 20, sm: 28 }, height: { xs: 20, sm: 28 }, backgroundColor: "var(--primary-100)" }}>{getFileIcon(file.type)}</Avatar>}
-              <Box sx={{ flex: 1, minWidth: 0 }}>
-                <Tooltip title={file.name} placement="top" arrow>
-                  <Typography
-                    variant="body2"
-                    sx={{
-                      fontWeight: 500,
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                      whiteSpace: "nowrap",
-                      fontSize: { xs: "0.75rem", sm: "0.8rem" },
-                      cursor: "pointer",
-                    }}
-                  >
-                    {truncateFileName(file.name, 16)}
-                  </Typography>
-                </Tooltip>
-                <Typography
-                  variant="caption"
+              {file.previewUrl ? (
+                <Avatar src={file.previewUrl} sx={{ width: { xs: 20, sm: 24 }, height: { xs: 20, sm: 24 } }} />
+              ) : (
+                <Avatar
                   sx={{
+                    width: { xs: 20, sm: 24 },
+                    height: { xs: 20, sm: 24 },
+                    backgroundColor: "var(--primary-100)",
+                  }}
+                >
+                  {getFileIcon(file.type)}
+                </Avatar>
+              )}
+              <Box sx={{ flex: 1, minWidth: 0 }}>
+                <Typography
+                  sx={{
+                    fontSize: { xs: "var(--text-xs)", sm: "var(--text-sm)" },
+                    fontWeight: 500,
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {truncateFileName(file.name, { xs: 15, sm: 20 }.sm || 20)}
+                </Typography>
+                <Typography
+                  sx={{
+                    fontSize: { xs: "var(--text-xxs)", sm: "var(--text-xs)" },
                     color: "var(--text-muted)",
-                    fontSize: { xs: "0.65rem", sm: "0.7rem" },
                   }}
                 >
                   {formatFileSize(file.size)}
@@ -734,12 +913,12 @@ const ChatInput: React.FC<ChatInputProps> = ({ agent, onSendMessage, isLoading }
                   handleRemoveFile(file.id);
                 }}
                 sx={{
+                  width: { xs: 18, sm: 20 },
+                  height: { xs: 18, sm: 20 },
                   color: "var(--error)",
-                  width: { xs: 20, sm: 28 },
-                  height: { xs: 20, sm: 28 },
                 }}
               >
-                <Delete sx={{ fontSize: { xs: "14px", sm: "16px" } }} />
+                <Delete sx={{ fontSize: { xs: "12px", sm: "14px" } }} />
               </IconButton>
             </MenuItem>
           ))}
