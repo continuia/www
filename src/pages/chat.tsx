@@ -45,16 +45,6 @@ const ChatPage: React.FC = () => {
           <Box sx={{ flex: 1 }}>
             <Typography
               sx={{
-                fontSize: "var(--text-xl)",
-                color: "var(--text-primary)",
-                fontWeight: 700,
-                mb: "var(--space-1)",
-              }}
-            >
-              Share Your Story
-            </Typography>
-            <Typography
-              sx={{
                 fontSize: "var(--text-base)",
                 color: "var(--primary-600)",
                 fontWeight: 500,
@@ -247,7 +237,7 @@ const ChatPage: React.FC = () => {
   const RightPanel = () => {
     return (
       <Box sx={{ width: { xs: "100%", lg: "62%" }, display: "flex", flexDirection: "column", position: "relative", zIndex: 2 }}>
-        <RacchaAgent heading="HealthCare Consultation" agent="Arika_Reddy" />
+        <RacchaAgent heading="Share Your Story" agent="Arika_Reddy" />
       </Box>
     );
   };

@@ -255,14 +255,10 @@ const ChatInput: React.FC<ChatInputProps> = ({ agent, onSendMessage, isLoading }
         // Mobile-first responsive design
         padding: {
           xs: "var(--space-2) var(--space-3)", // Mobile: 8px 12px
-          sm: "var(--space-3) var(--space-4)", // Tablet: 12px 16px
-          lg: "var(--space-3) var(--space-8)", // Large desktop: 20px 32px
+          sm: "var(--space-2) var(--space-4)", // Tablet: 12px 16px
+          lg: "var(--space-2) var(--space-8)", // Large desktop: 20px 32px
         },
         backgroundColor: "var(--bg-primary)",
-        borderTop: {
-          xs: "0.5px solid var(--border-light)", // Thinner on mobile
-          sm: "1px solid var(--border-light)",
-        },
         flexShrink: 0,
         width: "100%",
         maxWidth: {
@@ -290,21 +286,15 @@ const ChatInput: React.FC<ChatInputProps> = ({ agent, onSendMessage, isLoading }
               sm: "var(--space-2)", // Tablet: 8px
               md: "var(--space-2)", // Desktop: 8px
             },
-            marginBottom: {
-              xs: "var(--space-2)", // Mobile: 8px
-              sm: "var(--space-3)", // Tablet+: 12px
-            },
+
             flexWrap: "wrap",
             padding: {
               xs: "var(--space-2) var(--space-3)", // Mobile: 8px 12px
-              sm: "var(--space-3) var(--space-4)", // Tablet+: 12px 16px
             },
-            backgroundColor: "var(--bg-secondary)",
             borderRadius: {
               xs: "var(--radius-lg)", // Mobile: 8px
               sm: "var(--radius-xl)", // Tablet+: 12px
             },
-            border: "1px solid var(--border-light)",
             maxHeight: { xs: "80px", sm: "none" },
             overflowY: { xs: "auto", sm: "visible" },
           }}

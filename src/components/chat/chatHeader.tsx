@@ -1,14 +1,14 @@
-import { Person, Add, Login } from "@mui/icons-material";
+import { Person, Login } from "@mui/icons-material";
 import { Box, Typography, Chip, Button } from "@mui/material";
 import { useAuthStore } from "../../store/useAuthStore";
 import AuthModal from "../auth/AuthModal";
 interface ChatHeaderProps {
-  isConnecting: boolean;
-  newConversation: () => void;
+  isConnecting?: boolean;
+  newConversation?: () => void;
   heading?: string;
 }
 
-const ChatHeader: React.FC<ChatHeaderProps> = ({ isConnecting, newConversation, heading }) => {
+const ChatHeader: React.FC<ChatHeaderProps> = ({ heading }) => {
   const { user, isAuthenticated } = useAuthStore();
   const setShowAuthModal = useAuthStore((state) => state.setShowAuthModal);
   const onShowAuthModal = () => setShowAuthModal(true);
@@ -38,11 +38,12 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ isConnecting, newConversation, 
               color: "var(--text-primary)",
               fontSize: { xs: "var(--text-sm)", md: "var(--text-md)", lg: "var(--text-xl)" },
               letterSpacing: "0.01em",
+              display: { xs: "flex" },
             }}
           >
-            {heading ? heading : "Healthcare Consultation"}
+            {heading ? heading : "Share Your Story"}
           </Typography>
-          <Button
+          {/* <Button
             variant="contained"
             size="small"
             startIcon={<Add />}
@@ -95,7 +96,7 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ isConnecting, newConversation, 
             }}
           >
             New
-          </Button>
+          </Button> */}
         </Box>
 
         {/* Right: Auth Status & Sign In */}
