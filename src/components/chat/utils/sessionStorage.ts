@@ -23,13 +23,13 @@ export const storeSession = (agentName: string, sessionData: any) => {
     lastActivity: Date.now(),
     // No messages stored here
   };
-  localStorage.setItem(key, JSON.stringify(dataToStore));
+  sessionStorage.setItem(key, JSON.stringify(dataToStore));
 };
 
 export const getStoredSession = (agentName: string): StoredSessionData | null => {
   const key = getStorageKey(agentName);
   try {
-    const stored = localStorage.getItem(key);
+    const stored = sessionStorage.getItem(key);
     if (!stored) return null;
     const sessionData = JSON.parse(stored);
     return sessionData;
@@ -44,7 +44,7 @@ export const updateLastActivity = (agentName: string) => {
   if (stored) {
     stored.lastActivity = Date.now();
     const key = getStorageKey(agentName);
-    localStorage.setItem(key, JSON.stringify(stored));
+    sessionStorage.setItem(key, JSON.stringify(stored));
   }
 };
 
@@ -56,5 +56,5 @@ export const isSessionValid = (session: StoredSessionData): boolean => {
 
 export const clearStoredSession = (agentName: string) => {
   const key = getStorageKey(agentName);
-  localStorage.removeItem(key);
+  sessionStorage.removeItem(key);
 };
