@@ -1,8 +1,6 @@
 // Modified sessionStorage.ts - only stores session metadata, no messages
 interface StoredSessionData {
   sessionId: string;
-  agentId: string;
-  agentName: string;
   timestamp: number;
   lastActivity: number;
 }
@@ -16,9 +14,7 @@ const ACTIVITY_TIMEOUT = 24 * 60 * 60 * 1000; // 24 hours
 export const storeSession = (agentName: string, sessionData: any) => {
   const key = getStorageKey(agentName);
   const dataToStore: StoredSessionData = {
-    sessionId: sessionData.sessionId,
-    agentId: sessionData.agentId,
-    agentName: agentName,
+    sessionId: sessionData.session_id,
     timestamp: Date.now(),
     lastActivity: Date.now(),
     // No messages stored here

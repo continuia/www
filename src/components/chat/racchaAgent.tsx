@@ -6,7 +6,7 @@ import TypingIndicator from "./typingIndicator";
 import ChatHeader from "./chatHeader";
 import { storeSession, getStoredSession, updateLastActivity, isSessionValid, clearStoredSession } from "./utils/sessionStorage";
 import { fetchMessagesFromAPI } from "../../api/chat";
-
+import { useAuthStore } from "../../store/useAuthStore";
 export interface ChatMessageType {
   id: string;
   content: string;
@@ -15,23 +15,21 @@ export interface ChatMessageType {
 }
 
 interface SessionResponse {
-  sessionId: string;
-  agentId: string;
-  agentName: string;
-  status: string;
-  websocketUrl: string;
-  autoCreated: boolean;
-  autoConnected: boolean;
-  arikaWelcome: string;
-  message: string;
+  session_id: string;
+  agentId?: string;
+  agentName?: string;
+  status?: string;
+  websocketUrl?: string;
+  autoCreated?: boolean;
+  autoConnected?: boolean;
+  arikaWelcome?: string;
+  message?: string;
 }
 
 interface ChatConversation {
   id: string;
   messages: ChatMessageType[];
   updatedAt: Date;
-  sessionId: string;
-  agentId: string;
 }
 
 interface ChatContainerProps {
@@ -55,6 +53,7 @@ const RacchaAgent: React.FC<ChatContainerProps> = ({ agent = "defaultAgent", hea
   const [currentConversation, setCurrentConversation] = useState<ChatConversation | undefined>();
   const [isConnecting, setIsConnecting] = useState(false);
   const [isAgentTyping, setIsAgentTyping] = useState(false);
+  const { setAuthenticated, setUser } = useAuthStore();
 
   const wsRef = useRef<WebSocket | null>(null);
   const sessionCreationRef = useRef(false);
@@ -89,15 +88,13 @@ const RacchaAgent: React.FC<ChatContainerProps> = ({ agent = "defaultAgent", hea
 
         // Fetch messages from API (no localStorage messages)
         console.log("[restoreSession] Fetching messages from API...");
-        const messagesWithDates = await fetchMessagesFromAPI(agent, sessionData.sessionId);
+        const messagesWithDates = await fetchMessagesFromAPI(agent);
         console.log("[restoreSession] Messages fetched:", messagesWithDates.length);
 
         const conversation: ChatConversation = {
           id: sessionData.sessionId,
           messages: messagesWithDates,
           updatedAt: new Date(),
-          sessionId: sessionData.sessionId,
-          agentId: sessionData.agentId,
         };
 
         setCurrentConversation(conversation);
@@ -110,7 +107,7 @@ const RacchaAgent: React.FC<ChatContainerProps> = ({ agent = "defaultAgent", hea
         console.log("[restoreSession] Session restoration complete.");
       } catch (error) {
         console.error("[restoreSession] Error restoring session:", error);
-        clearStoredSession(agent);
+        // clearStoredSession(agent);
         connectionStateRef.current = "failed";
       } finally {
         setIsConnecting(false);
@@ -150,7 +147,7 @@ const RacchaAgent: React.FC<ChatContainerProps> = ({ agent = "defaultAgent", hea
         wsRef.current.close();
       }
 
-      const apiBaseUrl =  import.meta.env.VITE_API_BASE_URL;
+      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
       const wsBaseUrl = apiBaseUrl.replace("https://", "wss://").replace("http://", "ws://");
       const wsUrl = `${wsBaseUrl}/agents/ws?session_id=${sessionId}&agent_name=${agent}`;
       console.log("[initializeWebSocket] Connecting to URL:", wsUrl);
@@ -178,6 +175,17 @@ const RacchaAgent: React.FC<ChatContainerProps> = ({ agent = "defaultAgent", hea
         ws.onmessage = (event) => {
           try {
             const data = JSON.parse(event.data);
+
+            // Handle authentication command
+            if (data.UX_Command === true) {
+              console.log("[WebSocket] Authentication command received, setting isAuthenticated to true");
+              setAuthenticated(true);
+              if (data.login) {
+                console.log("[WebSocket] User details received:", data.login);
+                setUser(data.login);
+              }
+            }
+
             if (data.type === "agent_response" || data.type === "connection_established") {
               const cleanContent = data.content.replace(/\u001b\[[0-9;]*m/g, "");
               const assistantMessage: ChatMessageType = {
@@ -265,10 +273,11 @@ const RacchaAgent: React.FC<ChatContainerProps> = ({ agent = "defaultAgent", hea
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 15000);
 
-      const response = await fetch(`${apiBaseUrl}/api/auto-session`, {
+      const response = await fetch(`${apiBaseUrl}/agents/${agent}`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
         signal: controller.signal,
+        credentials: "include",
       });
 
       clearTimeout(timeoutId);
@@ -279,6 +288,14 @@ const RacchaAgent: React.FC<ChatContainerProps> = ({ agent = "defaultAgent", hea
 
       const sessionData: SessionResponse = await response.json();
       console.log("[createSession] Session created:", sessionData);
+
+      // Extract Set-Cookie header if needed for manual handling
+      const setCookieHeader = response.headers.get("set-cookie");
+      if (setCookieHeader) {
+        console.log("[createSession] Cookie received:", setCookieHeader);
+        // Cookie should be automatically set by browser with credentials: 'include'
+      }
+
       await new Promise((resolve) => setTimeout(resolve, 1500));
       return sessionData;
     } catch (error) {
@@ -328,6 +345,8 @@ const RacchaAgent: React.FC<ChatContainerProps> = ({ agent = "defaultAgent", hea
     console.log("[createNewConversation] Clearing conversation state and reconnect info.");
     setCurrentConversation(undefined);
     currentSessionIdRef.current = null;
+    setAuthenticated(false);
+    setUser(null);
 
     if (reconnectTimeoutRef.current) {
       clearTimeout(reconnectTimeoutRef.current);
@@ -348,21 +367,19 @@ const RacchaAgent: React.FC<ChatContainerProps> = ({ agent = "defaultAgent", hea
     }
 
     const newConversation: ChatConversation = {
-      id: sessionData.sessionId,
+      id: sessionData.session_id,
       messages: [],
       updatedAt: new Date(),
-      sessionId: sessionData.sessionId,
-      agentId: sessionData.agentId,
     };
 
     console.log("[createNewConversation] New conversation created:", newConversation);
     setCurrentConversation(newConversation);
-    currentSessionIdRef.current = sessionData.sessionId;
+    currentSessionIdRef.current = sessionData.session_id;
 
     storeSession(agent, sessionData);
 
     console.log("[createNewConversation] Initializing WebSocket with new session ID.");
-    initializeWebSocket(sessionData.sessionId);
+    initializeWebSocket(sessionData.session_id);
   }, [agent, createSession, initializeWebSocket]);
 
   useEffect(() => {

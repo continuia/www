@@ -104,7 +104,7 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ heading }) => {
           {isAuthenticated ? (
             <Chip
               icon={<Person sx={{ color: "var(--neutral-400)" }} />}
-              label={`${user?.email}` || "User"}
+              label={`${user?.name}` || "User"}
               size="small"
               sx={{
                 bgcolor: "var(--success-100)",
