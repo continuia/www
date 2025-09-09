@@ -1,5 +1,4 @@
 import { useEffect, useRef } from "react";
-import { useAuthStore } from "../../store/useAuthStore";
 import axiosInstance from "../../api/axiosConfig";
 import { useToast } from "../toastContext";
 
@@ -11,7 +10,6 @@ declare global {
 }
 
 const GoogleOneTap = () => {
-  const loginWithToken = useAuthStore((s) => s.loginWithToken);
   const isInitialized = useRef(false);
   const buttonRef = useRef<HTMLDivElement | null>(null);
   const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || "";
@@ -46,7 +44,6 @@ const GoogleOneTap = () => {
         });
 
         if (result.data?.user && result.data?.token) {
-          loginWithToken(result.data.token, result.data.user);
         } else {
           throw new Error("Invalid Google auth response");
         }

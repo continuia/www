@@ -8,10 +8,9 @@ import posterImage from "../../../assets/poster.webp";
 
 interface ContinuiaHeroProps {
   onStartPilot?: () => void;
-  onRequestPricing?: () => void;
 }
 
-const ContinuiaHero: React.FC<ContinuiaHeroProps> = ({ onStartPilot, onRequestPricing }) => {
+const ContinuiaHero: React.FC<ContinuiaHeroProps> = ({ onStartPilot }) => {
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
@@ -221,39 +220,6 @@ const ContinuiaHero: React.FC<ContinuiaHeroProps> = ({ onStartPilot, onRequestPr
                         }}
                       >
                         Start a Pilot with Continuia
-                      </Button>
-                    </motion.div>
-                  </Box>
-
-                  <Box sx={{ flex: { xs: 1, sm: "auto" } }}>
-                    <motion.div whileHover={{ scale: 1.05, y: -2 }} whileTap={{ scale: 0.95 }}>
-                      <Button
-                        variant="outlined"
-                        size="large"
-                        onClick={onRequestPricing}
-                        sx={{
-                          borderColor: "var(--primary-500)",
-                          color: "var(--primary-600)",
-                          px: { xs: "var(--space-6)", md: "var(--space-8)" },
-                          py: { xs: "var(--space-3)", md: "var(--space-4)" },
-                          borderRadius: "var(--radius-2xl)",
-                          fontSize: { xs: "var(--text-base)", md: "var(--text-lg)" },
-                          fontWeight: 600,
-                          textTransform: "none",
-                          borderWidth: "2px",
-                          width: { xs: "100%", sm: "auto" },
-                          background: "var(--bg-primary)",
-                          boxShadow: "var(--shadow-md)",
-                          "&:hover": {
-                            borderColor: "var(--primary-600)",
-                            backgroundColor: "var(--primary-50)",
-                            borderWidth: "2px",
-                            boxShadow: "var(--shadow-lg)",
-                            transform: "translateY(-2px)",
-                          },
-                        }}
-                      >
-                        Request Pricing
                       </Button>
                     </motion.div>
                   </Box>

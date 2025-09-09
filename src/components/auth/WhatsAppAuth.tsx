@@ -5,7 +5,6 @@ import { useForm, Controller } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useToast } from "../toastContext";
-import { useAuthStore } from "../../store/useAuthStore";
 
 const schema = z.object({
   phoneNumber: z
@@ -17,7 +16,6 @@ const schema = z.object({
 type FormValues = z.infer<typeof schema>;
 
 const WhatsAppAuth: React.FC = () => {
-  const loginWithToken = useAuthStore((s) => s.loginWithToken);
   const { addToast } = useToast();
 
   const { control, handleSubmit, formState, setError } = useForm<FormValues>({
@@ -79,7 +77,6 @@ const WhatsAppAuth: React.FC = () => {
       const result = await resp.json();
       if (!resp.ok) throw new Error(result.message || "Invalid OTP");
 
-      loginWithToken(result.token, result.user);
       addToast(`Welcome, ${result.user.firstName}`, "success");
     } catch (e: any) {
       setError("otp", { type: "manual", message: e.message || "Invalid OTP" });
