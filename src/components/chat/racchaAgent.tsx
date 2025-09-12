@@ -7,6 +7,7 @@ import ChatHeader from "./chatHeader";
 import { storeSession, getStoredSession, updateLastActivity, isSessionValid, clearStoredSession } from "./utils/sessionStorage";
 import { fetchMessagesFromAPI } from "../../api/chat";
 import { useAuthStore } from "../../store/useAuthStore";
+
 export interface ChatMessageType {
   id: string;
   content: string;
@@ -41,12 +42,6 @@ const ensureDate = (timestamp: any): Date => {
   if (timestamp instanceof Date) return timestamp;
   const date = new Date(timestamp);
   return isNaN(date.getTime()) ? new Date() : date;
-};
-
-const waitForSessionReady = async (): Promise<void> => {
-  console.log("[waitForSessionReady] Waiting 3 seconds before continuing...");
-  await new Promise((resolve) => setTimeout(resolve, 3000));
-  console.log("[waitForSessionReady] Wait complete.");
 };
 
 const RacchaAgent: React.FC<ChatContainerProps> = ({ agent = "defaultAgent", heading }) => {
@@ -100,14 +95,11 @@ const RacchaAgent: React.FC<ChatContainerProps> = ({ agent = "defaultAgent", hea
         setCurrentConversation(conversation);
         currentSessionIdRef.current = sessionData.sessionId;
 
-        await waitForSessionReady();
-
         initializeWebSocket(sessionData.sessionId);
         updateLastActivity(agent);
         console.log("[restoreSession] Session restoration complete.");
       } catch (error) {
         console.error("[restoreSession] Error restoring session:", error);
-        // clearStoredSession(agent);
         connectionStateRef.current = "failed";
       } finally {
         setIsConnecting(false);
@@ -293,10 +285,8 @@ const RacchaAgent: React.FC<ChatContainerProps> = ({ agent = "defaultAgent", hea
       const setCookieHeader = response.headers.get("set-cookie");
       if (setCookieHeader) {
         console.log("[createSession] Cookie received:", setCookieHeader);
-        // Cookie should be automatically set by browser with credentials: 'include'
       }
 
-      await new Promise((resolve) => setTimeout(resolve, 1500));
       return sessionData;
     } catch (error) {
       console.error("[createSession] Error creating session:", error);
@@ -395,8 +385,6 @@ const RacchaAgent: React.FC<ChatContainerProps> = ({ agent = "defaultAgent", hea
         wsRef.current = null;
       }
 
-      await new Promise((resolve) => setTimeout(resolve, 100));
-
       const hasSession = await restoreSessionWrapper();
       if (!hasSession) {
         createNewConversation();
@@ -478,7 +466,7 @@ const RacchaAgent: React.FC<ChatContainerProps> = ({ agent = "defaultAgent", hea
           flex: 1,
           overflow: "auto",
           padding: "var(--space-4)",
-          paddingBottom: "calc(var(--space-4) + 80px)", // Add space for fixed input
+          paddingBottom: "calc(var(--space-4) + 80px)",
           "&::-webkit-scrollbar": {
             width: 6,
             backgroundColor: "var(--bg-primary)",
@@ -529,7 +517,6 @@ const RacchaAgent: React.FC<ChatContainerProps> = ({ agent = "defaultAgent", hea
           </Box>
         </Box>
       </Box>
-      {/* Input Area */}
       <ChatInput agent={agent} onSendMessage={sendMessage} isLoading={isConnecting} />
     </Box>
   );
