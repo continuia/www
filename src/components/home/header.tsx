@@ -215,7 +215,7 @@ export default function Header() {
     };
 
     // Throttle scroll events for better performance
-    let timeoutId: NodeJS.Timeout | null = null;
+    let timeoutId: any = null;
     const throttledHandleScroll = () => {
       if (timeoutId) return;
       timeoutId = setTimeout(() => {
