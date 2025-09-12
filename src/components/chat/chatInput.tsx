@@ -1,7 +1,7 @@
 import { useState, useRef, useCallback } from "react";
 import { TextField, IconButton, Box, CircularProgress, Chip, Avatar, Menu, MenuItem, Typography, Divider, Button, Dialog, DialogContent, DialogActions } from "@mui/material";
 import { Send, AttachFile, Image, PictureAsPdf, Close, Delete, CameraAlt, Add, PhotoLibrary, PhotoCamera, FlipCameraAndroid } from "@mui/icons-material";
-
+import { useAuthStore } from "../../store/useAuthStore";
 interface UploadedFile {
   id: string;
   name: string;
@@ -24,7 +24,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ agent, onSendMessage, isLoading }
   const [uploading, setUploading] = useState(false);
   const [filesMenuAnchor, setFilesMenuAnchor] = useState<null | HTMLElement>(null);
   const [attachMenuAnchor, setAttachMenuAnchor] = useState<null | HTMLElement>(null);
-
+  const { isAuthenticated } = useAuthStore();
   // Camera states
   const [isCameraOpen, setIsCameraOpen] = useState(false);
   const [stream, setStream] = useState<MediaStream | null>(null);
@@ -422,41 +422,43 @@ const ChatInput: React.FC<ChatInputProps> = ({ agent, onSendMessage, isLoading }
         }}
       >
         {/* Fix #1: Attachment button with proper CircularProgress alignment */}
-        <IconButton
-          onClick={(e) => setAttachMenuAnchor(e.currentTarget)}
-          disabled={isLoading || uploading}
-          sx={{
-            width: { xs: 32, sm: 36, md: 40 },
-            height: { xs: 32, sm: 36, md: 40 },
-            margin: { xs: "var(--space-1)", sm: "var(--space-2)" },
-            color: "var(--text-tertiary)",
-            transition: "var(--transition-fast)",
-            display: "flex", // Fix #1: Ensure flex display
-            alignItems: "center", // Fix #1: Center align
-            justifyContent: "center", // Fix #1: Center align
-            "&:hover": {
-              backgroundColor: "var(--primary-50)",
-              color: "var(--primary-600)",
-              transform: { xs: "none", sm: "scale(1.05)" }, // No transform on mobile
-            },
-            "&:disabled": {
-              opacity: 0.5,
-              transform: "none",
-            },
-          }}
-        >
-          {uploading ? (
-            <CircularProgress
-              size={20}
-              sx={{
+        {isAuthenticated && (
+          <IconButton
+            onClick={(e) => setAttachMenuAnchor(e.currentTarget)}
+            disabled={isLoading || uploading}
+            sx={{
+              width: { xs: 32, sm: 36, md: 40 },
+              height: { xs: 32, sm: 36, md: 40 },
+              margin: { xs: "var(--space-1)", sm: "var(--space-2)" },
+              color: "var(--text-tertiary)",
+              transition: "var(--transition-fast)",
+              display: "flex", // Fix #1: Ensure flex display
+              alignItems: "center", // Fix #1: Center align
+              justifyContent: "center", // Fix #1: Center align
+              "&:hover": {
+                backgroundColor: "var(--primary-50)",
                 color: "var(--primary-600)",
-                display: "block",
-              }}
-            />
-          ) : (
-            <Add sx={{ fontSize: { xs: "16px", sm: "18px", md: "20px" } }} />
-          )}
-        </IconButton>
+                transform: { xs: "none", sm: "scale(1.05)" }, // No transform on mobile
+              },
+              "&:disabled": {
+                opacity: 0.5,
+                transform: "none",
+              },
+            }}
+          >
+            {uploading ? (
+              <CircularProgress
+                size={20}
+                sx={{
+                  color: "var(--primary-600)",
+                  display: "block",
+                }}
+              />
+            ) : (
+              <Add sx={{ fontSize: { xs: "16px", sm: "18px", md: "20px" } }} />
+            )}
+          </IconButton>
+        )}
 
         {/* Fix #2: Responsive text input with proper flex properties */}
         <TextField
