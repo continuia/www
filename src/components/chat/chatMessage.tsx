@@ -26,7 +26,7 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
 
   return (
     <Box display="flex" justifyContent={isUser ? "flex-end" : "flex-start"} sx={{ mb: "var(--space-3)" }}>
-      <Box display="flex" alignItems="flex-start" gap="var(--space-3)" maxWidth="85%" flexDirection={isUser ? "row-reverse" : "row"}>
+      <Box display="flex" alignItems="flex-start" gap="var(--space-3)" maxWidth={{ xs: "100%", md: "80%" }} flexDirection={isUser ? "row-reverse" : "row"}>
         {isUser ? (
           <Avatar
             sx={{

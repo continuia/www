@@ -1,6 +1,6 @@
 import { Box, Avatar, Typography } from "@mui/material";
-import { SmartToy } from "@mui/icons-material";
 import { keyframes } from "@mui/system";
+import ArikaReddy from "../../assets/arika_reddy.webp";
 
 const typingAnimation = keyframes`
   0%, 60%, 100% {
@@ -31,6 +31,7 @@ const TypingIndicator: React.FC<TypingIndicatorProps> = ({ agentName }) => {
     <Box display="flex" justifyContent="flex-start" sx={{ mb: "var(--space-3)" }}>
       <Box display="flex" alignItems="flex-start" gap="var(--space-3)" maxWidth="75%">
         <Avatar
+          src={ArikaReddy}
           sx={{
             width: 36,
             height: 36,
@@ -38,9 +39,7 @@ const TypingIndicator: React.FC<TypingIndicatorProps> = ({ agentName }) => {
             color: "var(--text-primary)",
             boxShadow: "var(--shadow-sm)",
           }}
-        >
-          <SmartToy fontSize="small" />
-        </Avatar>
+        />
 
         <Box
           sx={{
