@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Button, Stack, Typography, useTheme, useMediaQuery, Paper } from "@mui/material";
+import { Box,  Stack, Typography, useTheme, useMediaQuery, Paper } from "@mui/material";
 import { motion, type Variants } from "framer-motion";
 import { AssignmentTurnedIn, Search, DocumentScanner } from "@mui/icons-material";
 
@@ -45,8 +45,6 @@ const HowItWorks: React.FC = () => {
         background: "var(--bg-accent)",
         py: { xs: "var(--space-12)", md: "var(--space-20)" },
         px: { xs: "var(--space-2)", md: 0 },
-        borderRadius: { xs: "var(--radius-xl)", md: "var(--radius-2xl)" },
-        boxShadow: "var(--shadow-lg)",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
@@ -143,31 +141,6 @@ const HowItWorks: React.FC = () => {
           </motion.div>
         ))}
       </Stack>
-
-      <Button
-        variant="contained"
-        size="large"
-        sx={{
-          background: "linear-gradient(90deg, var(--primary-600), var(--primary-500))",
-          color: "var(--text-inverse)",
-          px: "var(--space-8)",
-          py: "var(--space-4)",
-          fontWeight: 700,
-          fontSize: "var(--text-lg)",
-          borderRadius: "var(--radius-xl)",
-          boxShadow: "var(--shadow-lg)",
-          textTransform: "none",
-          letterSpacing: "0.01em",
-          transition: "background var(--transition-fast), box-shadow var(--transition-fast)",
-          "&:hover": {
-            background: "linear-gradient(90deg, var(--primary-700), var(--primary-500))",
-            boxShadow: "var(--shadow-xl)",
-          },
-        }}
-        aria-label="See Sample Report"
-      >
-        See Sample Report
-      </Button>
     </Box>
   );
 };

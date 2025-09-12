@@ -7,6 +7,7 @@ import FlexiblePricing from "../../components/campaigns/campaign2/flexiblePricin
 import OutcomesROI from "../../components/campaigns/campaign2/proofAndRoi";
 import FrequentlyAskedQuestions from "../../components/campaigns/campaign2/faq";
 import FinalCTA from "../../components/campaigns/campaign2/cta";
+
 interface MetaTag {
   name?: string;
   httpEquiv?: string;

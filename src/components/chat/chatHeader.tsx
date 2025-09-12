@@ -1,5 +1,5 @@
-import { Person, Login } from "@mui/icons-material";
-import { Box, Typography, Chip, Button } from "@mui/material";
+import { Person } from "@mui/icons-material";
+import { Box, Typography, Chip } from "@mui/material";
 import { useAuthStore } from "../../store/useAuthStore";
 import AuthModal from "../auth/AuthModal";
 interface ChatHeaderProps {
@@ -10,8 +10,8 @@ interface ChatHeaderProps {
 
 const ChatHeader: React.FC<ChatHeaderProps> = ({ heading }) => {
   const { user, isAuthenticated } = useAuthStore();
-  const setShowAuthModal = useAuthStore((state) => state.setShowAuthModal);
-  const onShowAuthModal = () => setShowAuthModal(true);
+  // const setShowAuthModal = useAuthStore((state) => state.setShowAuthModal);
+  // const onShowAuthModal = () => setShowAuthModal(true);
 
   return (
     <>
@@ -128,7 +128,7 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ heading }) => {
                   ".MuiChip-icon": { mr: "var(--space-1)" },
                 }}
               />
-              <Button
+              {/* <Button
                 endIcon={<Login />}
                 variant="contained"
                 size="small"
@@ -152,9 +152,9 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ heading }) => {
                 }}
               >
                 Login
-              </Button>
+              </Button> */}
 
-              <Button
+              {/* <Button
                 startIcon={<Login />}
                 variant="contained"
                 size="small"
@@ -180,7 +180,7 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ heading }) => {
                     marginLeft: 0,
                   },
                 }}
-              ></Button>
+              ></Button> */}
             </>
           )}
         </Box>

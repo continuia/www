@@ -179,7 +179,7 @@ const ContinuiaHero: React.FC<ContinuiaHeroProps> = ({ onStartPilot }) => {
                 {/* Enhanced CTA Buttons */}
                 <Stack direction={{ xs: "column", sm: "row" }} spacing="var(--space-4)" sx={{ pt: "var(--space-6)" }}>
                   <Box sx={{ flex: { xs: 1, sm: "auto" } }}>
-                    <motion.div whileHover={{ scale: 1.05, y: -2 }} whileTap={{ scale: 0.95 }}>
+                    <motion.div whileTap={{ scale: 0.95 }}>
                       <Button
                         variant="contained"
                         size="large"
@@ -212,7 +212,6 @@ const ContinuiaHero: React.FC<ContinuiaHeroProps> = ({ onStartPilot }) => {
                           "&:hover": {
                             background: "linear-gradient(135deg, var(--primary-700) 0%, var(--primary-600) 100%)",
                             boxShadow: "var(--shadow-2xl)",
-                            transform: "translateY(-2px)",
                             "&::before": {
                               left: "100%",
                             },
@@ -310,7 +309,7 @@ const ContinuiaHero: React.FC<ContinuiaHeroProps> = ({ onStartPilot }) => {
                             fontWeight: 600,
                           }}
                         >
-                          24-72 Hours
+                          48-72 Hours
                         </Typography>
                         <Typography
                           variant="caption"

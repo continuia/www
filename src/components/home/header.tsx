@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { AppBar, Box, Toolbar, Button, Typography, Fade, Paper, IconButton, Drawer, List, ListItem, ListItemButton, ListItemText, Divider, Collapse, useTheme, useMediaQuery } from "@mui/material";
+import { useState, useEffect, useRef } from "react";
+import { AppBar, Box, Toolbar, Button, Typography, Paper, IconButton, Drawer, List, ListItem, ListItemButton, ListItemText, Divider, Collapse, useTheme, useMediaQuery } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
@@ -187,123 +187,166 @@ function MobileNavDrawer({ open, onClose }: { open: boolean; onClose: () => void
 
 export default function Header() {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [showHeader, setShowHeader] = useState(true);
+  const lastScrollY = useRef(0);
+
   const theme = useTheme();
   const isLarge = useMediaQuery(theme.breakpoints.up("lg"));
   const isBelowLg = !isLarge;
   const navigate = useNavigate();
 
+  // Scroll direction detection without auto-hide
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.pageYOffset;
+
+      // Only trigger if scroll difference is significant (avoid micro-scrolls)
+      if (Math.abs(currentScrollY - lastScrollY.current) < 10) return;
+
+      if (currentScrollY < lastScrollY.current) {
+        // Scrolling up - show header
+        setShowHeader(true);
+      } else if (currentScrollY > lastScrollY.current && currentScrollY > 100) {
+        // Scrolling down - hide header (only after scrolling past 100px)
+        setShowHeader(false);
+      }
+
+      lastScrollY.current = currentScrollY;
+    };
+
+    // Throttle scroll events for better performance
+    let timeoutId: NodeJS.Timeout | null = null;
+    const throttledHandleScroll = () => {
+      if (timeoutId) return;
+      timeoutId = setTimeout(() => {
+        handleScroll();
+        timeoutId = null;
+      }, 10);
+    };
+
+    window.addEventListener("scroll", throttledHandleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", throttledHandleScroll);
+      if (timeoutId) clearTimeout(timeoutId);
+    };
+  }, []);
+
   return (
-    <Fade in timeout={700}>
-      <AppBar
-        position="sticky"
-        elevation={0}
+    <AppBar
+      position="sticky"
+      elevation={0}
+      sx={{
+        background: "var(--bg-primary)",
+        color: "var(--text-primary)",
+        borderBottom: "1px solid var(--border-light)",
+        zIndex: 1300,
+        boxShadow: "0 2px 12px 0 var(--primary-50)",
+        transform: showHeader ? "translateY(0)" : "translateY(-100%)",
+        transition: "transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+      }}
+    >
+      <Toolbar
         sx={{
-          background: "var(--bg-primary)",
-          color: "var(--text-primary)",
-          borderBottom: "1px solid var(--border-light)",
-          zIndex: 100,
-          boxShadow: "0 2px 12px 0 var(--primary-50)",
+          justifyContent: "space-between",
+          minHeight: { xs: "56px", sm: "72px" },
+          px: { xs: 2, sm: 6 },
+          background: "transparent",
         }}
       >
-        <Toolbar
+        {/* Logo */}
+        <Box display="flex" alignItems="center">
+          <Box component="img" src="/continuia.png" alt="Continuia Logo" height={{ xs: 36, md: 50 }} />
+        </Box>
+
+        {/* Desktop nav – only items with showOn: 'all' or 'large'/'medium' */}
+        <Paper
+          elevation={2}
           sx={{
-            justifyContent: "space-between",
-            minHeight: { xs: "56px", sm: "72px" },
-            px: { xs: 2, sm: 6 },
-            background: "transparent",
+            display: { xs: "none", lg: "flex" },
+            borderRadius: "999px",
+            background: "var(--bg-primary)",
+            px: 1,
+            py: 0.5,
+            boxShadow: "0 2px 12px 0 var(--primary-100)",
+            gap: 1,
+            alignItems: "center",
           }}
         >
-          {/* Logo */}
-          <Box display="flex" alignItems="center">
-            <Box component="img" src="/continuia.png" alt="Continuia Logo" height={{ xs: 36, md: 50 }} />
-          </Box>
-          {/* Desktop nav – only items with showOn: 'all' or 'large'/'medium' */}
-          <Paper
-            elevation={2}
-            sx={{
-              display: { xs: "none", lg: "flex" },
-              borderRadius: "999px",
-              background: "var(--bg-primary)",
-              px: 1,
-              py: 0.5,
-              boxShadow: "0 2px 12px 0 var(--primary-100)",
-              gap: 1,
-              alignItems: "center",
-            }}
-          >
-            {navLinks
-              .filter((link) => linkVisibleOn(link, "large") && !link.children) // hide ToS on big if children
-              .map((link) => (
-                <NavLink key={link.label} to={link.href ?? "#"} end style={{ textDecoration: "none" }}>
-                  {({ isActive }) => (
-                    <Button
-                      disableRipple
-                      sx={{
-                        textTransform: "none",
-                        color: isActive ? "var(--text-inverse)" : "var(--neutral-600)",
-                        background: isActive ? "linear-gradient(90deg, var(--primary-500), var(--primary-700))" : "transparent",
-                        fontWeight: 600,
-                        fontSize: "1rem",
-                        borderRadius: "999px",
-                        px: 2.5,
-                        py: 1,
-                        minWidth: 0,
-                        boxShadow: isActive ? "0 5px 15px 0 var(--primary-200)" : "none",
-                        transition: "background 0.2s, color 0.2s",
-                        "&:hover": {
-                          background: isActive ? "linear-gradient(90deg, var(--primary-400), var(--primary-600))" : "var(--primary-50)",
-                          color: isActive ? "var(--text-inverse)" : "var(--primary-800)",
-                        },
-                      }}
-                    >
-                      {link.label}
-                    </Button>
-                  )}
-                </NavLink>
-              ))}
-          </Paper>
-          {/* Hamburger + Drawer only on mobile */}
-          {isBelowLg && (
-            <>
-              <IconButton
-                onClick={() => setDrawerOpen(true)}
-                edge="end"
-                sx={{
-                  ml: 1,
-                  color: "var(--primary-700)",
-                  display: { xs: "inline-flex", lg: "none" },
-                }}
-                aria-label="Open navigation menu"
-              >
-                <MenuIcon fontSize="large" />
-              </IconButton>
-              <MobileNavDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
-            </>
-          )}
-          {/* Desktop CTA */}
-          <Button
-            variant="contained"
-            onClick={() => navigate("/getInTouch")}
-            sx={{
-              background: "var(--primary-900)",
-              color: "var(--text-inverse)",
-              fontWeight: 700,
-              borderRadius: "999px",
-              px: 3,
-              py: 1.2,
-              fontSize: "1rem",
-              boxShadow: "0 2px 8px 0 var(--primary-300)",
-              textTransform: "none",
-              display: { xs: "none", lg: "inline-flex" },
-              "&:hover": {
-                background: "var(--primary-800)",
-              },
-            }}
-          >
-            Get In Touch
-          </Button>
-        </Toolbar>
-      </AppBar>
-    </Fade>
+          {navLinks
+            .filter((link) => linkVisibleOn(link, "large") && !link.children) // hide ToS on big if children
+            .map((link) => (
+              <NavLink key={link.label} to={link.href ?? "#"} end style={{ textDecoration: "none" }}>
+                {({ isActive }) => (
+                  <Button
+                    disableRipple
+                    sx={{
+                      textTransform: "none",
+                      color: isActive ? "var(--text-inverse)" : "var(--neutral-600)",
+                      background: isActive ? "linear-gradient(90deg, var(--primary-500), var(--primary-700))" : "transparent",
+                      fontWeight: 600,
+                      fontSize: "1rem",
+                      borderRadius: "999px",
+                      px: 2.5,
+                      py: 1,
+                      minWidth: 0,
+                      boxShadow: isActive ? "0 5px 15px 0 var(--primary-200)" : "none",
+                      transition: "background 0.2s, color 0.2s",
+                      "&:hover": {
+                        background: isActive ? "linear-gradient(90deg, var(--primary-400), var(--primary-600))" : "var(--primary-50)",
+                        color: isActive ? "var(--text-inverse)" : "var(--primary-800)",
+                      },
+                    }}
+                  >
+                    {link.label}
+                  </Button>
+                )}
+              </NavLink>
+            ))}
+        </Paper>
+
+        {/* Hamburger + Drawer only on mobile */}
+        {isBelowLg && (
+          <>
+            <IconButton
+              onClick={() => setDrawerOpen(true)}
+              edge="end"
+              sx={{
+                ml: 1,
+                color: "var(--primary-700)",
+                display: { xs: "inline-flex", lg: "none" },
+              }}
+              aria-label="Open navigation menu"
+            >
+              <MenuIcon fontSize="large" />
+            </IconButton>
+            <MobileNavDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
+          </>
+        )}
+
+        {/* Desktop CTA */}
+        <Button
+          variant="contained"
+          onClick={() => navigate("/getInTouch")}
+          sx={{
+            background: "var(--primary-900)",
+            color: "var(--text-inverse)",
+            fontWeight: 700,
+            borderRadius: "999px",
+            px: 3,
+            py: 1.2,
+            fontSize: "1rem",
+            boxShadow: "0 2px 8px 0 var(--primary-300)",
+            textTransform: "none",
+            display: { xs: "none", lg: "inline-flex" },
+            "&:hover": {
+              background: "var(--primary-800)",
+            },
+          }}
+        >
+          Get In Touch
+        </Button>
+      </Toolbar>
+    </AppBar>
   );
 }
