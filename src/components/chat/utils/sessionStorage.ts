@@ -1,8 +1,6 @@
 // Modified sessionStorage.ts - only stores session metadata, no messages
 interface StoredSessionData {
   sessionId: string;
-  agentId: string;
-  agentName: string;
   timestamp: number;
   lastActivity: number;
 }
@@ -16,20 +14,18 @@ const ACTIVITY_TIMEOUT = 24 * 60 * 60 * 1000; // 24 hours
 export const storeSession = (agentName: string, sessionData: any) => {
   const key = getStorageKey(agentName);
   const dataToStore: StoredSessionData = {
-    sessionId: sessionData.sessionId,
-    agentId: sessionData.agentId,
-    agentName: agentName,
+    sessionId: sessionData.session_id,
     timestamp: Date.now(),
     lastActivity: Date.now(),
     // No messages stored here
   };
-  localStorage.setItem(key, JSON.stringify(dataToStore));
+  sessionStorage.setItem(key, JSON.stringify(dataToStore));
 };
 
 export const getStoredSession = (agentName: string): StoredSessionData | null => {
   const key = getStorageKey(agentName);
   try {
-    const stored = localStorage.getItem(key);
+    const stored = sessionStorage.getItem(key);
     if (!stored) return null;
     const sessionData = JSON.parse(stored);
     return sessionData;
@@ -44,7 +40,7 @@ export const updateLastActivity = (agentName: string) => {
   if (stored) {
     stored.lastActivity = Date.now();
     const key = getStorageKey(agentName);
-    localStorage.setItem(key, JSON.stringify(stored));
+    sessionStorage.setItem(key, JSON.stringify(stored));
   }
 };
 
@@ -56,5 +52,5 @@ export const isSessionValid = (session: StoredSessionData): boolean => {
 
 export const clearStoredSession = (agentName: string) => {
   const key = getStorageKey(agentName);
-  localStorage.removeItem(key);
+  sessionStorage.removeItem(key);
 };

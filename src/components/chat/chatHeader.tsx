@@ -1,17 +1,17 @@
-import { Person, Add, Login } from "@mui/icons-material";
-import { Box, Typography, Chip, Button } from "@mui/material";
+import { Person } from "@mui/icons-material";
+import { Box, Typography, Chip } from "@mui/material";
 import { useAuthStore } from "../../store/useAuthStore";
 import AuthModal from "../auth/AuthModal";
 interface ChatHeaderProps {
-  isConnecting: boolean;
-  newConversation: () => void;
+  isConnecting?: boolean;
+  newConversation?: () => void;
   heading?: string;
 }
 
-const ChatHeader: React.FC<ChatHeaderProps> = ({ isConnecting, newConversation, heading }) => {
+const ChatHeader: React.FC<ChatHeaderProps> = ({ heading }) => {
   const { user, isAuthenticated } = useAuthStore();
-  const setShowAuthModal = useAuthStore((state) => state.setShowAuthModal);
-  const onShowAuthModal = () => setShowAuthModal(true);
+  // const setShowAuthModal = useAuthStore((state) => state.setShowAuthModal);
+  // const onShowAuthModal = () => setShowAuthModal(true);
 
   return (
     <>
@@ -38,11 +38,12 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ isConnecting, newConversation, 
               color: "var(--text-primary)",
               fontSize: { xs: "var(--text-sm)", md: "var(--text-md)", lg: "var(--text-xl)" },
               letterSpacing: "0.01em",
+              display: { xs: "flex" },
             }}
           >
-            {heading ? heading : "Healthcare Consultation"}
+            {heading ? heading : "Share Your Story"}
           </Typography>
-          <Button
+          {/* <Button
             variant="contained"
             size="small"
             startIcon={<Add />}
@@ -95,7 +96,7 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ isConnecting, newConversation, 
             }}
           >
             New
-          </Button>
+          </Button> */}
         </Box>
 
         {/* Right: Auth Status & Sign In */}
@@ -103,7 +104,7 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ isConnecting, newConversation, 
           {isAuthenticated ? (
             <Chip
               icon={<Person sx={{ color: "var(--neutral-400)" }} />}
-              label={`${user?.email}` || "User"}
+              label={`${user?.name}` || "User"}
               size="small"
               sx={{
                 bgcolor: "var(--success-100)",
@@ -127,7 +128,7 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ isConnecting, newConversation, 
                   ".MuiChip-icon": { mr: "var(--space-1)" },
                 }}
               />
-              <Button
+              {/* <Button
                 endIcon={<Login />}
                 variant="contained"
                 size="small"
@@ -151,9 +152,9 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ isConnecting, newConversation, 
                 }}
               >
                 Login
-              </Button>
+              </Button> */}
 
-              <Button
+              {/* <Button
                 startIcon={<Login />}
                 variant="contained"
                 size="small"
@@ -179,7 +180,7 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ isConnecting, newConversation, 
                     marginLeft: 0,
                   },
                 }}
-              ></Button>
+              ></Button> */}
             </>
           )}
         </Box>

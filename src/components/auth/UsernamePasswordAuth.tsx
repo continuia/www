@@ -5,7 +5,6 @@ import { useToast } from "../toastContext";
 import { useForm, Controller } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useAuthStore } from "../../store/useAuthStore";
 
 type Mode = "login" | "signup";
 
@@ -20,7 +19,6 @@ const baseSchema = z.object({
 type FormValues = z.infer<typeof baseSchema>;
 
 const UsernamePasswordAuth: React.FC = () => {
-  const loginWithToken = useAuthStore((s) => s.loginWithToken);
   const { addToast } = useToast();
 
   const [mode, setMode] = useState<Mode>("login");
@@ -77,7 +75,6 @@ const UsernamePasswordAuth: React.FC = () => {
         throw new Error("Invalid response from server");
       }
 
-      loginWithToken(result.token, result.user);
       addToast(`Welcome, ${result.user.firstName || result.user.email}`, "success");
     } catch (error: any) {
       addToast(error?.message || (mode === "login" ? "Login failed" : "Registration failed"), "error");
