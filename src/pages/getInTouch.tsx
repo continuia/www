@@ -153,7 +153,7 @@ export default function GetInTouchPage() {
       <form
         {...({
           name: "get-in-touch",
-          netlify: true,
+          netlify: "true",
           "netlify-honeypot": "bot-field",
           hidden: true,
         } as any)}
