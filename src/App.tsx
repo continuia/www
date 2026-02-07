@@ -33,6 +33,7 @@ import ChatPage from "./pages/chat";
 import PatientPricing from "./pages/patientPricing";
 import Pricing from "./pages/pricing";
 import Campaign2 from "./pages/campaigns/campaign2";
+import HIMSS26 from "./pages/himss26";
 function App() {
   const [showButton, setShowButton] = useState(false);
 
@@ -82,6 +83,7 @@ function App() {
           <Route path="about" element={<AboutPage />} />
           <Route path="cxa-globallaunch-c1a7e3d" element={<Campaign />} />
           <Route path="employees" element={<Campaign2 />} />
+          <Route path="himss26" element={<HIMSS26 />} />
         </Route>
 
         {/* Privacy Routes */}
