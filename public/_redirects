@@ -1,1 +1,9 @@
+# Netlify's default static-file serving skips dot-prefixed paths — without
+# this, /.well-known/* falls through to the SPA catch-all below and serves
+# index.html instead of the actual file. Explicit self-redirect forces it
+# to be served literally. Needed for ce/account's client-branding fetch
+# (auth.continuia.ai -> https://continuia.ai/.well-known/ce-account-*) —
+# see ce/account/app/src/styles/clients/README.md.
+/.well-known/*  /.well-known/:splat  200
+
 /*    /index.html   200
