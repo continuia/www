@@ -1,14 +1,16 @@
-/* RPM's theme override for ce/account's shared auth screens (auth.continuia.ai).
- * Fetched at runtime by ce/account's lib/loadClientTheme.ts — see
- * ce/account/app/src/styles/clients/README.md for the convention this
- * file follows. RPM owns and hosts this file; ce/account never bundles
- * or hardcodes RPM-specific colors in its own build.
+/* Continuia Pulse's theme override for ce/account's shared auth screens
+ * (auth.continuia.ai). Fetched at runtime by ce/account's
+ * lib/loadClientTheme.ts — see ce/account/app/src/styles/clients/README.md
+ * for the convention this file follows. Continuia Pulse owns and hosts
+ * this file; ce/account never bundles or hardcodes these colors in its
+ * own build. Colors are Continuia's actual measured brand colors (sampled
+ * from continuia/www/public/continuia.png), not an approximation.
  */
-:root[data-brand="rpm"] {
-  --accent: #7c3aed;
-  --accent-hover: #8b5cf6;
-  --accent-muted: rgba(124, 58, 237, 0.15);
+:root[data-brand="continuia-pulse"] {
+  --accent: #8b64dd;
+  --accent-hover: #7952c9;
+  --accent-muted: rgba(139, 100, 221, 0.15);
 
-  --ce-orange: #7c3aed;
-  --ce-orange-hover: #8b5cf6;
+  --ce-orange: #8b64dd;
+  --ce-orange-hover: #7952c9;
 }

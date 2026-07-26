@@ -1,9 +1,9 @@
 {
-  "slug": "rpm",
-  "name": "RPM",
-  "wordmark": "rpm",
-  "logoUrl": "https://rpm.continuia.ai/rpm-logo.svg",
-  "poweredBy": "Continuia",
+  "slug": "continuia-pulse",
+  "name": "Continuia Pulse",
+  "wordmark": "Continuia Pulse",
+  "logoUrl": "https://rpm.continuia.ai/continuia-pulse-logo.svg",
+  "poweredBy": null,
   "legalUrl": "https://continuia.ai",
   "homeUrl": "https://continuia.ai"
 }
