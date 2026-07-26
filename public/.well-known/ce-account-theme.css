@@ -1,0 +1,14 @@
+/* RPM's theme override for ce/account's shared auth screens (auth.continuia.ai).
+ * Fetched at runtime by ce/account's lib/loadClientTheme.ts — see
+ * ce/account/app/src/styles/clients/README.md for the convention this
+ * file follows. RPM owns and hosts this file; ce/account never bundles
+ * or hardcodes RPM-specific colors in its own build.
+ */
+:root[data-brand="rpm"] {
+  --accent: #7c3aed;
+  --accent-hover: #8b5cf6;
+  --accent-muted: rgba(124, 58, 237, 0.15);
+
+  --ce-orange: #7c3aed;
+  --ce-orange-hover: #8b5cf6;
+}
