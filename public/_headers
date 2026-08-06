@@ -1,3 +1,56 @@
+# ce/account fetches a client's branding at runtime from this domain
+# (`ce-account-brand.json` + `ce-account-theme.css`). The sign-in page falls
+# back to ce's own orange "continuous.engineering" identity whenever that
+# fetch fails for ANY reason — including a CORS rejection, which it swallows
+# silently (`app/src/lib/brand.ts::resolveBrand`). Two independent defects
+# below both ended in that same fallback, which is why testers reported the
+# login page "randomly" showing the wrong company's brand.
+#
+# 1. `Access-Control-Allow-Origin: *`, not a single named origin (fixed
+#    2026-08-03, redone 2026-08-06). This used to be
+#    `https://auth.continuia.ai`, which broke the sign-in page whenever it was
+#    served from `pulse.continuia.ai` instead — a host RPM uses deliberately,
+#    proxying `/verify`, `/forgot-password` and `/reset-password` through to
+#    ce/account so invite and magic-link URLs stay on the product's own domain
+#    rather than looking like a different site. The browser saw an
+#    allow-origin naming a host it was not on, blocked the fetch, and rendered
+#    the orange fallback — every time, for every magic link.
+#
+# 2. `no-store`, not `public, max-age=300`. This is the subtler half, and the
+#    one that made the failure look random even on `auth.continuia.ai`, where
+#    the allow-origin above already matched. With a max-age and an ETag, the
+#    browser caches the file, then revalidates once it goes stale — and
+#    Netlify does NOT apply these custom headers to the `304 Not Modified` it
+#    answers that revalidation with (verified 6/6 requests, on both edge-cache
+#    hits and origin forwards; the 304 carries `etag` and `cache-control` but
+#    no `access-control-allow-origin` at all). A CORS response with no
+#    allow-origin header is a failed CORS response, so the fetch threw and the
+#    brand fell back. Hence the pattern testers could not pin down: a first
+#    load worked (uncached -> 200 -> header present), a reload within five
+#    minutes worked (served from cache, no request at all), and a visit after
+#    five minutes failed (revalidation -> 304 -> header missing). Signing out
+#    and back in tended to land in that third case.
+#
+#    `no-store` means the browser never stores it, so it never sends a
+#    conditional request, so it can never receive a header-less 304 — it is
+#    always an unconditional GET answered with a real 200 carrying the header
+#    above (verified). Note `no-cache` would NOT work here: it stores and
+#    revalidates, which is exactly the broken path.
+#
+#    The cost is one 258-byte request per sign-in page load, on a page that is
+#    by definition not a hot path. Applying it to the theme CSS too, rather
+#    than caching that half, is deliberate: the wordmark and the colours must
+#    never come from different points in time, or a rebrand renders the new
+#    name in the old palette until whichever cache expires first.
+#
+# Serving `*` is safe here, and not a weakening: these two files are public,
+# non-credentialed branding assets — a product name, a wordmark, a logo URL
+# and a colour theme, all already visible to anyone who loads the sign-in
+# page. `brand.ts` says as much in its own docstring: "This is a cosmetic
+# decision, never a security boundary." No cookies or auth headers are sent
+# with either fetch. `*` also needs no `Vary: Origin`, which a single fixed
+# value did need and never had — a shared cache was free to hand one origin's
+# header to another.
 /.well-known/*
-  Access-Control-Allow-Origin: https://auth.continuia.ai
-  Cache-Control: public, max-age=300
+  Access-Control-Allow-Origin: *
+  Cache-Control: no-store
