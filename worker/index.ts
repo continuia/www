@@ -75,6 +75,14 @@ export default {
       return env.ASSETS.fetch(new Request(assetUrl.toString(), request));
     }
 
+    // html_handling = "none" (see wrangler.toml) also disables Cloudflare's
+    // automatic "/" -> "/index.html" resolution, not just the .html
+    // stripping this file exists to control. Handle root explicitly or the
+    // homepage 404s, which is a worse regression than the loop this fixed.
+    if (path === '/') {
+      return env.ASSETS.fetch(new Request(new URL('/index.html', url.origin).toString(), request));
+    }
+
     const doctorProfileMatch = path.match(/^\/doctorProfile\/([^/]+)$/);
     if (doctorProfileMatch) {
       const assetUrl = new URL(`/doctorProfile.html?id=${encodeURIComponent(doctorProfileMatch[1])}`, url.origin);
