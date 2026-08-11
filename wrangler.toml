@@ -9,3 +9,11 @@ id = "REPLACE_WITH_KV_NAMESPACE_ID"
 
 # Secrets set via: wrangler pages secret put <NAME>
 # ANTHROPIC_API_KEY
+
+# PUBLIC_API_BASE_URL: base URL of the doctor-directory backend, consumed by
+# functions/api/[[path]].ts's /api/doctors proxy. UNSET until Shree confirms
+# which of the two candidate URLs found in the old repo's .env is actually
+# live in production (see Phase 2 migration report). Doctor pages render an
+# honest "not configured yet" state until this is set via:
+#   wrangler pages secret put PUBLIC_API_BASE_URL
+# (or Cloudflare dashboard -> Pages project -> Settings -> Environment variables)

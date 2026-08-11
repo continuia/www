@@ -8,6 +8,7 @@
     { href: '/', text: 'Home', key: 'home' },
     { href: '/insights.html', text: 'Insights', key: 'insights' },
     { href: '/governance.html', text: 'Governance', key: 'governance' },
+    { href: '/partners.html', text: 'Partners', key: 'partners' },
     { href: '/products.html', text: 'Products', key: 'products' },
     { href: '/about.html', text: 'About', key: 'about' },
   ];
@@ -81,6 +82,8 @@
     ].map(function (l) { return '<a href="' + l.href + '">' + l.text + '</a>'; }).join('');
     var companyLinksHtml = [
       { href: '/about.html', text: 'About' },
+      { href: '/partners.html', text: 'Partners' },
+      { href: '/doctors.html', text: 'Find a doctor' },
       { href: '/getInTouch.html', text: 'Get in touch' },
       { href: 'https://linkedin.com/company/continuia', text: 'LinkedIn' },
     ].map(function (l) { return '<a href="' + l.href + '" ' + (l.href.indexOf('http') === 0 ? 'target="_blank" rel="noopener"' : '') + '>' + l.text + '</a>'; }).join('');

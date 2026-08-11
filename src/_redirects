@@ -11,11 +11,24 @@
 /get-in-touch  /getInTouch.html    301
 /contact       /getInTouch.html    301
 
-# ── Deferred to a follow-up pass (see migration report) ──────────────────
-# /doctors, /doctorProfile/:id, /partners/*, /employees,
-# /cxa-globallaunch-c1a7e3d, /himss26, /pricing, /patient-pricing,
-# /share-your-story, /privacy/* are NOT yet ported to this build.
-# They are not redirected here — decide before DNS cutover whether to:
+# Phase 2 ports the doctor directory and all 8 partner vertical pages.
+/doctors               /doctors.html                          200
+/doctorProfile/:id     /doctorProfile.html?id=:id              200
+/partners              /partners.html                          200
+/partners/hospitals               /partners/hospitals.html               200
+/partners/nursing-and-living      /partners/nursing-and-living.html      200
+/partners/doctors-and-specialists /partners/doctors-and-specialists.html 200
+/partners/clinics-diagnostics     /partners/clinics-diagnostics.html     200
+/partners/health-plans-tpas       /partners/health-plans-tpas.html       200
+/partners/benefit-consultants     /partners/benefit-consultants.html     200
+/partners/advocacy-ngos           /partners/advocacy-ngos.html           200
+/partners/medical-tourism         /partners/medical-tourism.html         200
+
+# ── Still deferred to a follow-up pass (see migration report) ────────────
+# /employees, /cxa-globallaunch-c1a7e3d, /himss26, /pricing,
+# /patient-pricing, /share-your-story, /privacy/* are NOT yet ported to
+# this build. They are not redirected here — decide before DNS cutover
+# whether to:
 #   (a) keep the old Vite/Netlify site live on a subdomain and point these
 #       paths there, or
 #   (b) port them before cutover, or
