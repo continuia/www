@@ -1,6 +1,5 @@
-// Doctor directory: fetches /api/doctors (proxied by functions/api to
-// PUBLIC_API_BASE_URL) and renders one card per doctor. If the backend
-// isn't configured yet, shows an honest state instead of empty silence.
+// Doctor directory: fetches /api/doctors (served by functions/api from the
+// static content/doctors.json) and renders one card per doctor.
 (function () {
   var stateEl = document.getElementById('doctors-state');
   var gridEl = document.getElementById('doctors-grid');

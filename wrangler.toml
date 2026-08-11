@@ -9,11 +9,9 @@ id = "REPLACE_WITH_KV_NAMESPACE_ID"
 
 # Secrets set via: wrangler pages secret put <NAME>
 # ANTHROPIC_API_KEY
+# ADMIN_PASSWORD
 
-# PUBLIC_API_BASE_URL: base URL of the doctor-directory backend, consumed by
-# functions/api/[[path]].ts's /api/doctors proxy. UNSET until Shree confirms
-# which of the two candidate URLs found in the old repo's .env is actually
-# live in production (see Phase 2 migration report). Doctor pages render an
-# honest "not configured yet" state until this is set via:
-#   wrangler pages secret put PUBLIC_API_BASE_URL
-# (or Cloudflare dashboard -> Pages project -> Settings -> Environment variables)
+# Doctor directory data lives at functions/_shared/content/doctors.json,
+# pulled once from the old Coda.io table and committed as static content
+# (same pattern as ce/continuous.engineering's own content JSON). No API,
+# no env var, no token required.

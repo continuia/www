@@ -1,17 +1,10 @@
 import { SYSTEM_PROMPT, OPENING_MESSAGE, ADMIN_SYSTEM_PROMPT, INTAKE_SYSTEM_PROMPT, INTAKE_OPENING_MESSAGE } from '../_shared/persona';
+import DOCTORS from '../_shared/content/doctors.json';
 
 export interface Env {
   ANTHROPIC_API_KEY: string;
   ADMIN_PASSWORD: string;
   LEADS_KV: KVNamespace;
-  // Base URL of the doctor-directory backend, set as a Cloudflare Pages
-  // environment variable (Settings -> Environment variables). NOT wired to
-  // a live backend yet — see handleDoctors/handleDoctorProfile below and
-  // the Phase 2 migration report for what needs confirming before this
-  // returns real data. No default is baked in here on purpose: guessing
-  // between the two candidate URLs in the old .env would be worse than an
-  // honest "not configured" response.
-  PUBLIC_API_BASE_URL?: string;
 }
 
 interface Message {
@@ -70,9 +63,9 @@ export async function onRequest(ctx: EventContext<Env, string, Record<string, un
     return Response.json({ message: isIntake ? INTAKE_OPENING_MESSAGE : OPENING_MESSAGE });
   }
 
-  if (path === '/api/doctors' && request.method === 'GET') return handleDoctors(env);
+  if (path === '/api/doctors' && request.method === 'GET') return handleDoctors();
   const doctorMatch = path.match(/^\/api\/doctors\/([^/]+)$/);
-  if (doctorMatch && request.method === 'GET') return handleDoctorProfile(doctorMatch[1], env);
+  if (doctorMatch && request.method === 'GET') return handleDoctorProfile(doctorMatch[1]);
 
   if (path.startsWith('/api/admin/')) {
     const pw = request.headers.get('X-Admin-Password');
@@ -380,50 +373,25 @@ ${messages.map(m => `${m.role}: ${typeof m.content === 'string' ? m.content : JS
 //
 // The old React site never actually called a Continuia backend for doctor
 // data: the listing pulled from a public Coda.io table with a bearer token
-// hardcoded in client source, and the individual profile page was a hardcoded
-// demo stub that only resolved id "1". There is no confirmed production
-// doctor API today. This proxy is deliberately backend-agnostic: it forwards
-// to PUBLIC_API_BASE_URL (a Cloudflare Pages env var, unset by default) and
-// returns an honest "not configured" response until Shree confirms the real
-// URL and this env var is set. See the Phase 2 report for the two candidate
-// URLs found in the old .env and why neither was assumed.
+// hardcoded in client source (a live leaked secret, since revoked), and the
+// individual profile page was a hardcoded demo stub that only resolved id
+// "1". There was never a real production doctor API to point at.
 //
-// Expected upstream shape (adjust here once the real API is confirmed):
-//   GET {base}/doctors        -> { doctors: [{ id, name, specialty, credentials, ... }] }
-//   GET {base}/doctors/:id    -> { doctor: { id, name, specialty, credentials, bio, ... } }
+// Fix: the 7 approved-for-web rows were pulled from that Coda table one time
+// and committed as a static content file (../_shared/content/doctors.json),
+// the same pattern ce/continuous.engineering uses for its own product/post
+// content. No token, no live third-party dependency, no client-exposed
+// credential. When there's a real doctor-management system to source from
+// instead, replace the JSON import below with a fetch to it.
 
-async function handleDoctors(env: Env): Promise<Response> {
-  if (!env.PUBLIC_API_BASE_URL) {
-    return Response.json({ configured: false, doctors: [] });
-  }
-  try {
-    const upstream = await fetch(`${env.PUBLIC_API_BASE_URL.replace(/\/$/, '')}/doctors`, {
-      headers: { 'Content-Type': 'application/json' },
-    });
-    if (!upstream.ok) return Response.json({ configured: true, error: 'Upstream error', doctors: [] }, { status: 502 });
-    const data = await upstream.json() as unknown;
-    const body: Record<string, unknown> = Array.isArray(data) ? { doctors: data } : (data as Record<string, unknown>);
-    return Response.json({ configured: true, ...body });
-  } catch {
-    return Response.json({ configured: true, error: 'Upstream unreachable', doctors: [] }, { status: 502 });
-  }
+async function handleDoctors(): Promise<Response> {
+  return Response.json({ configured: true, doctors: DOCTORS });
 }
 
-async function handleDoctorProfile(id: string, env: Env): Promise<Response> {
-  if (!env.PUBLIC_API_BASE_URL) {
-    return Response.json({ configured: false, doctor: null });
-  }
-  try {
-    const upstream = await fetch(`${env.PUBLIC_API_BASE_URL.replace(/\/$/, '')}/doctors/${encodeURIComponent(id)}`, {
-      headers: { 'Content-Type': 'application/json' },
-    });
-    if (upstream.status === 404) return Response.json({ configured: true, doctor: null }, { status: 404 });
-    if (!upstream.ok) return Response.json({ configured: true, error: 'Upstream error', doctor: null }, { status: 502 });
-    const data = await upstream.json() as Record<string, unknown>;
-    return Response.json({ configured: true, doctor: data.doctor ?? data });
-  } catch {
-    return Response.json({ configured: true, error: 'Upstream unreachable', doctor: null }, { status: 502 });
-  }
+async function handleDoctorProfile(id: string): Promise<Response> {
+  const doctor = (DOCTORS as Array<{ id: string }>).find((d) => d.id === id);
+  if (!doctor) return Response.json({ configured: true, doctor: null }, { status: 404 });
+  return Response.json({ configured: true, doctor });
 }
 
 // ── Claude helper ─────────────────────────────────────────────────────────────
