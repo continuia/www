@@ -12,5 +12,5 @@
     "resolveJsonModule": true,
     "esModuleInterop": true
   },
-  "include": ["functions/**/*.ts", "functions/**/*.json"]
+  "include": ["functions/**/*.ts", "functions/**/*.json", "worker/**/*.ts"]
 }
