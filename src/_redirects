@@ -1,0 +1,44 @@
+# Continuia — Cloudflare Pages redirects
+#
+# Phase 1 ports Home, Governance, Insights, About, Products (new), and
+# Get In Touch to plain HTML. Old clean-URL routes (no .html) redirect to
+# the shipped file so existing links and the sitemap keep working.
+/insights      /insights.html      200
+/governance    /governance.html    200
+/about         /about.html         200
+/products      /products.html      200
+/getInTouch    /getInTouch.html    200
+/get-in-touch  /getInTouch.html    301
+/contact       /getInTouch.html    301
+
+# Phase 2 ports the doctor directory and all 8 partner vertical pages.
+/doctors               /doctors.html                          200
+/doctorProfile/:id     /doctorProfile.html?id=:id              200
+/partners              /partners.html                          200
+/partners/hospitals               /partners/hospitals.html               200
+/partners/nursing-and-living      /partners/nursing-and-living.html      200
+/partners/doctors-and-specialists /partners/doctors-and-specialists.html 200
+/partners/clinics-diagnostics     /partners/clinics-diagnostics.html     200
+/partners/health-plans-tpas       /partners/health-plans-tpas.html       200
+/partners/benefit-consultants     /partners/benefit-consultants.html     200
+/partners/advocacy-ngos           /partners/advocacy-ngos.html           200
+/partners/medical-tourism         /partners/medical-tourism.html         200
+
+# Phase 3 ports pricing, the patient-intake chat, and the marketing/campaign
+# landers. patient-pricing.html was never real content on the old site (a
+# generic, unfinished SaaS pricing template); it now serves the same real
+# patient pricing content as /pricing rather than duplicating drift-prone
+# copy across two pages.
+/pricing               /pricing.html               200
+/patient-pricing       /pricing.html                200
+/share-your-story      /share-your-story.html       200
+/employees             /employees.html               200
+/himss26                /himss26.html                 200
+/cxa-globallaunch-c1a7e3d /cxa-globallaunch-c1a7e3d.html 200
+
+# ── Still deferred to a follow-up pass (see migration report) ────────────
+# /privacy/* (terms of service, AI-assisted opinion policy, public ethics
+# pledge, data processing addendum, business associate agreement) are NOT
+# yet ported to this build, though they are linked from the footer's Legal
+# column on every page shipped so far. Decide before DNS cutover whether to
+# port them or accept those links 404ing temporarily.

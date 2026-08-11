@@ -1,0 +1,58 @@
+[
+  {
+    "id": "i-yUP2Ct2gxv",
+    "name": "Dr. Unnikrishnan K N",
+    "affiliation": "Aidos Health",
+    "specialty": "General Practitioner",
+    "qualification": "International School of Medical Imaging Technology Padma rao (1996-1999)\nProfile of Angeles University Foundation School of Medicine(2001-2007)",
+    "licensedIn": "India"
+  },
+  {
+    "id": "i-bmb7UyN7sh",
+    "name": "Dr. Nikhita Deshmukh",
+    "affiliation": "KIMS Hospitals",
+    "specialty": "ENT/ Otorhinolaryngologist",
+    "qualification": "MBBS from Terna Medical College  Mumbai (1999)\nMS in ENT from King Edward Memorial Hospital and Seth Gordhandas Sunderdas Medical College, Mumbai (2003)\nDNB in ENT from the same institution (2004)",
+    "licensedIn": ""
+  },
+  {
+    "id": "i-zDUO676zDv",
+    "name": "Dr. Shruti Manvikar",
+    "affiliation": "Ferti Care",
+    "specialty": "Gynecologist",
+    "qualification": "MBBS from JJMMC, Davangere (under RGUHS Bangalore), completed in 2006\nDGO (Diploma in Obstetrics & Gynecology) from JJMMC, Davangere, completed in 2009\nDNB in Obstetrics & Gynecology from Durgabai Deshmukh Hospital, Hyderabad, completed in 2012",
+    "licensedIn": ""
+  },
+  {
+    "id": "i-q314q47gOl",
+    "name": "Dr. Sanjib Kumar BEHERA",
+    "affiliation": "Advanceorthosurgery",
+    "specialty": "Orthopedics",
+    "qualification": "MBBS, MS (Orthopaedics), DNB (Orthopaedic Surgery/Rehab), DPMR, Fellowship in Sports Surgery from France (ISAKOS/ESSKA)",
+    "licensedIn": ""
+  },
+  {
+    "id": "i-8wNNdfk1xq",
+    "name": "Dr. Kalyan",
+    "affiliation": "GenepoweRx",
+    "specialty": "General Medicine",
+    "qualification": "MBBS – Dr. NTR University of Health Sciences Andhra Pradesh (2004) \nDiplomate of the American Board of Internal Medicine (Internal Medicine) – (2011) \nDNB – General Medicine – Michigan State University College of Human Medicine (2013) \nCertification in Genetics and Genomics – Stanford University (2019)",
+    "licensedIn": "India,USA"
+  },
+  {
+    "id": "i-yat0K71AHb",
+    "name": "Dr. Tony Banerjee",
+    "affiliation": "HarleyDoc",
+    "specialty": "General Practitioner",
+    "qualification": "MBChB Degree University of Leicester in the UK",
+    "licensedIn": "India"
+  },
+  {
+    "id": "i-Q_RdRJnsmy",
+    "name": "Dr. Sweta Adatia",
+    "affiliation": "Gargash Hospital",
+    "specialty": "Neurologist",
+    "qualification": "MBBS & MD from Guru Gobind Singh Hospital Gujarat\nDNB (Neurology) from Lilavati Hospital & Research Centre Mumbai",
+    "licensedIn": "UAE,India"
+  }
+]
