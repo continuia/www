@@ -79,6 +79,7 @@
       { href: '/products.html#governance', text: 'Continuia Governance' },
       { href: '/products.html#cliniq', text: 'ClinIQ' },
       { href: '/products.html#pulse', text: 'Pulse' },
+      { href: '/pricing.html', text: 'Pricing' },
     ].map(function (l) { return '<a href="' + l.href + '">' + l.text + '</a>'; }).join('');
     var companyLinksHtml = [
       { href: '/about.html', text: 'About' },
@@ -112,7 +113,9 @@
     ].join('');
   }
 
-  // Inject chat panel
+  // Inject chat panel (skipped on pages running their own standalone chat
+  // experience, e.g. share-your-story.html, via data-no-widget-chat on <body>)
+  var skipWidgetChat = document.body.hasAttribute('data-no-widget-chat');
   var CHAT_SVG_REFRESH = '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13.5 8A5.5 5.5 0 112.5 5M2.5 2v3h3"/></svg>';
   var CHAT_SVG_CLOSE   = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 4L4 12M4 4l8 8"/></svg>';
   var CHAT_SVG_SEND    = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8l12-6-6 12V8H2z" fill="currentColor"/></svg>';
@@ -145,7 +148,7 @@
     '</div>',
     '<div id="chat-bubble" class="chat-bubble" aria-label="Chat with Maya">' + CHAT_SVG_BUBBLE + '<span class="chat-bubble-ping"></span></div>',
   ].join('');
-  document.body.insertAdjacentHTML('beforeend', chatHtml);
+  if (!skipWidgetChat) document.body.insertAdjacentHTML('beforeend', chatHtml);
 
   // Reveal on scroll
   var revealEls = document.querySelectorAll('.reveal');

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Join the Continuia Founding Circle</title>
+  <meta name="description" content="Continuia's global launch. Join the founding circle of physicians shaping how second opinions get delivered." />
+  <link rel="icon" type="image/webp" href="/continuia.webp" />
+  <link rel="canonical" href="https://continuia.ai/cxa-globallaunch-c1a7e3d.html" />
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet" />
+  <link rel="preconnect" href="https://fonts.bunny.net" />
+  <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700,800|source-serif-4:500,600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div id="site-nav"></div>
+
+  <section class="hero">
+    <div class="hero-glow"></div>
+    <div class="container">
+      <div class="hero-inner">
+        <span class="hero-eyebrow">Continuia's global launch</span>
+        <h1 class="hero-title">Practice medicine like it's <em>2025</em></h1>
+        <p class="hero-tagline">Continuia is a global medical initiative redefining second opinions: doctor-led, consent-verified, AI-assisted. This isn't a gig. It's an invitation to practice medicine on your terms, ethically and globally.</p>
+        <div class="hero-actions">
+          <a href="#founding-circle-form" class="btn btn-primary btn-large">Join the founding circle</a>
+          <a href="/" class="btn btn-ghost btn-large">Learn more</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="card-grid cols-2">
+        <div class="card reveal">
+          <h3>The future isn't coming. It's already live.</h3>
+          <p>We're launching a next-generation platform where second opinions are delivered the way modern medicine demands: doctor-led, consent-verified, AI-assisted, never AI-decided.</p>
+        </div>
+        <div class="card reveal">
+          <h3>For minds that value clarity</h3>
+          <p>You review. You decide. You lead. Full access to comprehensive case data, your clinical judgment as the highest authority, no bots in the loop and no filters on your insight.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GUIDING PRINCIPLES -->
+  <section class="section section-alt">
+    <div class="container">
+      <div class="section-header center">
+        <div class="section-label">Our guiding principles</div>
+        <h2 class="section-title">In a time where speed often trumps thought, we stand for something else</h2>
+      </div>
+      <div class="card-grid">
+        <div class="card reveal"><h3>Consent is non-negotiable</h3><p>Patient consent and data privacy form the foundation of our platform's ethics.</p></div>
+        <div class="card reveal"><h3>Traceability is built in</h3><p>Every decision is documented and traceable, so accountability and transparency aren't an afterthought.</p></div>
+        <div class="card reveal"><h3>Clinical integrity</h3><p>A system grounded in clinical integrity, not just reviewing cases against a checklist.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOUNDING CIRCLE FORM -->
+  <section class="section" id="founding-circle-form">
+    <div class="container narrow">
+      <div class="section-header center">
+        <h2 class="section-title">This is Continuia's global launch, and you're being invited at the start</h2>
+        <p class="section-sub">This isn't per-click medicine, and it isn't triage by template. Your voice doesn't just fill a role, it helps define what the role should be.</p>
+      </div>
+      <div class="form-card">
+        <h3 style="text-align:center;color:var(--accent-bright);margin-bottom:20px">Join the Founding Circle</h3>
+        <form id="founding-form">
+          <div class="form-row">
+            <label for="ff-name">Full name *</label>
+            <input type="text" id="ff-name" name="name" required autocomplete="name" />
+          </div>
+          <div class="form-row">
+            <label for="ff-email">Email *</label>
+            <input type="email" id="ff-email" name="email" required autocomplete="email" />
+          </div>
+          <div class="form-row">
+            <label for="ff-phone">Phone *</label>
+            <input type="tel" id="ff-phone" name="phone" required autocomplete="tel" />
+          </div>
+          <div class="form-row">
+            <label for="ff-specialization">Specialization *</label>
+            <input type="text" id="ff-specialization" name="specialization" required placeholder="e.g. Cardiology, Internal Medicine, Surgery" />
+          </div>
+          <div class="form-row">
+            <label for="ff-region">Licensed region *</label>
+            <input type="text" id="ff-region" name="region" required placeholder="e.g. New York, California, London, India" />
+          </div>
+          <div class="form-row">
+            <label for="ff-info">Additional info</label>
+            <textarea id="ff-info" name="info" placeholder="Tell us more about your experience, interests, or how you'd like to contribute..."></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary btn-large" id="ff-submit" style="width:100%;justify-content:center">Submit</button>
+          <p class="form-status" id="ff-status"></p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer" id="site-footer"></footer>
+
+  <script src="components.js" defer></script>
+  <script src="chat.js" defer></script>
+  <script>
+    document.getElementById('founding-form').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      var status = document.getElementById('ff-status');
+      var btn = document.getElementById('ff-submit');
+      var specialization = document.getElementById('ff-specialization').value.trim();
+      var region = document.getElementById('ff-region').value.trim();
+      var info = document.getElementById('ff-info').value.trim();
+      var payload = {
+        name: document.getElementById('ff-name').value.trim(),
+        email: document.getElementById('ff-email').value.trim(),
+        phone: document.getElementById('ff-phone').value.trim(),
+        org: 'Founding Circle applicant',
+        message: 'Founding Circle application. Specialization: ' + specialization + '. Licensed region: ' + region + (info ? '. Additional info: ' + info : ''),
+      };
+      btn.disabled = true;
+      status.textContent = '';
+      status.className = 'form-status';
+      try {
+        var res = await fetch('/api/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        if (!res.ok) throw new Error('request failed');
+        status.textContent = "Thank you for joining the founding circle! We'll be in touch soon.";
+        status.classList.add('ok');
+        e.target.reset();
+      } catch (err) {
+        status.textContent = 'Something went wrong submitting your application. Please email us directly at contact@continuia.ai.';
+        status.classList.add('err');
+      } finally {
+        btn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>

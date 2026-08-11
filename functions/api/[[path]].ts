@@ -1,4 +1,4 @@
-import { SYSTEM_PROMPT, OPENING_MESSAGE, ADMIN_SYSTEM_PROMPT } from '../_shared/persona';
+import { SYSTEM_PROMPT, OPENING_MESSAGE, ADMIN_SYSTEM_PROMPT, INTAKE_SYSTEM_PROMPT, INTAKE_OPENING_MESSAGE } from '../_shared/persona';
 
 export interface Env {
   ANTHROPIC_API_KEY: string;
@@ -40,7 +40,7 @@ interface LeadData {
   // Session
   messages: Message[];
   meta?: SessionMeta;
-  source: 'chat' | 'contact-form';
+  source: 'chat' | 'contact-form' | 'patient-intake';
   capturedAt: string;
   updatedAt: string;
   // Admin
@@ -65,7 +65,10 @@ export async function onRequest(ctx: EventContext<Env, string, Record<string, un
   if (path === '/api/chat'    && request.method === 'POST') return handleChat(request, env, ctx);
   if (path === '/api/contact' && request.method === 'POST') return handleContact(request, env);
   if (path === '/api/session' && request.method === 'GET')  return handleSession(url, env);
-  if (path === '/api/opening')                              return Response.json({ message: OPENING_MESSAGE });
+  if (path === '/api/opening') {
+    const isIntake = url.searchParams.get('persona') === 'intake';
+    return Response.json({ message: isIntake ? INTAKE_OPENING_MESSAGE : OPENING_MESSAGE });
+  }
 
   if (path === '/api/doctors' && request.method === 'GET') return handleDoctors(env);
   const doctorMatch = path.match(/^\/api\/doctors\/([^/]+)$/);
@@ -87,19 +90,22 @@ export async function onRequest(ctx: EventContext<Env, string, Record<string, un
 // ── Visitor chat ──────────────────────────────────────────────────────────────
 
 async function handleChat(request: Request, env: Env, ctx: EventContext<Env, string, Record<string, unknown>>): Promise<Response> {
-  let body: { messages: Message[]; sessionId?: string; meta?: SessionMeta };
+  let body: { messages: Message[]; sessionId?: string; meta?: SessionMeta; persona?: string };
   try { body = await request.json(); }
   catch { return Response.json({ error: 'Invalid JSON' }, { status: 400 }); }
 
-  const { messages, sessionId, meta } = body;
+  const { messages, sessionId, meta, persona } = body;
   if (!messages?.length) return Response.json({ error: 'messages required' }, { status: 400 });
+
+  const isIntake = persona === 'intake';
+  const systemPrompt = isIntake ? INTAKE_SYSTEM_PROMPT : SYSTEM_PROMPT;
 
   const cachedMessages = messages.map((m, i) =>
     i === messages.length - 1 && m.role === 'user'
       ? { role: m.role, content: [{ type: 'text', text: m.content as string, cache_control: { type: 'ephemeral' } }] }
       : m
   );
-  const res = await claudeChat(env.ANTHROPIC_API_KEY, SYSTEM_PROMPT, cachedMessages, 'claude-sonnet-4-6', 400);
+  const res = await claudeChat(env.ANTHROPIC_API_KEY, systemPrompt, cachedMessages, 'claude-sonnet-4-6', 400);
   if (!res.ok) return Response.json({ error: 'Upstream error' }, { status: 502 });
 
   const data = await res.json() as { content: Array<{ text: string }> };
@@ -107,7 +113,7 @@ async function handleChat(request: Request, env: Env, ctx: EventContext<Env, str
 
   if (sessionId) {
     const all = [...messages, { role: 'assistant' as const, content: reply }];
-    ctx.waitUntil(persistLead(all, sessionId, meta, env).catch(() => {}));
+    ctx.waitUntil(persistLead(all, sessionId, meta, env, isIntake ? 'patient-intake' : 'chat').catch(() => {}));
   }
 
   return Response.json({ reply });
@@ -281,7 +287,7 @@ async function handleAdminChat(request: Request, env: Env): Promise<Response> {
 
 // ── Lead qualification & persistence ─────────────────────────────────────────
 
-async function persistLead(messages: Message[], sessionId: string, meta: SessionMeta | undefined, env: Env): Promise<void> {
+async function persistLead(messages: Message[], sessionId: string, meta: SessionMeta | undefined, env: Env, source: 'chat' | 'patient-intake' = 'chat'): Promise<void> {
   if (!messages.length || !env.LEADS_KV) return;
 
   const key = `lead:${sessionId}`;
@@ -301,7 +307,7 @@ async function persistLead(messages: Message[], sessionId: string, meta: Session
     summary: prev?.summary ?? '',
     messages,
     meta: meta ?? prev?.meta,
-    source: 'chat',
+    source,
     capturedAt: prev?.capturedAt ?? now,
     updatedAt: now,
   };

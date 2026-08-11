@@ -24,13 +24,21 @@
 /partners/advocacy-ngos           /partners/advocacy-ngos.html           200
 /partners/medical-tourism         /partners/medical-tourism.html         200
 
+# Phase 3 ports pricing, the patient-intake chat, and the marketing/campaign
+# landers. patient-pricing.html was never real content on the old site (a
+# generic, unfinished SaaS pricing template); it now serves the same real
+# patient pricing content as /pricing rather than duplicating drift-prone
+# copy across two pages.
+/pricing               /pricing.html               200
+/patient-pricing       /pricing.html                200
+/share-your-story      /share-your-story.html       200
+/employees             /employees.html               200
+/himss26                /himss26.html                 200
+/cxa-globallaunch-c1a7e3d /cxa-globallaunch-c1a7e3d.html 200
+
 # ── Still deferred to a follow-up pass (see migration report) ────────────
-# /employees, /cxa-globallaunch-c1a7e3d, /himss26, /pricing,
-# /patient-pricing, /share-your-story, /privacy/* are NOT yet ported to
-# this build. They are not redirected here — decide before DNS cutover
-# whether to:
-#   (a) keep the old Vite/Netlify site live on a subdomain and point these
-#       paths there, or
-#   (b) port them before cutover, or
-#   (c) accept them 404ing on continuia.ai temporarily.
-# See the migration report for the full list and recommendation.
+# /privacy/* (terms of service, AI-assisted opinion policy, public ethics
+# pledge, data processing addendum, business associate agreement) are NOT
+# yet ported to this build, though they are linked from the footer's Legal
+# column on every page shipped so far. Decide before DNS cutover whether to
+# port them or accept those links 404ing temporarily.
