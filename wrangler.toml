@@ -15,7 +15,7 @@ binding = "ASSETS"
 
 [[kv_namespaces]]
 binding = "LEADS_KV"
-id = "REPLACE_WITH_KV_NAMESPACE_ID"
+id = "fcfddb2a62184b58b373ea47cf226f0f"
 
 # Secrets set via: wrangler pages secret put <NAME>
 # ANTHROPIC_API_KEY
