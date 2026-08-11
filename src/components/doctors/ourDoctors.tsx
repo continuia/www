@@ -1,7 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Box, Typography, IconButton, Avatar, Chip, Skeleton, Paper } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { motion, type Variants } from "framer-motion";
+// Previously fetched live from a public Coda.io table using a bearer token
+// hardcoded in this file, a live leaked secret shipped to every browser that
+// loaded this page. That token has been removed. The same 7 approved-for-web
+// rows now ship as a static import instead, no credential, no live
+// third-party dependency. Mirrors the fix already shipped on the
+// dev/Cloudflare rebuild (functions/_shared/content/doctors.json there).
+import doctorsData from "../../data/doctors.json";
 
 // Doctor data type
 export interface Doctor {
@@ -263,48 +270,10 @@ export const ExpertCard: React.FC<{ doctor: Doctor }> = ({ doctor }) => {
   );
 };
 
-// Main parent container
-const API_URL = "https://coda.io/apis/v1/docs/xVB9OfVCsI/tables/grid-Nao6Gri_WW/rows?query=c-veetlBuEX9:true&useColumnNames=true";
-const BEARER_TOKEN = "cbdf9ec2-b48d-4b2d-aa72-3a567c4b6122";
-
 export const MedicalExperts: React.FC = () => {
-  const [doctors, setDoctors] = useState<Doctor[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchDoctors = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-        const response = await fetch(API_URL, {
-          headers: {
-            Authorization: `Bearer ${BEARER_TOKEN}`,
-            "Content-Type": "application/json",
-          },
-        });
-        if (!response.ok) throw new Error("Failed to fetch");
-        const data = await response.json();
-        const doctorsArray: Doctor[] = (data.items ?? []).map((item: any): Doctor => {
-          const values = item.values ?? {};
-          return {
-            hospital: values["Affililation"] ?? item.name ?? "",
-            image: values["ImageURL"] !== "" ? values["ImageURL"] : "https://www.shutterstock.com/image-photo/smiling-indian-man-doctor-wearing-600nw-2558930081.jpg",
-            doctorName: values["DoctorName"] ?? "",
-            qualification: values["Qualification"] ?? "",
-            specialist: values["Specialist"] ? [values["Specialist"]] : [],
-            licensed: values["LicensedIn"] ? [values["LicensedIn"]] : [],
-          };
-        });
-        setDoctors(doctorsArray);
-      } catch (err) {
-        setError((err as Error).message);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchDoctors();
-  }, []);
+  const [doctors] = useState<Doctor[]>(doctorsData as Doctor[]);
+  const [loading] = useState(false);
+  const [error] = useState<string | null>(null);
 
   return (
     <Box
