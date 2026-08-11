@@ -1,0 +1,23 @@
+# Continuia — Cloudflare Pages redirects
+#
+# Phase 1 ports Home, Governance, Insights, About, Products (new), and
+# Get In Touch to plain HTML. Old clean-URL routes (no .html) redirect to
+# the shipped file so existing links and the sitemap keep working.
+/insights      /insights.html      200
+/governance    /governance.html    200
+/about         /about.html         200
+/products      /products.html      200
+/getInTouch    /getInTouch.html    200
+/get-in-touch  /getInTouch.html    301
+/contact       /getInTouch.html    301
+
+# ── Deferred to a follow-up pass (see migration report) ──────────────────
+# /doctors, /doctorProfile/:id, /partners/*, /employees,
+# /cxa-globallaunch-c1a7e3d, /himss26, /pricing, /patient-pricing,
+# /share-your-story, /privacy/* are NOT yet ported to this build.
+# They are not redirected here — decide before DNS cutover whether to:
+#   (a) keep the old Vite/Netlify site live on a subdomain and point these
+#       paths there, or
+#   (b) port them before cutover, or
+#   (c) accept them 404ing on continuia.ai temporarily.
+# See the migration report for the full list and recommendation.
