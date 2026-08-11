@@ -1,4 +1,11 @@
-# Continuia — Cloudflare Pages redirects
+# SUPERSEDED: this file is a Cloudflare Pages convention. This project
+# deploys via `wrangler deploy` (a plain Worker with static assets), which
+# doesn't reliably honor _redirects the way Pages does, combined with the
+# assets binding's own default html_handling this produced a real infinite
+# redirect loop in production (/governance.html -> /governance -> ...).
+# All clean-URL routing now lives explicitly in worker/index.ts's
+# CLEAN_URL_MAP/REDIRECTS instead. Kept below for reference only, not
+# read by the live deploy.
 #
 # Phase 1 ports Home, Governance, Insights, About, Products (new), and
 # Get In Touch to plain HTML. Old clean-URL routes (no .html) redirect to

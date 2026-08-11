@@ -12,6 +12,12 @@ compatibility_flags = ["nodejs_compat"]
 [assets]
 directory = "./dist"
 binding = "ASSETS"
+# Disabled: the default "auto-trailing-slash" mode auto-redirects .html
+# requests to the extensionless URL, which collided with worker/index.ts's
+# own clean-URL routing and produced a genuine infinite redirect loop in
+# production (/governance.html -> /governance -> /governance -> ...).
+# worker/index.ts now owns all clean-URL routing explicitly.
+html_handling = "none"
 
 [[kv_namespaces]]
 binding = "LEADS_KV"
