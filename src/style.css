@@ -159,6 +159,37 @@ h1, h2 { font-family: var(--font-serif); }
 .nav-mobile-links a:last-child { border-bottom: none; }
 .nav-mobile-cta { margin-top: 36px; }
 
+/* Login dropdown (desktop) + inline region list (mobile menu) */
+.nav-dropdown { position: relative; }
+.nav-dropdown-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: none; border: none; padding: 0;
+  font-size: 16px; font-weight: 500; color: var(--text-muted);
+}
+.nav-dropdown-btn:hover, .nav-dropdown-btn[aria-expanded="true"] { color: var(--text); }
+.nav-dropdown-chevron { transition: transform var(--transition); }
+.nav-dropdown-btn[aria-expanded="true"] .nav-dropdown-chevron { transform: rotate(180deg); }
+.nav-dropdown-menu {
+  position: absolute; top: calc(100% + 12px); left: 0; z-index: 260; min-width: 180px;
+  background: var(--surface); border: 1px solid var(--border-bright); border-radius: var(--radius);
+  box-shadow: 0 12px 32px rgba(var(--ink-rgb), 0.12); padding: 6px;
+}
+.nav-dropdown-menu[hidden] { display: none; }
+.nav-dropdown-menu a { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 6px; white-space: nowrap; }
+.nav-dropdown-menu a:hover { background: var(--surface-2); }
+.flag { flex: none; border: 1px solid var(--border-bright); border-radius: 2px; }
+.nav-dropdown-btn:focus-visible, .nav-dropdown-menu a:focus-visible, .nav-mobile-login-items a:focus-visible {
+  outline: 2px solid var(--accent-deep); outline-offset: 3px;
+}
+.nav-mobile-login { margin-top: 28px; }
+.nav-mobile-login-title { font-size: 13px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 4px; }
+.nav-mobile-login-items { display: flex; flex-direction: column; }
+.nav-mobile-login-items a {
+  display: flex; align-items: center; gap: 12px; padding: 14px 0;
+  font-size: 1.3rem; font-weight: 600; color: var(--text-muted); border-bottom: 1px solid var(--border);
+}
+.nav-mobile-login-items a:hover { color: var(--text); }
+
 @media (max-width: 900px) {
   .nav-links { display: none; }
   .nav-mobile-toggle { display: flex; }
