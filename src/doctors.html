@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Find a Doctor - Continuia's Board-Certified Specialists</title>
+  <meta name="description" content="Browse the board-certified specialists who review second opinions for Continuia. Request a consult directly from a doctor's profile." />
+  <link rel="icon" type="image/webp" href="/continuia.webp" />
+  <link rel="canonical" href="https://continuia.ai/doctors.html" />
+  <link rel="preconnect" href="https://fonts.bunny.net" />
+  <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700,800|source-serif-4:500,600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+
+  <div id="site-nav"></div>
+
+  <section class="page-header">
+    <div class="container">
+      <div class="section-label teal">Our specialists</div>
+      <h1 class="page-title">Board-certified doctors, reviewing real cases.</h1>
+      <p class="page-subtitle">Every second opinion on Continuia is read by a licensed, board-certified physician, not a model alone. Browse the specialists on our network below and request a consult directly.</p>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:20px">
+    <div class="container">
+      <div id="doctors-state" style="text-align:center;padding:40px 0;color:var(--text-dim)">Loading our specialists&hellip;</div>
+      <div id="doctors-grid" class="card-grid hidden"></div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section cta-section">
+    <div class="container cta-inner">
+      <div class="section-label">Not sure who's the right fit?</div>
+      <h2 class="cta-title">Tell us what you're facing and we'll route it to the right specialist.</h2>
+      <p class="cta-body">You don't have to pick a doctor to get started. Send us your case and we'll match it to the specialist best suited to review it.</p>
+      <div class="cta-actions">
+        <a href="/getInTouch.html" class="btn btn-primary btn-large">Request a consult</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer" id="site-footer"></footer>
+
+  <script src="/components.js" defer></script>
+  <script src="/chat.js" defer></script>
+  <script src="/doctors.js" defer></script>
+</body>
+</html>

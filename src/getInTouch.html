@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Get in Touch - Continuia</title>
+  <meta name="description" content="Reach the Continuia team for a second opinion, a governance partnership, or any other question. We respond fast." />
+  <link rel="icon" type="image/webp" href="/continuia.webp" />
+  <link rel="canonical" href="https://continuia.ai/getInTouch.html" />
+  <link rel="preconnect" href="https://fonts.bunny.net" />
+  <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700,800|source-serif-4:500,600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div id="site-nav"></div>
+
+  <section class="page-header">
+    <div class="container">
+      <div class="section-label">We'd love to hear from you</div>
+      <h1 class="page-title">Get in touch</h1>
+      <p class="page-subtitle">Tell us what you need, whether it's a second opinion, a governance conversation for your hospital, or just a question. We read every message ourselves.</p>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:20px">
+    <div class="container">
+      <div class="contact-grid">
+        <!-- Form -->
+        <div class="form-card">
+          <h2 style="font-size:1.3rem;margin-bottom:20px">Send us a message</h2>
+          <form id="contact-form">
+            <div class="form-row">
+              <label for="cf-name">Name</label>
+              <input type="text" id="cf-name" name="name" autocomplete="name" />
+            </div>
+            <div class="form-row">
+              <label for="cf-email">Email *</label>
+              <input type="email" id="cf-email" name="email" required autocomplete="email" />
+            </div>
+            <div class="form-row">
+              <label for="cf-phone">Phone</label>
+              <input type="tel" id="cf-phone" name="phone" autocomplete="tel" />
+            </div>
+            <div class="form-row">
+              <label for="cf-org">Organization <span style="font-weight:400;color:var(--text-dim)">(if you're reaching out for a hospital or health system)</span></label>
+              <input type="text" id="cf-org" name="org" autocomplete="organization" />
+            </div>
+            <div class="form-row">
+              <label for="cf-message">What do you need? *</label>
+              <textarea id="cf-message" name="message" required placeholder="Tell us a bit about your situation, or what you're evaluating Continuia for."></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary btn-large" id="cf-submit" style="width:100%;justify-content:center">Send message</button>
+            <p class="form-status" id="cf-status"></p>
+          </form>
+        </div>
+
+        <!-- Info -->
+        <div>
+          <div class="contact-info-card">
+            <h3>Email us directly</h3>
+            <p><strong>General:</strong> <a href="mailto:contact@continuia.ai">contact@continuia.ai</a><br />
+            <strong>Support (24/7):</strong> <a href="mailto:support@continuia.ai">support@continuia.ai</a><br />
+            <strong>Sales &amp; partnerships:</strong> <a href="mailto:sales@continuia.ai">sales@continuia.ai</a></p>
+          </div>
+          <div class="contact-info-card">
+            <h3>Book a 30-minute call</h3>
+            <p style="margin-bottom:14px">For hospitals and institutional partners, the fastest path is a direct conversation with our team.</p>
+            <div class="calendly-inline-widget" data-url="https://calendly.com/continuia/30min" style="min-width:280px;height:420px"></div>
+          </div>
+          <div class="contact-info-card">
+            <h3>Hours</h3>
+            <p><strong>Patient support:</strong> 24/7, in English, Hindi, Arabic, and Spanish<br />
+            <strong>Sales &amp; partnerships:</strong> Monday-Friday, 9:00 AM-6:00 PM local time</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer" id="site-footer"></footer>
+
+  <script src="components.js" defer></script>
+  <script src="chat.js" defer></script>
+  <script src="https://assets.calendly.com/assets/external/widget.js" async></script>
+  <script>
+    document.getElementById('contact-form').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      var status = document.getElementById('cf-status');
+      var btn = document.getElementById('cf-submit');
+      var payload = {
+        name: document.getElementById('cf-name').value.trim(),
+        email: document.getElementById('cf-email').value.trim(),
+        phone: document.getElementById('cf-phone').value.trim(),
+        org: document.getElementById('cf-org').value.trim(),
+        message: document.getElementById('cf-message').value.trim(),
+      };
+      btn.disabled = true;
+      status.textContent = '';
+      status.className = 'form-status';
+      try {
+        var res = await fetch('/api/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        if (!res.ok) throw new Error('request failed');
+        status.textContent = "Thank you, we've got your message and will be in touch soon.";
+        status.classList.add('ok');
+        e.target.reset();
+      } catch (err) {
+        status.textContent = 'Something went wrong sending your message. Please email us directly at contact@continuia.ai.';
+        status.classList.add('err');
+      } finally {
+        btn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>

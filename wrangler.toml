@@ -1,0 +1,33 @@
+name = "continuia-ai"
+main = "worker/index.ts"
+compatibility_date = "2024-09-23"
+compatibility_flags = ["nodejs_compat"]
+
+# The Cloudflare dashboard's Git integration for this Worker runs
+# `npx wrangler deploy` (the Workers CLI path), not `wrangler pages deploy`,
+# so the file-based routing under functions/ isn't auto-detected the way it
+# would be for a Pages project. worker/index.ts adapts functions/api's
+# handler to a plain Workers fetch() entry point instead. `pages_build_output_dir`
+# was removed since that key is Pages-only and does nothing here.
+[assets]
+directory = "./dist"
+binding = "ASSETS"
+# Disabled: the default "auto-trailing-slash" mode auto-redirects .html
+# requests to the extensionless URL, which collided with worker/index.ts's
+# own clean-URL routing and produced a genuine infinite redirect loop in
+# production (/governance.html -> /governance -> /governance -> ...).
+# worker/index.ts now owns all clean-URL routing explicitly.
+html_handling = "none"
+
+[[kv_namespaces]]
+binding = "LEADS_KV"
+id = "981ee69ec5504ad18c5fbceb5f318350"
+
+# Secrets set via: wrangler pages secret put <NAME>
+# ANTHROPIC_API_KEY
+# ADMIN_PASSWORD
+
+# Doctor directory data lives at functions/_shared/content/doctors.json,
+# pulled once from the old Coda.io table and committed as static content
+# (same pattern as ce/continuous.engineering's own content JSON). No API,
+# no env var, no token required.

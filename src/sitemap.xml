@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://continuia.ai/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://continuia.ai/insights.html</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://continuia.ai/governance.html</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://continuia.ai/products.html</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://continuia.ai/about.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://continuia.ai/getInTouch.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://continuia.ai/partners.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://continuia.ai/partners/hospitals.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://continuia.ai/partners/nursing-and-living.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://continuia.ai/partners/doctors-and-specialists.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://continuia.ai/partners/clinics-diagnostics.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://continuia.ai/partners/health-plans-tpas.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://continuia.ai/partners/benefit-consultants.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://continuia.ai/partners/advocacy-ngos.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://continuia.ai/partners/medical-tourism.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://continuia.ai/doctors.html</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://continuia.ai/pricing.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://continuia.ai/share-your-story.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+</urlset>

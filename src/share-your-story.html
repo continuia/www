@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Share Your Story - Continuia</title>
+  <meta name="description" content="Start your second opinion by sharing your case with Aarika, Continuia's intake specialist. Secure, confidential, and matched with a specialist within 24 hours." />
+  <link rel="icon" type="image/webp" href="/continuia.webp" />
+  <link rel="canonical" href="https://continuia.ai/share-your-story.html" />
+  <link rel="preconnect" href="https://fonts.bunny.net" />
+  <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700,800|source-serif-4:500,600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body data-no-widget-chat>
+
+  <div id="site-nav"></div>
+
+  <div class="intake-shell">
+    <aside class="intake-info">
+      <div>
+        <div class="intake-info-eyebrow">Secure, confidential, comprehensive</div>
+        <p class="intake-info-lead">Start by sharing your medical story. Our HIPAA-aligned intake organizes your records intelligently, so nothing gets missed.</p>
+      </div>
+
+      <div>
+        <h3>What happens next</h3>
+        <div class="intake-timeline">
+          <div class="intake-timeline-item"><span class="intake-timeline-dot"></span><span><strong>Within 24 hours:</strong> your case is matched with a board-certified specialist in your condition area.</span></div>
+          <div class="intake-timeline-item"><span class="intake-timeline-dot"></span><span><strong>Within 72 hours:</strong> you receive a comprehensive, plain-language second opinion.</span></div>
+          <div class="intake-timeline-item"><span class="intake-timeline-dot"></span><span><strong>Always available:</strong> follow-up questions and ongoing support from our care team.</span></div>
+        </div>
+      </div>
+
+      <div class="intake-remember">
+        "There are no silly questions when it comes to your health. Share as much or as little as you're comfortable with."
+      </div>
+
+      <div class="intake-chips">
+        <span>HIPAA-aligned</span>
+        <span>15+ languages</span>
+        <span>24/7 support</span>
+      </div>
+    </aside>
+
+    <main class="intake-chat">
+      <div class="intake-chat-header">
+        <h1>Share Your Story</h1>
+        <p>A focused conversation with Aarika to get your case in front of the right specialist.</p>
+      </div>
+      <div id="intake-messages" class="intake-chat-messages"></div>
+      <div id="intake-typing" class="intake-typing hidden"><span></span><span></span><span></span></div>
+      <div class="intake-input-row">
+        <input id="intake-input" type="text" placeholder="Tell Aarika what's going on..." autocomplete="off" />
+        <button id="intake-send" aria-label="Send">Send</button>
+      </div>
+    </main>
+  </div>
+
+  <script src="components.js" defer></script>
+  <script src="shareStory.js" defer></script>
+</body>
+</html>
