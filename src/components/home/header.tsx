@@ -1,11 +1,12 @@
 import { useState, useEffect, useRef } from "react";
-import { AppBar, Box, Toolbar, Button, Typography, Paper, IconButton, Drawer, List, ListItem, ListItemButton, ListItemText, Divider, Collapse, useTheme, useMediaQuery } from "@mui/material";
+import { AppBar, Box, Toolbar, Button, Typography, Paper, IconButton, Drawer, List, ListItem, ListItemButton, ListItemText, Divider, Collapse, Menu, MenuItem, useTheme, useMediaQuery } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import { mainSections } from "../../constants/sections";
+import { LOGIN_REGIONS, REGION_FLAGS } from "../../constants/loginRegions";
 
 type NavScreen = "all" | "small" | "medium" | "large";
 interface NavLinkBase {
@@ -53,8 +54,79 @@ function linkVisibleOn(link: NavLinkBase, screen: NavScreen): boolean {
   return showOn === screen;
 }
 
+// Decorative: the visible text label carries the meaning.
+function FlagIcon({ countryCode }: { countryCode: string }) {
+  const flag = REGION_FLAGS[countryCode.toLowerCase()];
+  if (!flag) return null;
+  return (
+    <Box
+      component="svg"
+      viewBox="0 0 24 18"
+      aria-hidden="true"
+      focusable="false"
+      sx={{ width: 24, height: 18, flexShrink: 0, borderRadius: "2px", boxShadow: "0 0 0 1px var(--border-light)" }}
+    >
+      {flag}
+    </Box>
+  );
+}
+
+function LoginMenu() {
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+  const open = Boolean(anchorEl);
+
+  return (
+    <>
+      <Button
+        id="login-menu-button"
+        disableRipple
+        aria-haspopup="menu"
+        aria-expanded={open ? "true" : undefined}
+        aria-controls={open ? "login-menu" : undefined}
+        onClick={(e) => setAnchorEl(e.currentTarget)}
+        endIcon={open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+        sx={{
+          textTransform: "none",
+          color: open ? "var(--primary-800)" : "var(--neutral-600)",
+          background: open ? "var(--primary-50)" : "transparent",
+          fontWeight: 600,
+          fontSize: "1rem",
+          borderRadius: "999px",
+          px: 2.5,
+          py: 1,
+          minWidth: 0,
+          "&:hover": { background: "var(--primary-50)", color: "var(--primary-800)" },
+        }}
+      >
+        Login
+      </Button>
+      <Menu
+        id="login-menu"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={() => setAnchorEl(null)}
+        slotProps={{ list: { "aria-labelledby": "login-menu-button" }, paper: { sx: { bgcolor: "var(--bg-primary)", mt: 1, minWidth: 180 } } }}
+      >
+        {LOGIN_REGIONS.map((region) => (
+          <MenuItem
+            key={region.countryCode}
+            component="a"
+            href={region.url}
+            onClick={() => setAnchorEl(null)}
+            sx={{ gap: 1.5, fontWeight: 600, color: "var(--primary-700)", "&:hover, &.Mui-focusVisible": { bgcolor: "var(--primary-50)" } }}
+          >
+            <FlagIcon countryCode={region.countryCode} />
+            {region.label}
+          </MenuItem>
+        ))}
+      </Menu>
+    </>
+  );
+}
+
 function MobileNavDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
   const [tosOpen, setTosOpen] = useState(false);
+  const [loginOpen, setLoginOpen] = useState(false);
   const screen = useNavScreen();
   const navigate = useNavigate();
   const location = useLocation();
@@ -158,6 +230,35 @@ function MobileNavDrawer({ open, onClose }: { open: boolean; onClose: () => void
               </Box>
             )
           )}
+        <Box>
+          <ListItem disablePadding>
+            <ListItemButton
+              onClick={() => setLoginOpen((o) => !o)}
+              aria-expanded={loginOpen}
+              aria-controls="mobile-login-list"
+              sx={{ px: 3, fontWeight: 700, color: "var(--primary-700)" }}
+            >
+              <ListItemText primary="Login" />
+              {loginOpen ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+            </ListItemButton>
+          </ListItem>
+          <Collapse in={loginOpen} timeout="auto" unmountOnExit>
+            <List id="mobile-login-list" component="div" disablePadding>
+              {LOGIN_REGIONS.map((region) => (
+                <ListItem key={region.countryCode} disablePadding>
+                  <ListItemButton
+                    component="a"
+                    href={region.url}
+                    sx={{ pl: 5.5, py: 1, gap: 1.5, fontWeight: 500, color: "var(--primary-700)", "&:hover": { bgcolor: "var(--primary-50)" } }}
+                  >
+                    <FlagIcon countryCode={region.countryCode} />
+                    <ListItemText primary={region.label} />
+                  </ListItemButton>
+                </ListItem>
+              ))}
+            </List>
+          </Collapse>
+        </Box>
       </List>
       <Divider sx={{ my: 2 }} />
       <ListItem>
@@ -303,6 +404,7 @@ export default function Header() {
                 )}
               </NavLink>
             ))}
+          <LoginMenu />
         </Paper>
 
         {/* Hamburger + Drawer only on mobile */}
