@@ -13,6 +13,41 @@
     { href: '/about.html', text: 'About', key: 'about' },
   ];
 
+  // ClinIQ region login. ONE entry per country/tenant: add { code, label, href }
+  // here plus an inline SVG in FLAGS under the same lowercase ISO 3166-1 alpha-2
+  // code, and both the desktop dropdown and the mobile menu pick it up.
+  var LOGIN_LABEL = 'Login';
+  var LOGIN_MENU = [
+    { code: 'us', label: 'ClinIQ US', href: 'https://cliniq.continuia.ai/app/login' },
+    { code: 'in', label: 'ClinIQ IN', href: 'https://cliniq-in.continuia.ai/app/login' },
+  ];
+  var FLAG_ATTRS = 'class="flag" width="22" height="15" viewBox="0 0 22 15" aria-hidden="true" focusable="false"';
+  var FLAGS = {
+    us: '<svg ' + FLAG_ATTRS + '><rect width="22" height="15" fill="#fff"/><path fill="#b22234" d="M0 0h22v1.15H0zM0 2.3h22v1.15H0zM0 4.6h22v1.15H0zM0 6.9h22v1.15H0zM0 9.2h22v1.15H0zM0 11.5h22v1.15H0zM0 13.8h22V15H0z"/><rect width="9.2" height="8.05" fill="#3c3b6e"/></svg>',
+    in: '<svg ' + FLAG_ATTRS + '><rect width="22" height="5" fill="#ff9933"/><rect y="5" width="22" height="5" fill="#fff"/><rect y="10" width="22" height="5" fill="#138808"/><circle cx="11" cy="7.5" r="1.9" fill="none" stroke="#000080" stroke-width=".5"/></svg>',
+  };
+  var CHEVRON = '<svg class="nav-dropdown-chevron" width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="M2 3.5l3 3 3-3"/></svg>';
+
+  function loginItemHtml(e, menuItem) {
+    var role = menuItem ? ' role="menuitem" tabindex="-1"' : '';
+    return '<a href="' + e.href + '"' + role + '>' + (FLAGS[e.code] || '') + '<span>' + e.label + '</span></a>';
+  }
+
+  function loginDropdownHtml() {
+    return [
+      '<div class="nav-dropdown" id="nav-login">',
+      '<button type="button" class="nav-dropdown-btn" id="nav-login-btn" aria-haspopup="menu" aria-expanded="false" aria-controls="nav-login-menu">' + LOGIN_LABEL + CHEVRON + '</button>',
+      '<div class="nav-dropdown-menu" id="nav-login-menu" role="menu" aria-labelledby="nav-login-btn" hidden>' + LOGIN_MENU.map(function (e) { return loginItemHtml(e, true); }).join('') + '</div>',
+      '</div>',
+    ].join('');
+  }
+
+  // Mobile has room to show the regions inline, so no disclosure widget there.
+  function loginMobileHtml() {
+    return '<div class="nav-mobile-login"><div class="nav-mobile-login-title" id="nav-mobile-login-title">' + LOGIN_LABEL + '</div>' +
+      '<div class="nav-mobile-login-items" role="group" aria-labelledby="nav-mobile-login-title">' + LOGIN_MENU.map(function (e) { return loginItemHtml(e, false); }).join('') + '</div></div>';
+  }
+
   var LEGAL_LINKS = [
     { href: '/privacy.html', text: 'Privacy Policy' },
     { href: '/terms.html', text: 'Terms of Service' },
@@ -37,7 +72,7 @@
     return LINKS.map(function (l) {
       var c = l.key === active ? ' class="active"' : '';
       return '<a href="' + l.href + '"' + c + '>' + l.text + '</a>';
-    }).join('') + '<a href="/getInTouch.html" class="btn btn-nav">Talk to us</a>';
+    }).join('') + loginDropdownHtml() + '<a href="/getInTouch.html" class="btn btn-nav">Talk to us</a>';
   }
 
   function mobileLinksHtml() {
@@ -62,6 +97,7 @@
       '    <button class="nav-mobile-close" id="nav-mobile-close" aria-label="Close menu"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 4L4 12M4 4l8 8"/></svg></button>',
       '  </div>',
       '  <nav class="nav-mobile-links">' + mobileLinksHtml() + '</nav>',
+      '  ' + loginMobileHtml(),
       '  <a href="/getInTouch.html" class="btn btn-primary btn-large nav-mobile-cta">Talk to us</a>',
       '</div>',
     ].join('');
@@ -170,4 +206,43 @@
   if (toggle) toggle.addEventListener('click', openMenu);
   if (closeBtn) closeBtn.addEventListener('click', closeMenu);
   if (menu) menu.querySelectorAll('a').forEach(function (a) { a.addEventListener('click', closeMenu); });
+
+  // Login dropdown (desktop)
+  var loginWrap = document.getElementById('nav-login');
+  var loginBtn  = document.getElementById('nav-login-btn');
+  var loginMenu = document.getElementById('nav-login-menu');
+  if (loginWrap && loginBtn && loginMenu) {
+    var loginItems = Array.prototype.slice.call(loginMenu.querySelectorAll('[role="menuitem"]'));
+    var isOpen = function () { return loginBtn.getAttribute('aria-expanded') === 'true'; };
+    var openLogin = function (focusIdx) {
+      loginMenu.hidden = false;
+      loginBtn.setAttribute('aria-expanded', 'true');
+      if (focusIdx != null && loginItems[focusIdx]) loginItems[focusIdx].focus();
+    };
+    var closeLogin = function (returnFocus) {
+      loginMenu.hidden = true;
+      loginBtn.setAttribute('aria-expanded', 'false');
+      if (returnFocus) loginBtn.focus();
+    };
+    loginBtn.addEventListener('click', function (e) {
+      if (isOpen()) closeLogin(false); else openLogin(e.detail === 0 ? 0 : null);
+    });
+    loginBtn.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowDown') { e.preventDefault(); openLogin(0); }
+    });
+    loginMenu.addEventListener('keydown', function (e) {
+      var i = loginItems.indexOf(document.activeElement);
+      if (e.key === 'ArrowDown') { e.preventDefault(); loginItems[(i + 1) % loginItems.length].focus(); }
+      else if (e.key === 'ArrowUp') { e.preventDefault(); loginItems[(i - 1 + loginItems.length) % loginItems.length].focus(); }
+      else if (e.key === 'Home') { e.preventDefault(); loginItems[0].focus(); }
+      else if (e.key === 'End') { e.preventDefault(); loginItems[loginItems.length - 1].focus(); }
+      else if (e.key === 'Tab') closeLogin(false);
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && isOpen()) { e.preventDefault(); closeLogin(true); }
+    });
+    document.addEventListener('click', function (e) {
+      if (isOpen() && !loginWrap.contains(e.target)) closeLogin(false);
+    });
+  }
 })();
