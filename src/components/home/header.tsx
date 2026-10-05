@@ -84,6 +84,12 @@ function LoginMenu() {
         aria-expanded={open ? "true" : undefined}
         aria-controls={open ? "login-menu" : undefined}
         onClick={(e) => setAnchorEl(e.currentTarget)}
+        onKeyDown={(e) => {
+          if (e.key === "ArrowDown") {
+            e.preventDefault();
+            setAnchorEl(e.currentTarget);
+          }
+        }}
         endIcon={open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
         sx={{
           textTransform: "none",
@@ -96,6 +102,7 @@ function LoginMenu() {
           py: 1,
           minWidth: 0,
           "&:hover": { background: "var(--primary-50)", color: "var(--primary-800)" },
+          "&.Mui-focusVisible": { outline: "2px solid var(--primary-700)", outlineOffset: "2px" },
         }}
       >
         Login
