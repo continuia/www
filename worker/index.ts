@@ -38,8 +38,6 @@ const CLEAN_URL_MAP: Record<string, string> = {
   '/partners/benefit-consultants': '/partners/benefit-consultants.html',
   '/partners/advocacy-ngos': '/partners/advocacy-ngos.html',
   '/partners/medical-tourism': '/partners/medical-tourism.html',
-  '/pricing': '/pricing.html',
-  '/patient-pricing': '/pricing.html',
   '/share-your-story': '/share-your-story.html',
   '/employees': '/employees.html',
   '/himss26': '/himss26.html',
@@ -51,6 +49,10 @@ const CLEAN_URL_MAP: Record<string, string> = {
 const REDIRECTS: Record<string, string> = {
   '/get-in-touch': '/getInTouch.html',
   '/contact': '/getInTouch.html',
+  // The price sheet was removed from continuia.ai; old links land on Insights.
+  '/pricing': '/insights.html',
+  '/pricing.html': '/insights.html',
+  '/patient-pricing': '/insights.html',
 };
 
 export default {

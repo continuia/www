@@ -115,7 +115,6 @@
       { href: '/products.html#governance', text: 'Continuia Governance' },
       { href: '/products.html#cliniq', text: 'ClinIQ' },
       { href: '/products.html#pulse', text: 'Pulse' },
-      { href: '/pricing.html', text: 'Pricing' },
     ].map(function (l) { return '<a href="' + l.href + '">' + l.text + '</a>'; }).join('');
     var companyLinksHtml = [
       { href: '/about.html', text: 'About' },

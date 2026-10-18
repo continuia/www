@@ -31,13 +31,10 @@
 /partners/advocacy-ngos           /partners/advocacy-ngos.html           200
 /partners/medical-tourism         /partners/medical-tourism.html         200
 
-# Phase 3 ports pricing, the patient-intake chat, and the marketing/campaign
-# landers. patient-pricing.html was never real content on the old site (a
-# generic, unfinished SaaS pricing template); it now serves the same real
-# patient pricing content as /pricing rather than duplicating drift-prone
-# copy across two pages.
-/pricing               /pricing.html               200
-/patient-pricing       /pricing.html                200
+# The price sheet was removed from continuia.ai; old links land on Insights.
+/pricing               /insights.html              301
+/pricing.html          /insights.html              301
+/patient-pricing       /insights.html              301
 /share-your-story      /share-your-story.html       200
 /employees             /employees.html               200
 /himss26                /himss26.html                 200
